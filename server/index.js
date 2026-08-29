@@ -82,6 +82,92 @@ app.get('/api/auth/users', (req, res) => {
   res.json(safeUsers);
 });
 
+app.get('/api/users', (req, res) => {
+  const db = readDb();
+  // Return users with passwords if needed for admin editing or safe fields
+  res.json(db.users || []);
+});
+
+app.post('/api/users', (req, res) => {
+  const db = readDb();
+  const { name, email, role, phone, avatar, password, active } = req.body;
+
+  if (!name || !email) {
+    return res.status(400).json({ error: 'Nombre y correo electrónico son requeridos.' });
+  }
+
+  // Check email collision
+  const existing = (db.users || []).find(u => u.email.toLowerCase() === email.toLowerCase());
+  if (existing) {
+    return res.status(400).json({ error: 'Ya existe un usuario registrado con este correo electrónico.' });
+  }
+
+  const newUser = {
+    id: `usr-${Date.now()}`,
+    name,
+    email: email.toLowerCase(),
+    role: role || 'technician',
+    phone: phone || '',
+    avatar: avatar || name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2),
+    password: password || '123456',
+    active: active !== undefined ? active : true,
+    createdAt: new Date().toISOString().split('T')[0]
+  };
+
+  db.users = [...(db.users || []), newUser];
+  writeDb(db);
+  res.status(201).json(newUser);
+});
+
+app.put('/api/users/:id', (req, res) => {
+  const db = readDb();
+  const { id } = req.params;
+  const updates = req.body;
+
+  const idx = (db.users || []).findIndex(u => u.id === id);
+  if (idx === -1) {
+    return res.status(404).json({ error: 'Usuario no encontrado.' });
+  }
+
+  // Check email uniqueness if email updated
+  if (updates.email && updates.email.toLowerCase() !== db.users[idx].email.toLowerCase()) {
+    const existing = db.users.find(u => u.id !== id && u.email.toLowerCase() === updates.email.toLowerCase());
+    if (existing) {
+      return res.status(400).json({ error: 'Ya existe otro usuario registrado con este correo.' });
+    }
+  }
+
+  db.users[idx] = {
+    ...db.users[idx],
+    ...updates
+  };
+
+  writeDb(db);
+  res.json(db.users[idx]);
+});
+
+app.delete('/api/users/:id', (req, res) => {
+  const db = readDb();
+  const { id } = req.params;
+
+  const user = (db.users || []).find(u => u.id === id);
+  if (!user) {
+    return res.status(404).json({ error: 'Usuario no encontrado.' });
+  }
+
+  // Safeguard: Ensure at least one admin remains
+  if (user.role === 'admin') {
+    const adminCount = db.users.filter(u => u.role === 'admin').length;
+    if (adminCount <= 1) {
+      return res.status(400).json({ error: 'No se puede eliminar el único administrador del sistema.' });
+    }
+  }
+
+  db.users = db.users.filter(u => u.id !== id);
+  writeDb(db);
+  res.json({ success: true });
+});
+
 /* ========================================================
    PAYMENTS & RECEIPTS
 ======================================================== */

@@ -4,7 +4,8 @@ import {
   Deal, 
   Quote, 
   Client, 
-  CompanySettings 
+  CompanySettings,
+  User
 } from '../types';
 
 export const initialCompanySettings: CompanySettings = {
@@ -339,7 +340,57 @@ export const initialPortfolio: PortfolioProject[] = [
       '1x Monitor de conserjería táctil de 10 pulgadas',
       '1x Switch PoE de distribución y cableado Cat6'
     ],
-    featured: false
+    featured: true
+  },
+  {
+    id: 'port-05',
+    title: 'Infraestructura de Cableado Estructurado Cat6A y Rack Servidores',
+    category: 'redes',
+    client: 'Torre Corporativa Bella Vista',
+    location: 'Av. Sarasota, Santo Domingo',
+    date: 'Octubre 2025',
+    description: 'Instalación de 48 puntos de red Gigabit certificados Cat6A, peinado de gabinete de 42U, switches Cisco administrables y certificación Fluke de enlace de fibra óptica.',
+    images: [
+      'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=900&q=80'
+    ],
+    equipmentInstalled: [
+      '48x Puntos de Red Cat6A con conectores blindados',
+      '2x Switches Cisco Gigabit PoE+ 24 Puertos',
+      '1x Rack Servidores 42U con organizadores horizontales/verticales',
+      '1x Enlace de Fibra Óptica OM3 de 10Gbps'
+    ],
+    testimonial: {
+      author: 'Ing. Laura Valenzuela',
+      role: 'Directora de TI',
+      text: 'El orden y rotulación del rack son de nivel internacional. Las pruebas de velocidad y certificación de red pasaron al 100%.',
+      rating: 5
+    },
+    featured: true
+  },
+  {
+    id: 'port-06',
+    title: 'Sistema de Alarma Perimetral Inalámbrica y Cámaras Solares',
+    category: 'alarmas',
+    client: 'Residencia Campestre Los Robles',
+    location: 'Jarabacoa, La Vega',
+    date: 'Septiembre 2025',
+    description: 'Protección perimetral con barreras infrarrojas solares de 100 metros, sirenas de 120dB y panel de alarma híbrido con notificación push instantánea y comunicación 4G LTE.',
+    images: [
+      'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=900&q=80'
+    ],
+    equipmentInstalled: [
+      '1x Panel de Alarma Híbrido AJAX Hub 2 Plus 4G/Wi-Fi',
+      '4x Barreras Fotoeléctricas Infrarrojas de 100m con panel solar',
+      '8x Detectores de Movimiento para Exterior con cámara integrada',
+      '2x Sirenas Estroboscópicas de 120dB'
+    ],
+    testimonial: {
+      author: 'Sr. Roberto Henríquez',
+      role: 'Propietario',
+      text: 'Tranquilidad total al poder vigilar la propiedad a distancia y recibir fotos inmediatas si hay alguna alerta.',
+      rating: 5
+    },
+    featured: true
   }
 ];
 
@@ -705,3 +756,29 @@ export const initialQuotes: Quote[] = [
     createdAt: '2026-02-20T14:30:00Z'
   }
 ];
+
+export const initialUsers: User[] = [
+  {
+    id: 'usr-01',
+    name: 'Rafael Martínez',
+    email: 'admin@martineztech.com',
+    role: 'admin',
+    phone: '(809) 555-0199',
+    avatar: 'RM',
+    password: 'admin',
+    active: true,
+    createdAt: '2025-01-10'
+  },
+  {
+    id: 'usr-02',
+    name: 'Manuel Gómez',
+    email: 'tecnico@martineztech.com',
+    role: 'technician',
+    phone: '(809) 555-0188',
+    avatar: 'MG',
+    password: 'tecnico',
+    active: true,
+    createdAt: '2025-02-01'
+  }
+];
+

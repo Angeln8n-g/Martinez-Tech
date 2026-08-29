@@ -22,7 +22,8 @@ import {
   initialPortfolio, 
   initialClients, 
   initialDeals, 
-  initialQuotes 
+  initialQuotes,
+  initialUsers
 } from '../data/initialData';
 import { initialCatalogProducts } from '../data/catalogItems';
 import { api } from '../services/api';
@@ -38,6 +39,7 @@ export type AdminTab =
   | 'catalog' 
   | 'clients' 
   | 'portfolio' 
+  | 'users'
   | 'settings';
 
 type ThemeMode = 'light' | 'dark';
@@ -82,6 +84,7 @@ interface AppStateContextType {
   logout: () => void;
   
   // Data
+  users: User[];
   deals: Deal[];
   quotes: Quote[];
   clients: Client[];
@@ -93,6 +96,12 @@ interface AppStateContextType {
   visits: TechnicalVisit[];
   workOrders: WorkOrder[];
   invoices: FiscalInvoice[];
+
+  // User Actions
+  addUser: (userData: Omit<User, 'id' | 'createdAt'>) => Promise<User>;
+  updateUser: (id: string, updates: Partial<User>) => Promise<void>;
+  deleteUser: (id: string) => Promise<void>;
+  toggleUserStatus: (id: string) => Promise<void>;
 
   // Deal Actions
   addDeal: (dealData: Omit<Deal, 'id' | 'code' | 'createdAt' | 'updatedAt'>) => Promise<Deal>;
@@ -216,6 +225,7 @@ const STORAGE_KEYS = {
   THEME: 'mt_theme_mode',
   USER: 'mt_current_user',
   TOKEN: 'mt_auth_token',
+  USERS: 'mt_users_v1',
   DEALS: 'mt_deals_v1',
   QUOTES: 'mt_quotes_v1',
   CLIENTS: 'mt_clients_v1',
@@ -232,6 +242,12 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [currentView, setCurrentView] = useState<'public' | 'admin'>('public');
   const [adminTab, setAdminTab] = useState<AdminTab>('dashboard');
   const [isServerConnected, setIsServerConnected] = useState<boolean>(false);
+
+  // Users Management State
+  const [users, setUsers] = useState<User[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.USERS);
+    return saved ? JSON.parse(saved) : initialUsers;
+  });
 
   // Authentication
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
@@ -253,42 +269,50 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setCurrentView('admin');
         return { success: true };
       } else {
-        if (
-          (email.toLowerCase() === 'admin@martineztech.com' && password === 'admin123') ||
-          (email.toLowerCase() === 'admin' && password === 'admin')
-        ) {
-          const user: User = {
-            id: 'usr-01',
-            name: 'Rafael Martínez',
-            email: 'admin@martineztech.com',
-            role: 'admin',
-            phone: '(809) 555-0199',
-            avatar: 'RM'
+        const trimmedEmail = email.trim().toLowerCase();
+        const trimmedPass = password.trim();
+
+        // Match against dynamic users list
+        const matchedUser = users.find(u => {
+          const matchesEmail = u.email.toLowerCase() === trimmedEmail;
+          const matchesUsername = u.email.toLowerCase().split('@')[0] === trimmedEmail;
+          const matchesName = u.name.toLowerCase() === trimmedEmail;
+          const passMatch = u.password === trimmedPass || 
+            (u.email.toLowerCase() === 'admin@martineztech.com' && (trimmedPass === 'admin' || trimmedPass === 'admin123')) ||
+            (u.email.toLowerCase() === 'tecnico@martineztech.com' && (trimmedPass === 'tecnico' || trimmedPass === 'tecnico123'));
+          
+          return (matchesEmail || matchesUsername || matchesName) && passMatch;
+        });
+
+        if (matchedUser) {
+          if (matchedUser.active === false) {
+            return { success: false, error: 'Esta cuenta de usuario ha sido suspendida/desactivada.' };
+          }
+
+          const safeUser: User = {
+            id: matchedUser.id,
+            name: matchedUser.name,
+            email: matchedUser.email,
+            role: matchedUser.role,
+            phone: matchedUser.phone,
+            avatar: matchedUser.avatar || matchedUser.name.slice(0, 2).toUpperCase(),
+            active: true,
+            createdAt: matchedUser.createdAt,
+            lastLogin: new Date().toISOString()
           };
-          setCurrentUser(user);
-          localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
-          setIsLoginModalOpen(false);
-          setCurrentView('admin');
-          return { success: true };
-        } else if (
-          (email.toLowerCase() === 'tecnico@martineztech.com' && password === 'tecnico123') ||
-          (email.toLowerCase() === 'tecnico' && password === 'tecnico')
-        ) {
-          const user: User = {
-            id: 'usr-02',
-            name: 'Manuel Gómez',
-            email: 'tecnico@martineztech.com',
-            role: 'technician',
-            phone: '(809) 555-0188',
-            avatar: 'MG'
-          };
-          setCurrentUser(user);
-          localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
+
+          setCurrentUser(safeUser);
+          localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(safeUser));
+          
+          // update lastLogin in users array
+          setUsers(prev => prev.map(u => u.id === matchedUser.id ? { ...u, lastLogin: new Date().toISOString() } : u));
+          
           setIsLoginModalOpen(false);
           setCurrentView('admin');
           return { success: true };
         }
-        return { success: false, error: 'Credenciales inválidas. Ingrese con admin@martineztech.com / admin123' };
+
+        return { success: false, error: 'Credenciales inválidas. Verifique su correo o contraseña.' };
       }
     } catch (err: any) {
       return { success: false, error: err.message || 'Error de conexión con el servidor.' };
@@ -488,6 +512,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         if (isHealthy) {
           setIsServerConnected(true);
           const data = await api.getBootstrapData();
+          if (data.users?.length) setUsers(data.users);
           if (data.deals?.length) setDeals(data.deals);
           if (data.quotes?.length) setQuotes(data.quotes);
           if (data.clients?.length) setClients(data.clients);
@@ -510,6 +535,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Save to LocalStorage Sync
   useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
     localStorage.setItem(STORAGE_KEYS.DEALS, JSON.stringify(deals));
     localStorage.setItem(STORAGE_KEYS.QUOTES, JSON.stringify(quotes));
     localStorage.setItem(STORAGE_KEYS.CLIENTS, JSON.stringify(clients));
@@ -520,7 +546,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem(STORAGE_KEYS.VISITS, JSON.stringify(visits));
     localStorage.setItem(STORAGE_KEYS.WORK_ORDERS, JSON.stringify(workOrders));
     localStorage.setItem(STORAGE_KEYS.INVOICES, JSON.stringify(invoices));
-  }, [deals, quotes, clients, portfolio, companySettings, catalog, payments, visits, workOrders, invoices]);
+  }, [users, deals, quotes, clients, portfolio, companySettings, catalog, payments, visits, workOrders, invoices]);
 
   // Open WhatsApp Templates Helper
   const openWhatsAppTemplates = (templateType: WhatsAppTemplateType, data?: Partial<WhatsAppModalPayload>) => {
@@ -529,6 +555,97 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       ...data
     });
     setIsWhatsAppModalOpen(true);
+  };
+
+  // User Actions
+  const addUser = async (userData: Omit<User, 'id' | 'createdAt'>): Promise<User> => {
+    if (isServerConnected) {
+      try {
+        const created = await api.createUser(userData);
+        setUsers(prev => [created, ...prev]);
+        return created;
+      } catch (err) {
+        console.error('Error creating user via API', err);
+      }
+    }
+
+    const newUser: User = {
+      ...userData,
+      id: `usr-${Date.now()}`,
+      active: userData.active !== undefined ? userData.active : true,
+      avatar: userData.avatar || userData.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2),
+      password: userData.password || '123456',
+      createdAt: new Date().toISOString().split('T')[0]
+    };
+
+    setUsers(prev => [newUser, ...prev]);
+    return newUser;
+  };
+
+  const updateUser = async (id: string, updates: Partial<User>) => {
+    if (isServerConnected) {
+      try {
+        const updated = await api.updateUser(id, updates);
+        setUsers(prev => prev.map(u => u.id === id ? { ...u, ...updated } : u));
+        if (currentUser?.id === id) {
+          const safeUser = { ...currentUser, ...updated };
+          delete safeUser.password;
+          setCurrentUser(safeUser);
+          localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(safeUser));
+        }
+        return;
+      } catch (err) {
+        console.error('Error updating user via API', err);
+      }
+    }
+
+    setUsers(prev => prev.map(u => {
+      if (u.id === id) {
+        const updated = { ...u, ...updates };
+        if (currentUser?.id === id) {
+          const safeUser = { ...currentUser, ...updated };
+          delete safeUser.password;
+          setCurrentUser(safeUser);
+          localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(safeUser));
+        }
+        return updated;
+      }
+      return u;
+    }));
+  };
+
+  const deleteUser = async (id: string) => {
+    if (currentUser?.id === id) {
+      throw new Error('No puedes eliminar el usuario con el que has iniciado sesión actualmente.');
+    }
+
+    const target = users.find(u => u.id === id);
+    if (target?.role === 'admin') {
+      const adminCount = users.filter(u => u.role === 'admin').length;
+      if (adminCount <= 1) {
+        throw new Error('No es posible eliminar el único administrador del sistema.');
+      }
+    }
+
+    if (isServerConnected) {
+      try {
+        await api.deleteUser(id);
+      } catch (err) {
+        console.error('Error deleting user via API', err);
+      }
+    }
+
+    setUsers(prev => prev.filter(u => u.id !== id));
+  };
+
+  const toggleUserStatus = async (id: string) => {
+    const target = users.find(u => u.id === id);
+    if (!target) return;
+    if (currentUser?.id === id) {
+      throw new Error('No puedes desactivar tu propio usuario mientras estás en sesión.');
+    }
+    const newStatus = target.active === false;
+    await updateUser(id, { active: newStatus });
   };
 
   // Deal Actions
@@ -1304,6 +1421,12 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setIsLoginModalOpen,
         login,
         logout,
+
+        users,
+        addUser,
+        updateUser,
+        deleteUser,
+        toggleUserStatus,
 
         deals,
         quotes,

@@ -259,6 +259,10 @@ export interface User {
   role: UserRole;
   phone?: string;
   avatar?: string;
+  password?: string;
+  active?: boolean;
+  createdAt?: string;
+  lastLogin?: string;
 }
 
 export type PaymentMethod = 'transferencia' | 'efectivo' | 'tarjeta' | 'cheque';

@@ -41,6 +41,33 @@ export function readDb() {
     if (!parsed.invoices) {
       parsed.invoices = [];
     }
+    if (!parsed.users || parsed.users.length === 0) {
+      parsed.users = [
+        {
+          id: 'usr-01',
+          name: 'Rafael Martínez',
+          email: 'admin@martineztech.com',
+          role: 'admin',
+          phone: '(809) 555-0199',
+          avatar: 'RM',
+          password: 'admin',
+          active: true,
+          createdAt: '2025-01-10'
+        },
+        {
+          id: 'usr-02',
+          name: 'Manuel Gómez',
+          email: 'tecnico@martineztech.com',
+          role: 'technician',
+          phone: '(809) 555-0188',
+          avatar: 'MG',
+          password: 'tecnico',
+          active: true,
+          createdAt: '2025-02-01'
+        }
+      ];
+      writeDb(parsed);
+    }
     return parsed;
   } catch (error) {
     console.error('Error reading db.json:', error);

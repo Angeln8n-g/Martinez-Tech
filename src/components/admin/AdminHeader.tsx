@@ -20,7 +20,8 @@ import {
   Wrench,
   MessageCircle,
   FileSpreadsheet,
-  Receipt
+  Receipt,
+  UserCheck
 } from 'lucide-react';
 
 export const AdminHeader: React.FC = () => {
@@ -45,7 +46,8 @@ export const AdminHeader: React.FC = () => {
     payments, 
     visits,
     workOrders,
-    invoices
+    invoices,
+    users
   } = useAppState();
 
   const handleNewDeal = () => {
@@ -69,6 +71,7 @@ export const AdminHeader: React.FC = () => {
     { id: 'catalog', label: 'Catálogo & Precios', icon: Package },
     { id: 'clients', label: 'Directorio Clientes', icon: Users },
     { id: 'portfolio', label: 'Portafolio Web', icon: Layers },
+    ...(currentUser?.role === 'admin' ? [{ id: 'users' as AdminTab, label: 'Usuarios & Accesos', icon: UserCheck, badge: users.length }] : []),
   ];
 
   return (

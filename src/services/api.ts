@@ -48,8 +48,42 @@ export const api = {
   },
 
   async getUsers(): Promise<User[]> {
-    const res = await fetch(`${API_BASE}/auth/users`);
+    const res = await fetch(`${API_BASE}/users`);
     return res.json();
+  },
+
+  async createUser(user: Omit<User, 'id' | 'createdAt'>): Promise<User> {
+    const res = await fetch(`${API_BASE}/users`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user),
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Error al crear usuario');
+    }
+    return res.json();
+  },
+
+  async updateUser(id: string, updates: Partial<User>): Promise<User> {
+    const res = await fetch(`${API_BASE}/users/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates),
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Error al actualizar usuario');
+    }
+    return res.json();
+  },
+
+  async deleteUser(id: string): Promise<void> {
+    const res = await fetch(`${API_BASE}/users/${id}`, { method: 'DELETE' });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Error al eliminar usuario');
+    }
   },
 
   // ================= PAYMENTS =================

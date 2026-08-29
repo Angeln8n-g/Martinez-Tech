@@ -4,9 +4,9 @@ import { AppStateProvider, useAppState } from './context/AppStateContext';
 // Public Components
 import { Navbar } from './components/public/Navbar';
 import { Hero } from './components/public/Hero';
+import { ProjectsBanner } from './components/public/ProjectsBanner';
 import { ServicesSection } from './components/public/ServicesSection';
 import { QuickEstimator } from './components/public/QuickEstimator';
-import { PortfolioSection } from './components/public/PortfolioSection';
 import { WhyUs } from './components/public/WhyUs';
 import { TestimonialsSection } from './components/public/TestimonialsSection';
 import { ContactSection } from './components/public/ContactSection';
@@ -24,6 +24,7 @@ import { CalendarSchedule } from './components/admin/CalendarSchedule';
 import { CatalogManager } from './components/admin/CatalogManager';
 import { ClientDirectory } from './components/admin/ClientDirectory';
 import { PortfolioManager } from './components/admin/PortfolioManager';
+import { UserManager } from './components/admin/UserManager';
 
 // Modals
 import { LoginModal } from './components/auth/LoginModal';
@@ -96,9 +97,9 @@ const MainContent: React.FC = () => {
           <Navbar />
           <main className="flex-1">
             <Hero />
+            <ProjectsBanner />
             <ServicesSection />
             <QuickEstimator />
-            <PortfolioSection />
             <WhyUs />
             <TestimonialsSection />
             <ContactSection />
@@ -132,6 +133,7 @@ const MainContent: React.FC = () => {
             {adminTab === 'catalog' && <CatalogManager />}
             {adminTab === 'clients' && <ClientDirectory />}
             {adminTab === 'portfolio' && <PortfolioManager />}
+            {adminTab === 'users' && <UserManager />}
           </main>
         </div>
       )}
