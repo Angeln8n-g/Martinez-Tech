@@ -15,7 +15,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
 }) => {
   const [imgError, setImgError] = useState(false);
 
-  const sizeStyles = {
+  const sizeStyles: Record<'sm' | 'md' | 'lg' | 'xl', { icon: string; title: string; sub: string }> = {
     sm: { icon: 'w-8 h-8', title: 'text-base font-bold', sub: 'text-[9px]' },
     md: { icon: 'w-10 h-10', title: 'text-lg font-extrabold', sub: 'text-[10px]' },
     lg: { icon: 'w-14 h-14', title: 'text-2xl font-black tracking-wide', sub: 'text-xs tracking-wider' },
