@@ -6,12 +6,21 @@ import {
   Search, 
   Trash2, 
   Edit, 
-  X
+  X,
+  Upload,
+  Download,
+  FileSpreadsheet
 } from 'lucide-react';
 import { formatCurrency, getCategoryInfo } from '../../utils/formatters';
 
 export const CatalogManager: React.FC = () => {
-  const { catalog, addCatalogProduct, updateCatalogProduct, deleteCatalogProduct } = useAppState();
+  const { 
+    catalog, 
+    addCatalogProduct, 
+    updateCatalogProduct, 
+    deleteCatalogProduct, 
+    setIsBulkImportModalOpen 
+  } = useAppState();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
@@ -110,11 +119,46 @@ export const CatalogManager: React.FC = () => {
     return matchesSearch && matchesCategory && matchesType;
   });
 
+  const handleExportCatalog = () => {
+    if (catalog.length === 0) {
+      alert('No hay productos en el catálogo para exportar.');
+      return;
+    }
+
+    const headers = 'Codigo,Nombre_Producto,Marca,Categoria,Tipo,Descripcion,Precio_Venta_DOP,Costo_Compra_DOP,Stock,Unidad';
+    const rows = catalog.map(p => {
+      const escape = (str: string = '') => `"${str.replace(/"/g, '""')}"`;
+      return [
+        escape(p.code || ''),
+        escape(p.name),
+        escape(p.brand || ''),
+        escape(p.category),
+        escape(p.type),
+        escape(p.description),
+        p.unitPrice,
+        p.costPrice || 0,
+        p.stock !== undefined ? p.stock : 10,
+        escape(p.unit || 'Unidad')
+      ].join(',');
+    });
+
+    const csvContent = '\uFEFF' + [headers, ...rows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `catalogo_precios_martinez_tech_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-6 animate-fadeIn">
       
-      {/* Top Filter Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md">
+      {/* Top Filter Bar & Actions */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md">
         
         <div className="flex items-center gap-3 flex-1 flex-wrap">
           <div className="relative flex-1 min-w-[240px]">
@@ -157,13 +201,32 @@ export const CatalogManager: React.FC = () => {
           </select>
         </div>
 
-        <button
-          onClick={openNewModal}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-md border border-brand-teal-700/20"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Agregar Ítem al Catálogo</span>
-        </button>
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            onClick={handleExportCatalog}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs border border-slate-300 dark:border-slate-700 shadow-sm transition-colors"
+            title="Exportar listado a archivo CSV compatible con Excel"
+          >
+            <Download className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <span className="hidden sm:inline">Exportar Excel</span>
+          </button>
+
+          <button
+            onClick={() => setIsBulkImportModalOpen(true)}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-brand-teal-50 dark:hover:bg-brand-teal-950/60 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs shadow-sm transition-colors"
+          >
+            <Upload className="w-4 h-4 text-brand-teal-600 dark:text-brand-teal-400" />
+            <span>Carga Masiva CSV</span>
+          </button>
+
+          <button
+            onClick={openNewModal}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 hover:from-brand-teal-400 hover:to-brand-green-400 text-slate-950 font-black text-xs shadow-md border border-brand-teal-600/30 transition-all"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Nuevo Ítem</span>
+          </button>
+        </div>
       </div>
 
       {/* Catalog Grid */}

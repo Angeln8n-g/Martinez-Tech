@@ -12,7 +12,9 @@ import {
   User,
   Payment,
   TechnicalVisit,
-  WorkOrder
+  WorkOrder,
+  FiscalInvoice,
+  NCFType
 } from '../types';
 import { 
   initialCompanySettings, 
@@ -30,6 +32,7 @@ export type AdminTab =
   | 'pipeline' 
   | 'quotes' 
   | 'payments' 
+  | 'invoices'
   | 'work_orders'
   | 'calendar' 
   | 'catalog' 
@@ -89,6 +92,7 @@ interface AppStateContextType {
   payments: Payment[];
   visits: TechnicalVisit[];
   workOrders: WorkOrder[];
+  invoices: FiscalInvoice[];
 
   // Deal Actions
   addDeal: (dealData: Omit<Deal, 'id' | 'code' | 'createdAt' | 'updatedAt'>) => Promise<Deal>;
@@ -101,6 +105,12 @@ interface AppStateContextType {
   updateQuote: (id: string, updates: Partial<Quote>) => Promise<void>;
   deleteQuote: (id: string) => Promise<void>;
   signQuote: (id: string, signature: string, signedBy?: string) => Promise<void>;
+
+  // Fiscal Invoices (DGII / NCF) Actions
+  addInvoice: (invoiceData: Omit<FiscalInvoice, 'id' | 'invoiceNumber' | 'createdAt'>) => Promise<FiscalInvoice>;
+  updateInvoice: (id: string, updates: Partial<FiscalInvoice>) => Promise<void>;
+  deleteInvoice: (id: string) => Promise<void>;
+  getNextNCF: (ncfType: NCFType) => { ncf: string; expiryDate: string };
 
   // Client Actions
   addClient: (clientData: Omit<Client, 'id' | 'createdAt' | 'totalDeals' | 'totalSpent'>) => Promise<Client>;
@@ -131,6 +141,7 @@ interface AppStateContextType {
   addCatalogProduct: (productData: Omit<CatalogProduct, 'id'>) => Promise<void>;
   updateCatalogProduct: (id: string, updates: Partial<CatalogProduct>) => Promise<void>;
   deleteCatalogProduct: (id: string) => Promise<void>;
+  bulkUpsertCatalog: (products: Partial<CatalogProduct>[]) => Promise<{ addedCount: number; updatedCount: number; total: number }>;
 
   // Settings Actions
   updateCompanySettings: (newSettings: Partial<CompanySettings>) => Promise<void>;
@@ -156,6 +167,10 @@ interface AppStateContextType {
   setActiveWorkOrderForEdit: (wo: WorkOrder | null) => void;
   activeWorkOrderForView: WorkOrder | null;
   setActiveWorkOrderForView: (wo: WorkOrder | null) => void;
+  activeInvoiceForView: FiscalInvoice | null;
+  setActiveInvoiceForView: (inv: FiscalInvoice | null) => void;
+  activeInvoiceForEdit: FiscalInvoice | null;
+  setActiveInvoiceForEdit: (inv: FiscalInvoice | null) => void;
 
   isQuoteModalOpen: boolean;
   setIsQuoteModalOpen: (open: boolean) => void;
@@ -169,6 +184,10 @@ interface AppStateContextType {
   setIsVisitModalOpen: (open: boolean) => void;
   isWorkOrderModalOpen: boolean;
   setIsWorkOrderModalOpen: (open: boolean) => void;
+  isInvoiceModalOpen: boolean;
+  setIsInvoiceModalOpen: (open: boolean) => void;
+  isBulkImportModalOpen: boolean;
+  setIsBulkImportModalOpen: (open: boolean) => void;
   
   // WhatsApp Smart Messaging Modal
   isWhatsAppModalOpen: boolean;
@@ -186,6 +205,9 @@ interface AppStateContextType {
   openPaymentForQuote: (quote: Quote) => void;
   quoteDealPreload: Deal | null;
   openNewQuoteForDeal: (deal: Deal) => void;
+  invoiceQuotePreload: Quote | null;
+  setInvoiceQuotePreload: (quote: Quote | null) => void;
+  openNewInvoiceForQuote: (quote: Quote) => void;
 }
 
 const AppStateContext = createContext<AppStateContextType | undefined>(undefined);
@@ -202,7 +224,8 @@ const STORAGE_KEYS = {
   CATALOG: 'mt_catalog_v1',
   PAYMENTS: 'mt_payments_v1',
   VISITS: 'mt_visits_v1',
-  WORK_ORDERS: 'mt_work_orders_v1'
+  WORK_ORDERS: 'mt_work_orders_v1',
+  INVOICES: 'mt_invoices_v1'
 };
 
 export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -419,6 +442,11 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     ];
   });
 
+  const [invoices, setInvoices] = useState<FiscalInvoice[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.INVOICES);
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const [services] = useState<ServiceItem[]>(initialServices);
 
   // Modals & Active State
@@ -429,6 +457,8 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [activeVisitForEdit, setActiveVisitForEdit] = useState<TechnicalVisit | null>(null);
   const [activeWorkOrderForEdit, setActiveWorkOrderForEdit] = useState<WorkOrder | null>(null);
   const [activeWorkOrderForView, setActiveWorkOrderForView] = useState<WorkOrder | null>(null);
+  const [activeInvoiceForView, setActiveInvoiceForView] = useState<FiscalInvoice | null>(null);
+  const [activeInvoiceForEdit, setActiveInvoiceForEdit] = useState<FiscalInvoice | null>(null);
 
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [isDealModalOpen, setIsDealModalOpen] = useState(false);
@@ -436,6 +466,8 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isVisitModalOpen, setIsVisitModalOpen] = useState(false);
   const [isWorkOrderModalOpen, setIsWorkOrderModalOpen] = useState(false);
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  const [isBulkImportModalOpen, setIsBulkImportModalOpen] = useState(false);
   
   // WhatsApp Smart Messaging
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
@@ -446,6 +478,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const [quoteForPayment, setQuoteForPayment] = useState<Quote | null>(null);
   const [quoteDealPreload, setQuoteDealPreload] = useState<Deal | null>(null);
+  const [invoiceQuotePreload, setInvoiceQuotePreload] = useState<Quote | null>(null);
 
   // Connect to Backend API
   useEffect(() => {
@@ -463,6 +496,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           if (data.payments?.length) setPayments(data.payments);
           if (data.visits?.length) setVisits(data.visits);
           if (data.workOrders?.length) setWorkOrders(data.workOrders);
+          if (data.invoices?.length) setInvoices(data.invoices);
           if (data.companySettings && Object.keys(data.companySettings).length > 0) {
             setCompanySettings(prev => ({ ...prev, ...data.companySettings }));
           }
@@ -485,7 +519,8 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem(STORAGE_KEYS.PAYMENTS, JSON.stringify(payments));
     localStorage.setItem(STORAGE_KEYS.VISITS, JSON.stringify(visits));
     localStorage.setItem(STORAGE_KEYS.WORK_ORDERS, JSON.stringify(workOrders));
-  }, [deals, quotes, clients, portfolio, companySettings, catalog, payments, visits, workOrders]);
+    localStorage.setItem(STORAGE_KEYS.INVOICES, JSON.stringify(invoices));
+  }, [deals, quotes, clients, portfolio, companySettings, catalog, payments, visits, workOrders, invoices]);
 
   // Open WhatsApp Templates Helper
   const openWhatsAppTemplates = (templateType: WhatsAppTemplateType, data?: Partial<WhatsAppModalPayload>) => {
@@ -961,6 +996,162 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setCatalog(prev => prev.filter(c => c.id !== id));
   };
 
+  const bulkUpsertCatalog = async (products: Partial<CatalogProduct>[]) => {
+    if (isServerConnected) {
+      try {
+        const res = await api.bulkUpsertCatalog(products);
+        if (res.catalog) {
+          setCatalog(res.catalog);
+        }
+        return { addedCount: res.addedCount || 0, updatedCount: res.updatedCount || 0, total: res.total || 0 };
+      } catch (err) {
+        console.error('Error bulk updating catalog via API', err);
+      }
+    }
+
+    // Local state fallback
+    let current = [...catalog];
+    let addedCount = 0;
+    let updatedCount = 0;
+
+    products.forEach(p => {
+      if (!p.name || !p.unitPrice) return;
+      const idx = current.findIndex(item => (p.id && item.id === p.id) || (p.code && item.code && item.code.trim().toUpperCase() === p.code.trim().toUpperCase()));
+      if (idx >= 0) {
+        current[idx] = { ...current[idx], ...p, id: current[idx].id } as CatalogProduct;
+        updatedCount++;
+      } else {
+        const newItem: CatalogProduct = {
+          id: p.id || `cat-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+          name: p.name,
+          category: p.category || 'camaras',
+          type: p.type || 'product',
+          description: p.description || '',
+          unitPrice: Number(p.unitPrice) || 0,
+          costPrice: Number(p.costPrice) || 0,
+          stock: p.stock !== undefined ? Number(p.stock) : 10,
+          unit: p.unit || 'Unidad',
+          code: p.code || '',
+          brand: p.brand || ''
+        };
+        current.push(newItem);
+        addedCount++;
+      }
+    });
+
+    setCatalog(current);
+    localStorage.setItem(STORAGE_KEYS.CATALOG, JSON.stringify(current));
+    return { addedCount, updatedCount, total: current.length };
+  };
+
+  // Fiscal Invoices (DGII / NCF)
+  const getNextNCF = (ncfType: NCFType): { ncf: string; expiryDate: string } => {
+    const sequences = companySettings.ncfSequences || {
+      b01Next: 1,
+      b02Next: 1,
+      b14Next: 1,
+      b15Next: 1,
+      ncfExpiryDate: '2027-12-31'
+    };
+    
+    let num = 1;
+    if (ncfType === 'B01') num = sequences.b01Next || 1;
+    else if (ncfType === 'B02') num = sequences.b02Next || 1;
+    else if (ncfType === 'B14') num = sequences.b14Next || 1;
+    else if (ncfType === 'B15') num = sequences.b15Next || 1;
+
+    const ncfFormatted = `${ncfType}${String(num).padStart(8, '0')}`;
+    const expiryDate = sequences.ncfExpiryDate || '2027-12-31';
+
+    return { ncf: ncfFormatted, expiryDate };
+  };
+
+  const addInvoice = async (invoiceData: Omit<FiscalInvoice, 'id' | 'invoiceNumber' | 'createdAt'>): Promise<FiscalInvoice> => {
+    if (isServerConnected) {
+      try {
+        const created = await api.createInvoice(invoiceData);
+        setInvoices(prev => [created, ...prev]);
+        
+        if (companySettings.ncfSequences) {
+          const seqKey = `${invoiceData.ncfType.toLowerCase()}Next` as keyof typeof companySettings.ncfSequences;
+          const currentNum = companySettings.ncfSequences[seqKey];
+          if (typeof currentNum === 'number') {
+            const updatedSettings = {
+              ...companySettings,
+              ncfSequences: {
+                ...companySettings.ncfSequences,
+                [seqKey]: currentNum + 1
+              }
+            };
+            setCompanySettings(updatedSettings);
+          }
+        }
+        return created;
+      } catch (err) {
+        console.error('Error creating invoice via API', err);
+      }
+    }
+
+    const nextCount = invoices.length + 1;
+    const newInvoice: FiscalInvoice = {
+      ...invoiceData,
+      id: `inv-${Date.now()}`,
+      invoiceNumber: `FAC-${new Date().getFullYear()}-${String(nextCount).padStart(3, '0')}`,
+      createdAt: new Date().toISOString()
+    };
+
+    setInvoices(prev => [newInvoice, ...prev]);
+
+    if (companySettings.ncfSequences) {
+      const seqKey = `${invoiceData.ncfType.toLowerCase()}Next` as keyof typeof companySettings.ncfSequences;
+      const currentNum = companySettings.ncfSequences[seqKey];
+      if (typeof currentNum === 'number') {
+        const updatedSettings = {
+          ...companySettings,
+          ncfSequences: {
+            ...companySettings.ncfSequences,
+            [seqKey]: currentNum + 1
+          }
+        };
+        setCompanySettings(updatedSettings);
+      }
+    }
+
+    if (invoiceData.quoteId) {
+      setQuotes(prev => prev.map(q => q.id === invoiceData.quoteId ? { ...q, status: 'invoiced' } : q));
+    }
+
+    return newInvoice;
+  };
+
+  const updateInvoice = async (id: string, updates: Partial<FiscalInvoice>) => {
+    if (isServerConnected) {
+      try {
+        await api.updateInvoice(id, updates);
+      } catch (err) {
+        console.error('Error updating invoice via API', err);
+      }
+    }
+    setInvoices(prev => prev.map(inv => (inv.id === id ? { ...inv, ...updates } : inv)));
+  };
+
+  const deleteInvoice = async (id: string) => {
+    if (isServerConnected) {
+      try {
+        await api.deleteInvoice(id);
+      } catch (err) {
+        console.error('Error deleting invoice via API', err);
+      }
+    }
+    setInvoices(prev => prev.filter(inv => inv.id !== id));
+  };
+
+  const openNewInvoiceForQuote = (quote: Quote) => {
+    setInvoiceQuotePreload(quote);
+    setActiveInvoiceForEdit(null);
+    setIsInvoiceModalOpen(true);
+  };
+
   // Settings Actions
   const updateCompanySettings = async (newSettings: Partial<CompanySettings>) => {
     if (isServerConnected) {
@@ -1124,6 +1315,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         payments,
         visits,
         workOrders,
+        invoices,
 
         addDeal,
         updateDeal,
@@ -1134,6 +1326,11 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         updateQuote,
         deleteQuote,
         signQuote,
+
+        addInvoice,
+        updateInvoice,
+        deleteInvoice,
+        getNextNCF,
 
         addClient,
         updateClient,
@@ -1158,6 +1355,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         addCatalogProduct,
         updateCatalogProduct,
         deleteCatalogProduct,
+        bulkUpsertCatalog,
 
         updateCompanySettings,
         exportDataBackup,
@@ -1179,6 +1377,10 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setActiveWorkOrderForEdit,
         activeWorkOrderForView,
         setActiveWorkOrderForView,
+        activeInvoiceForView,
+        setActiveInvoiceForView,
+        activeInvoiceForEdit,
+        setActiveInvoiceForEdit,
 
         isQuoteModalOpen,
         setIsQuoteModalOpen,
@@ -1192,6 +1394,10 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setIsVisitModalOpen,
         isWorkOrderModalOpen,
         setIsWorkOrderModalOpen,
+        isInvoiceModalOpen,
+        setIsInvoiceModalOpen,
+        isBulkImportModalOpen,
+        setIsBulkImportModalOpen,
 
         isWhatsAppModalOpen,
         setIsWhatsAppModalOpen,
@@ -1206,7 +1412,10 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setQuoteForPayment,
         openPaymentForQuote,
         quoteDealPreload,
-        openNewQuoteForDeal
+        openNewQuoteForDeal,
+        invoiceQuotePreload,
+        setInvoiceQuotePreload,
+        openNewInvoiceForQuote
       }}
     >
       {children}

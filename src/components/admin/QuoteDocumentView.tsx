@@ -16,7 +16,8 @@ import {
   DollarSign,
   PenTool,
   CheckCircle2,
-  Lock
+  Lock,
+  Receipt
 } from 'lucide-react';
 import { formatCurrency, formatDate, generateQuoteWhatsAppText, createWhatsAppUrl } from '../../utils/formatters';
 import jsPDF from 'jspdf';
@@ -30,6 +31,7 @@ export const QuoteDocumentView: React.FC = () => {
     setActiveQuoteForEdit, 
     setIsQuoteModalOpen,
     openPaymentForQuote,
+    openNewInvoiceForQuote,
     signQuote,
     openWhatsAppTemplates
   } = useAppState();
@@ -149,6 +151,17 @@ export const QuoteDocumentView: React.FC = () => {
             >
               <DollarSign className="w-4 h-4" />
               <span>Registrar Pago / Cobro</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveQuoteForView(null);
+                openNewInvoiceForQuote(quote);
+              }}
+              className="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md"
+            >
+              <Receipt className="w-4 h-4" />
+              <span>Emitir Factura Fiscal</span>
             </button>
 
             <button

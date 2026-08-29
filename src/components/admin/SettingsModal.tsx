@@ -40,6 +40,20 @@ export const SettingsModal: React.FC = () => {
   const [defaultTerms, setDefaultTerms] = useState(companySettings.defaultTerms);
   const [bankAccounts, setBankAccounts] = useState(companySettings.bankAccounts || []);
 
+  // Social Links
+  const [instagram, setInstagram] = useState(companySettings.socialLinks?.instagram || '');
+  const [facebook, setFacebook] = useState(companySettings.socialLinks?.facebook || '');
+  const [tiktok, setTiktok] = useState(companySettings.socialLinks?.tiktok || '');
+  const [linkedin, setLinkedin] = useState(companySettings.socialLinks?.linkedin || '');
+  const [youtube, setYoutube] = useState(companySettings.socialLinks?.youtube || '');
+
+  // DGII NCF Sequences
+  const [b01Next, setB01Next] = useState(companySettings.ncfSequences?.b01Next || 1);
+  const [b02Next, setB02Next] = useState(companySettings.ncfSequences?.b02Next || 1);
+  const [b14Next, setB14Next] = useState(companySettings.ncfSequences?.b14Next || 1);
+  const [b15Next, setB15Next] = useState(companySettings.ncfSequences?.b15Next || 1);
+  const [ncfExpiryDate, setNcfExpiryDate] = useState(companySettings.ncfSequences?.ncfExpiryDate || '2027-12-31');
+
   if (!isSettingsModalOpen) return null;
 
   const handleAddBankAccount = () => {
@@ -77,7 +91,21 @@ export const SettingsModal: React.FC = () => {
       defaultTaxPercent: Number(defaultTaxPercent),
       defaultWarranty,
       defaultTerms,
-      bankAccounts
+      bankAccounts,
+      socialLinks: {
+        instagram,
+        facebook,
+        tiktok,
+        linkedin,
+        youtube
+      },
+      ncfSequences: {
+        b01Next: Number(b01Next),
+        b02Next: Number(b02Next),
+        b14Next: Number(b14Next),
+        b15Next: Number(b15Next),
+        ncfExpiryDate
+      }
     });
     setCopiedSuccess(true);
     setTimeout(() => {
@@ -323,10 +351,147 @@ export const SettingsModal: React.FC = () => {
             </div>
           </div>
 
+          {/* Social Media & Channels */}
+          <div className="space-y-3 pt-3 border-t-2 border-slate-200 dark:border-slate-800">
+            <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+              4. Redes Sociales & Enlaces Digitales
+            </h4>
+            <p className="text-[11px] text-slate-500">
+              Estos enlaces se mostrarán en el pie de página (footer) y en los canales de contacto de la web pública.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Instagram URL</label>
+                <input
+                  type="text"
+                  placeholder="https://instagram.com/martineztech.do"
+                  value={instagram}
+                  onChange={(e) => setInstagram(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Facebook URL</label>
+                <input
+                  type="text"
+                  placeholder="https://facebook.com/martineztechrd"
+                  value={facebook}
+                  onChange={(e) => setFacebook(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">TikTok URL</label>
+                <input
+                  type="text"
+                  placeholder="https://tiktok.com/@martineztech"
+                  value={tiktok}
+                  onChange={(e) => setTiktok(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">LinkedIn URL</label>
+                <input
+                  type="text"
+                  placeholder="https://linkedin.com/company/martinez-tech"
+                  value={linkedin}
+                  onChange={(e) => setLinkedin(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div className="space-y-1 sm:col-span-2">
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">YouTube Channel URL</label>
+                <input
+                  type="text"
+                  placeholder="https://youtube.com/@martineztech"
+                  value={youtube}
+                  onChange={(e) => setYoutube(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Fiscal DGII NCF Sequences */}
+          <div className="space-y-3 pt-3 border-t-2 border-slate-200 dark:border-slate-800">
+            <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+              5. Secuencias de Comprobantes Fiscales (DGII - NCF)
+            </h4>
+            <p className="text-[11px] text-slate-500">
+              Control correlativo para la emisión de facturas fiscales según la numeración asignada por la DGII.
+            </p>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Próximo B01 (Crédito)</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={b01Next}
+                  onChange={(e) => setB01Next(parseInt(e.target.value, 10) || 1)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white"
+                />
+                <span className="text-[10px] text-slate-400 font-mono">B01{String(b01Next).padStart(8, '0')}</span>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Próximo B02 (Consumo)</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={b02Next}
+                  onChange={(e) => setB02Next(parseInt(e.target.value, 10) || 1)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white"
+                />
+                <span className="text-[10px] text-slate-400 font-mono">B02{String(b02Next).padStart(8, '0')}</span>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Próximo B14 (Esp.)</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={b14Next}
+                  onChange={(e) => setB14Next(parseInt(e.target.value, 10) || 1)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white"
+                />
+                <span className="text-[10px] text-slate-400 font-mono">B14{String(b14Next).padStart(8, '0')}</span>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Próximo B15 (Gubern.)</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={b15Next}
+                  onChange={(e) => setB15Next(parseInt(e.target.value, 10) || 1)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white"
+                />
+                <span className="text-[10px] text-slate-400 font-mono">B15{String(b15Next).padStart(8, '0')}</span>
+              </div>
+            </div>
+
+            <div className="space-y-1 sm:w-1/2">
+              <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Fecha de Vencimiento de Secuencia NCF</label>
+              <input
+                type="date"
+                value={ncfExpiryDate}
+                onChange={(e) => setNcfExpiryDate(e.target.value)}
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-mono text-slate-900 dark:text-white"
+              />
+            </div>
+          </div>
+
           {/* Backup & Restore */}
           <div className="space-y-3 pt-3 border-t-2 border-slate-200 dark:border-slate-800">
             <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-              4. Respaldos de Datos & Seguridad
+              6. Respaldos de Datos & Seguridad
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">

@@ -31,8 +31,8 @@
     "slogan": "Soluciones - Servicios - Calidad",
     "rnc": "131-99445-1",
     "phone": "(809) 555-0199",
-    "whatsapp": "18095550199",
-    "email": "contacto@martineztech.com",
+    "whatsapp": "8295297161",
+    "email": "raynelm@gmail.com",
     "website": "www.martineztech.com",
     "address": "Av. 27 de Febrero #245, Plaza Tecno Suite 3B",
     "city": "Santo Domingo, República Dominicana",
@@ -60,7 +60,21 @@
     "defaultCurrency": "DOP",
     "defaultWarranty": "1 Año de garantía en equipos y 6 meses en mano de obra e instalación.",
     "defaultTerms": "50% o 60% de anticipo para inicio de trabajos / compra de equipos, y saldo restante contra entrega a satisfacción.",
-    "logoUrl": ""
+    "logoUrl": "",
+    "socialLinks": {
+      "instagram": "https://instagram.com/martinez_.tech",
+      "facebook": "https://facebook.com/martineztechrd",
+      "tiktok": "https://tiktok.com/@martineztech",
+      "linkedin": "https://linkedin.com/company/martinez-tech",
+      "youtube": "https://youtube.com/@martineztech"
+    },
+    "ncfSequences": {
+      "b01Next": 3,
+      "b02Next": 1,
+      "b14Next": 1,
+      "b15Next": 1,
+      "ncfExpiryDate": "2027-12-31"
+    }
   },
   "catalog": [
     {
@@ -244,6 +258,32 @@
       "costPrice": 0,
       "stock": 999,
       "unit": "Servicio"
+    },
+    {
+      "code": "TEST-BULK-01",
+      "name": "Cámara Domo IP 4MP Test Pro",
+      "brand": "Hikvision",
+      "category": "camaras",
+      "type": "product",
+      "description": "Cámara de prueba para verificación masiva",
+      "unitPrice": 3500,
+      "costPrice": 2500,
+      "stock": 25,
+      "unit": "Unidad",
+      "id": "cat-1788018300237-61ln"
+    },
+    {
+      "code": "TEST-BULK-02",
+      "name": "Switch Gigabit PoE 8 Puertos Test",
+      "brand": "D-Link",
+      "category": "redes",
+      "type": "product",
+      "description": "Switch PoE administrable",
+      "unitPrice": 5800,
+      "costPrice": 4200,
+      "stock": 8,
+      "unit": "Unidad",
+      "id": "cat-1788018300237-o99i"
     }
   ],
   "portfolio": [
@@ -304,6 +344,87 @@
         "Fuentes de Poder Centralizadas con Baterías de Respaldo"
       ],
       "featured": true
+    }
+  ],
+  "invoices": [
+    {
+      "ncf": "B0100000002",
+      "ncfType": "B01",
+      "ncfTypeName": "Factura para Crédito Fiscal",
+      "ncfExpiryDate": "2026-12-31",
+      "clientId": "cli-04",
+      "clientName": "Residencia Familiar",
+      "clientRnc": "10111500",
+      "clientPhone": "849-555-6677",
+      "clientAddress": "Calle Costa Rica #12, Urb. Real, Santo Domingo",
+      "date": "2026-08-29",
+      "dueDate": "2026-09-13",
+      "items": [
+        {
+          "id": "item-1",
+          "description": "Suministro e instalación de equipos tecnológicos",
+          "quantity": 1,
+          "unitPrice": 1,
+          "taxPercent": 18,
+          "taxAmount": 0.18,
+          "total": 1.18
+        }
+      ],
+      "subtotal": 1,
+      "discountPercent": 0,
+      "discountAmount": 0,
+      "taxPercent": 18,
+      "taxAmount": 0.18,
+      "total": 1.18,
+      "currency": "DOP",
+      "paymentStatus": "pending",
+      "paymentMethod": "transferencia",
+      "amountPaid": 0,
+      "balanceDue": 1.18,
+      "notes": "",
+      "createdBy": "Rafael Martínez",
+      "id": "inv-1788021065385",
+      "invoiceNumber": "FAC-2026-002",
+      "createdAt": "2026-08-29T16:31:05.385Z"
+    },
+    {
+      "ncf": "B0100000001",
+      "ncfType": "B01",
+      "ncfTypeName": "Factura para Crédito Fiscal",
+      "ncfExpiryDate": "2027-12-31",
+      "clientName": "Empresa Constructora del Cibao S.A.",
+      "clientRnc": "131-44552-1",
+      "clientAddress": "Santiago de los Caballeros",
+      "clientPhone": "809-582-0199",
+      "date": "2026-08-29",
+      "dueDate": "2026-09-15",
+      "items": [
+        {
+          "id": "item-1",
+          "description": "Suministro e instalación de 8 Cámaras 4K ColorVu con NVR",
+          "quantity": 1,
+          "unitPrice": 65000,
+          "taxPercent": 18,
+          "taxAmount": 11700,
+          "total": 76700
+        }
+      ],
+      "subtotal": 65000,
+      "discountPercent": 0,
+      "discountAmount": 0,
+      "taxPercent": 18,
+      "taxAmount": 11700,
+      "total": 76700,
+      "currency": "DOP",
+      "paymentStatus": "paid",
+      "paymentMethod": "transferencia",
+      "amountPaid": 76700,
+      "balanceDue": 0,
+      "notes": "Pago completo recibido contra entrega conforme.",
+      "createdBy": "Rafael Martínez",
+      "id": "inv-1788018300275",
+      "invoiceNumber": "FAC-2026-001",
+      "createdAt": "2026-08-29T15:45:00.275Z"
     }
   ]
 }

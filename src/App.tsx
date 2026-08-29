@@ -19,6 +19,7 @@ import { PipelineKanban } from './components/admin/PipelineKanban';
 import { QuotesList } from './components/admin/QuotesList';
 import { PaymentsManager } from './components/admin/PaymentsManager';
 import { WorkOrdersList } from './components/admin/WorkOrdersList';
+import { FiscalInvoicesList } from './components/admin/FiscalInvoicesList';
 import { CalendarSchedule } from './components/admin/CalendarSchedule';
 import { CatalogManager } from './components/admin/CatalogManager';
 import { ClientDirectory } from './components/admin/ClientDirectory';
@@ -34,6 +35,9 @@ import { PaymentReceiptView } from './components/admin/PaymentReceiptView';
 import { VisitModal } from './components/admin/VisitModal';
 import { WorkOrderModal } from './components/admin/WorkOrderModal';
 import { WorkOrderDocumentView } from './components/admin/WorkOrderDocumentView';
+import { FiscalInvoiceModal } from './components/admin/FiscalInvoiceModal';
+import { FiscalInvoiceDocumentView } from './components/admin/FiscalInvoiceDocumentView';
+import { CatalogBulkImportModal } from './components/admin/CatalogBulkImportModal';
 import { WhatsAppTemplatesModal } from './components/admin/WhatsAppTemplatesModal';
 import { FinancialReportsModal } from './components/admin/FinancialReportsModal';
 import { SettingsModal } from './components/admin/SettingsModal';
@@ -121,6 +125,7 @@ const MainContent: React.FC = () => {
             {adminTab === 'dashboard' && <DashboardOverview />}
             {adminTab === 'pipeline' && <PipelineKanban />}
             {adminTab === 'quotes' && <QuotesList />}
+            {adminTab === 'invoices' && <FiscalInvoicesList />}
             {adminTab === 'payments' && <PaymentsManager />}
             {adminTab === 'work_orders' && <WorkOrdersList />}
             {adminTab === 'calendar' && <CalendarSchedule />}
@@ -141,6 +146,9 @@ const MainContent: React.FC = () => {
       <VisitModal />
       <WorkOrderModal />
       <WorkOrderDocumentView />
+      <FiscalInvoiceModal />
+      <FiscalInvoiceDocumentView />
+      <CatalogBulkImportModal />
       <WhatsAppTemplatesModal />
       <FinancialReportsModal />
       <SettingsModal />

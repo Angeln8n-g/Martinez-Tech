@@ -8,7 +8,12 @@ import {
   MessageCircle, 
   LayoutDashboard, 
   ShieldCheck,
-  ChevronRight
+  ChevronRight,
+  Instagram,
+  Facebook,
+  Linkedin,
+  Youtube,
+  Share2
 } from 'lucide-react';
 import { createWhatsAppUrl } from '../../utils/formatters';
 
@@ -32,6 +37,71 @@ export const Footer: React.FC = () => {
             <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm leading-relaxed pr-4">
               Especialistas en soluciones integrales de seguridad electrónica, redes de datos de alta velocidad, automatización y control de accesos. Calidad, garantía y soporte técnico profesional.
             </p>
+            
+            {/* Social Media Links Bar */}
+            <div className="pt-1 space-y-2">
+              <div className="text-[11px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                Conéctate con nosotros:
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                {companySettings.socialLinks?.instagram && (
+                  <a
+                    href={companySettings.socialLinks.instagram}
+                    target="_blank"
+                    rel="@martinez_.tech"
+                    className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-pink-600 hover:bg-pink-50 dark:hover:bg-pink-950/40 hover:border-pink-300 transition-all hover:scale-110 shadow-sm"
+                    title="Instagram @martinez_.tech"
+                  >
+                    <Instagram className="w-4 h-4" />
+                  </a>
+                )}
+                {companySettings.socialLinks?.facebook && (
+                  <a
+                    href={companySettings.socialLinks.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:border-blue-300 transition-all hover:scale-110 shadow-sm"
+                    title="Facebook Martínez Tech"
+                  >
+                    <Facebook className="w-4 h-4" />
+                  </a>
+                )}
+                {companySettings.socialLinks?.tiktok && (
+                  <a
+                    href={companySettings.socialLinks.tiktok}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-800 hover:border-slate-400 transition-all hover:scale-110 shadow-sm flex items-center justify-center font-black text-xs"
+                    title="TikTok @martineztech"
+                  >
+                    <span className="font-mono text-[11px]">TT</span>
+                  </a>
+                )}
+                {companySettings.socialLinks?.linkedin && (
+                  <a
+                    href={companySettings.socialLinks.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sky-600 hover:bg-sky-50 dark:hover:bg-sky-950/40 hover:border-sky-300 transition-all hover:scale-110 shadow-sm"
+                    title="LinkedIn Martínez Tech"
+                  >
+                    <Linkedin className="w-4 h-4" />
+                  </a>
+                )}
+                {companySettings.socialLinks?.youtube && (
+                  <a
+                    href={companySettings.socialLinks.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 hover:border-red-300 transition-all hover:scale-110 shadow-sm"
+                    title="Canal de YouTube"
+                  >
+                    <Youtube className="w-4 h-4" />
+                  </a>
+                )}
+              </div>
+            </div>
+
             <div className="flex items-center gap-3 pt-2">
               <button
                 onClick={handleWhatsApp}

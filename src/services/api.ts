@@ -9,7 +9,8 @@ import {
   Payment,
   TechnicalVisit,
   CatalogProduct,
-  WorkOrder
+  WorkOrder,
+  FiscalInvoice
 } from '../types';
 
 const API_BASE = '/api';
@@ -149,6 +150,42 @@ export const api = {
 
   async deleteCatalogProduct(id: string): Promise<void> {
     await fetch(`${API_BASE}/catalog/${id}`, { method: 'DELETE' });
+  },
+
+  async bulkUpsertCatalog(products: Partial<CatalogProduct>[]): Promise<{ success: boolean; addedCount: number; updatedCount: number; total: number; catalog: CatalogProduct[] }> {
+    const res = await fetch(`${API_BASE}/catalog/bulk`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ products }),
+    });
+    return res.json();
+  },
+
+  // ================= FISCAL INVOICES (DGII / NCF) =================
+  async getInvoices(): Promise<FiscalInvoice[]> {
+    const res = await fetch(`${API_BASE}/invoices`);
+    return res.json();
+  },
+
+  async createInvoice(invoice: Omit<FiscalInvoice, 'id' | 'invoiceNumber' | 'createdAt'>): Promise<FiscalInvoice> {
+    const res = await fetch(`${API_BASE}/invoices`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(invoice),
+    });
+    return res.json();
+  },
+
+  async updateInvoice(id: string, updates: Partial<FiscalInvoice>): Promise<void> {
+    await fetch(`${API_BASE}/invoices/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates),
+    });
+  },
+
+  async deleteInvoice(id: string): Promise<void> {
+    await fetch(`${API_BASE}/invoices/${id}`, { method: 'DELETE' });
   },
 
   // ================= DEALS =================

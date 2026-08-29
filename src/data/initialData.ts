@@ -42,7 +42,21 @@ export const initialCompanySettings: CompanySettings = {
   defaultCurrency: 'DOP',
   defaultWarranty: '1 año de garantía en equipos nuevos y 6 meses en mano de obra e instalación.',
   defaultTerms: 'Forma de pago: 60% de anticipo para inicio de trabajos y pedido de equipos, 40% contra entrega y conformidad de funcionamiento. Validez de la cotización: 15 días.',
-  logoUrl: '/logo.png'
+  logoUrl: '/logo.png',
+  socialLinks: {
+    instagram: 'https://instagram.com/martineztech.do',
+    facebook: 'https://facebook.com/martineztechrd',
+    tiktok: 'https://tiktok.com/@martineztech',
+    linkedin: 'https://linkedin.com/company/martinez-tech',
+    youtube: 'https://youtube.com/@martineztech'
+  },
+  ncfSequences: {
+    b01Next: 1,
+    b02Next: 1,
+    b14Next: 1,
+    b15Next: 1,
+    ncfExpiryDate: '2027-12-31'
+  }
 };
 
 export const initialServices: ServiceItem[] = [

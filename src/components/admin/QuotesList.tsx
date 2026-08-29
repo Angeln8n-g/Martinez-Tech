@@ -11,7 +11,8 @@ import {
   DollarSign,
   PenTool,
   CheckCircle2,
-  Wrench
+  Wrench,
+  Receipt
 } from 'lucide-react';
 import { 
   formatCurrency, 
@@ -26,6 +27,7 @@ export const QuotesList: React.FC = () => {
     setActiveQuoteForEdit, 
     setIsQuoteModalOpen,
     openPaymentForQuote,
+    openNewInvoiceForQuote,
     updateQuote,
     openWhatsAppTemplates,
     setActiveWorkOrderForEdit,
@@ -248,6 +250,15 @@ export const QuotesList: React.FC = () => {
                             title="Registrar Cobro / Anticipo"
                           >
                             <DollarSign className="w-4 h-4" />
+                          </button>
+
+                          {/* Fiscal Invoice (DGII) */}
+                          <button
+                            onClick={() => openNewInvoiceForQuote(quote)}
+                            className="p-1.5 rounded-lg bg-amber-50 dark:bg-amber-950/80 hover:bg-amber-100 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-500/30"
+                            title="Emitir Factura Fiscal (DGII / NCF)"
+                          >
+                            <Receipt className="w-4 h-4" />
                           </button>
 
                           {/* WhatsApp Template */}

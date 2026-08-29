@@ -19,7 +19,8 @@ import {
   LogOut,
   Wrench,
   MessageCircle,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Receipt
 } from 'lucide-react';
 
 export const AdminHeader: React.FC = () => {
@@ -43,7 +44,8 @@ export const AdminHeader: React.FC = () => {
     quotes, 
     payments, 
     visits,
-    workOrders 
+    workOrders,
+    invoices
   } = useAppState();
 
   const handleNewDeal = () => {
@@ -60,6 +62,7 @@ export const AdminHeader: React.FC = () => {
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'pipeline', label: 'Negociaciones', icon: Kanban, badge: deals.length },
     { id: 'quotes', label: 'Presupuestos', icon: FileText, badge: quotes.length },
+    { id: 'invoices', label: 'Facturación Fiscal (NCF)', icon: Receipt, badge: invoices.length },
     { id: 'payments', label: 'Cobros & Recibos', icon: DollarSign, badge: payments.length },
     { id: 'work_orders', label: 'Órdenes de Trabajo', icon: Wrench, badge: workOrders.length },
     { id: 'calendar', label: 'Agenda Técnica', icon: Calendar, badge: visits.length },

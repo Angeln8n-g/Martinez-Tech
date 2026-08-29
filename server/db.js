@@ -18,6 +18,7 @@ function ensureDbFile() {
       payments: [],
       visits: [],
       workOrders: [],
+      invoices: [],
       companySettings: {},
       catalog: [],
       deals: [],
@@ -37,6 +38,9 @@ export function readDb() {
     if (!parsed.workOrders) {
       parsed.workOrders = [];
     }
+    if (!parsed.invoices) {
+      parsed.invoices = [];
+    }
     return parsed;
   } catch (error) {
     console.error('Error reading db.json:', error);
@@ -45,6 +49,7 @@ export function readDb() {
       payments: [],
       visits: [],
       workOrders: [],
+      invoices: [],
       companySettings: {},
       catalog: [],
       deals: [],

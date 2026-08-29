@@ -40,6 +40,7 @@ app.get('/api/bootstrap', (req, res) => {
     payments: db.payments || [],
     visits: db.visits || [],
     workOrders: db.workOrders || [],
+    invoices: db.invoices || [],
     companySettings: db.companySettings || {},
     catalog: db.catalog || [],
     deals: db.deals || [],
@@ -223,6 +224,105 @@ app.put('/api/catalog/:id', (req, res) => {
 app.delete('/api/catalog/:id', (req, res) => {
   const db = readDb();
   db.catalog = (db.catalog || []).filter(c => c.id !== req.params.id);
+  writeDb(db);
+  res.json({ success: true });
+});
+
+app.post('/api/catalog/bulk', (req, res) => {
+  const db = readDb();
+  const incoming = Array.isArray(req.body) ? req.body : (req.body.products || []);
+  if (!incoming || incoming.length === 0) {
+    return res.status(400).json({ error: 'No se recibieron productos para importar.' });
+  }
+
+  let current = [...(db.catalog || [])];
+  let updatedCount = 0;
+  let addedCount = 0;
+
+  incoming.forEach(p => {
+    if (!p.name || !p.unitPrice) return;
+    
+    // Find by ID or by matching code
+    const existingIdx = current.findIndex(item => 
+      (p.id && item.id === p.id) || 
+      (p.code && item.code && item.code.trim().toUpperCase() === p.code.trim().toUpperCase())
+    );
+
+    if (existingIdx >= 0) {
+      current[existingIdx] = {
+        ...current[existingIdx],
+        ...p,
+        id: current[existingIdx].id // preserve id
+      };
+      updatedCount++;
+    } else {
+      const newItem = {
+        ...p,
+        id: p.id || `cat-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`
+      };
+      current.push(newItem);
+      addedCount++;
+    }
+  });
+
+  db.catalog = current;
+  writeDb(db);
+  res.json({ success: true, addedCount, updatedCount, total: current.length, catalog: current });
+});
+
+/* ========================================================
+   FISCAL INVOICES (DGII / NCF)
+======================================================== */
+app.get('/api/invoices', (req, res) => {
+  const db = readDb();
+  res.json(db.invoices || []);
+});
+
+app.post('/api/invoices', (req, res) => {
+  const db = readDb();
+  const newInvoice = req.body;
+  if (!newInvoice.id) {
+    newInvoice.id = `inv-${Date.now()}`;
+  }
+  if (!newInvoice.invoiceNumber) {
+    const nextNum = (db.invoices || []).length + 1;
+    newInvoice.invoiceNumber = `FAC-${new Date().getFullYear()}-${String(nextNum).padStart(3, '0')}`;
+  }
+  newInvoice.createdAt = newInvoice.createdAt || new Date().toISOString();
+
+  // If quoteId was provided, update quote status to invoiced
+  if (newInvoice.quoteId) {
+    db.quotes = (db.quotes || []).map(q => 
+      q.id === newInvoice.quoteId ? { ...q, status: 'invoiced' } : q
+    );
+  }
+
+  // Auto-increment NCF sequence in companySettings if present
+  if (newInvoice.ncfType && db.companySettings) {
+    const seqKey = `${newInvoice.ncfType.toLowerCase()}Next`;
+    if (db.companySettings.ncfSequences && typeof db.companySettings.ncfSequences[seqKey] === 'number') {
+      db.companySettings.ncfSequences[seqKey] += 1;
+    }
+  }
+
+  db.invoices = [newInvoice, ...(db.invoices || [])];
+  writeDb(db);
+  res.status(201).json(newInvoice);
+});
+
+app.put('/api/invoices/:id', (req, res) => {
+  const db = readDb();
+  const id = req.params.id;
+  db.invoices = (db.invoices || []).map(inv => 
+    inv.id === id ? { ...inv, ...req.body } : inv
+  );
+  writeDb(db);
+  res.json({ success: true });
+});
+
+app.delete('/api/invoices/:id', (req, res) => {
+  const db = readDb();
+  db.invoices = (db.invoices || []).filter(inv => inv.id !== req.params.id);
   writeDb(db);
   res.json({ success: true });
 });

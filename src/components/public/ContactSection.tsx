@@ -7,7 +7,11 @@ import {
   MessageCircle, 
   Send, 
   CheckCircle2, 
-  Clock 
+  Clock,
+  Instagram,
+  Facebook,
+  Linkedin,
+  Youtube
 } from 'lucide-react';
 import { createWhatsAppUrl } from '../../utils/formatters';
 import { ServiceCategory } from '../../types';
@@ -140,6 +144,68 @@ export const ContactSection: React.FC = () => {
                     <div className="text-xs text-slate-600 dark:text-slate-400 font-bold">Horario de Operación</div>
                     <div className="text-xs text-slate-800 dark:text-slate-300 font-medium">Lunes a Viernes: 8:00 AM - 6:00 PM</div>
                     <div className="text-xs text-slate-800 dark:text-slate-300 font-medium">Sábados: 8:30 AM - 2:00 PM</div>
+                  </div>
+                </div>
+
+                {/* Social media connections */}
+                <div className="pt-3 border-t border-slate-200 dark:border-slate-800">
+                  <div className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">Canales Oficiales:</div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {companySettings.socialLinks?.instagram && (
+                      <a
+                        href={companySettings.socialLinks.instagram}
+                        target="_blank"
+                        rel="@martinez_.tech"
+                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-pink-600 hover:bg-pink-50 hover:border-pink-300 transition-all shadow-sm"
+                        title="Instagram"
+                      >
+                        <Instagram className="w-4 h-4" />
+                      </a>
+                    )}
+                    {companySettings.socialLinks?.facebook && (
+                      <a
+                        href={companySettings.socialLinks.facebook}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-blue-600 hover:bg-blue-50 hover:border-blue-300 transition-all shadow-sm"
+                        title="Facebook"
+                      >
+                        <Facebook className="w-4 h-4" />
+                      </a>
+                    )}
+                    {companySettings.socialLinks?.tiktok && (
+                      <a
+                        href={companySettings.socialLinks.tiktok}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white hover:bg-slate-200 transition-all shadow-sm flex items-center justify-center font-bold text-xs"
+                        title="TikTok"
+                      >
+                        <span className="font-mono text-[10px]">TT</span>
+                      </a>
+                    )}
+                    {companySettings.socialLinks?.linkedin && (
+                      <a
+                        href={companySettings.socialLinks.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sky-600 hover:bg-sky-50 hover:border-sky-300 transition-all shadow-sm"
+                        title="LinkedIn"
+                      >
+                        <Linkedin className="w-4 h-4" />
+                      </a>
+                    )}
+                    {companySettings.socialLinks?.youtube && (
+                      <a
+                        href={companySettings.socialLinks.youtube}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-red-600 hover:bg-red-50 hover:border-red-300 transition-all shadow-sm"
+                        title="YouTube"
+                      >
+                        <Youtube className="w-4 h-4" />
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>

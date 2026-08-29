@@ -145,6 +145,22 @@ export interface Client {
   createdAt: string;
 }
 
+export interface SocialLinks {
+  instagram?: string;
+  facebook?: string;
+  tiktok?: string;
+  linkedin?: string;
+  youtube?: string;
+}
+
+export interface NCFSequences {
+  b01Next: number; // Crédito Fiscal (B0100000001)
+  b02Next: number; // Consumo Final (B0200000001)
+  b14Next: number; // Régimen Especial (B1400000001)
+  b15Next: number; // Gubernamental (B1500000001)
+  ncfExpiryDate?: string;
+}
+
 export interface CompanySettings {
   name: string;
   legalName: string;
@@ -167,6 +183,57 @@ export interface CompanySettings {
   defaultWarranty: string;
   defaultTerms: string;
   logoUrl: string;
+  socialLinks?: SocialLinks;
+  ncfSequences?: NCFSequences;
+}
+
+export type NCFType = 'B01' | 'B02' | 'B14' | 'B15';
+
+export type InvoicePaymentStatus = 'paid' | 'partial' | 'pending' | 'cancelled';
+
+export interface InvoiceItem {
+  id: string;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  taxPercent: number; // standard 18%
+  taxAmount: number;
+  total: number;
+}
+
+export interface FiscalInvoice {
+  id: string;
+  invoiceNumber: string; // e.g. FAC-2026-001
+  ncf: string;           // e.g. B0100000001
+  ncfType: NCFType;
+  ncfTypeName: string;   // Factura para Crédito Fiscal
+  ncfExpiryDate: string;
+  quoteId?: string;
+  quoteNumber?: string;
+  dealId?: string;
+  dealCode?: string;
+  clientId?: string;
+  clientName: string;
+  clientRnc: string;
+  clientPhone?: string;
+  clientAddress?: string;
+  date: string;
+  dueDate: string;
+  items: InvoiceItem[];
+  subtotal: number;
+  discountPercent: number;
+  discountAmount: number;
+  taxPercent: number;
+  taxAmount: number;
+  total: number;
+  currency: 'DOP' | 'USD';
+  paymentStatus: InvoicePaymentStatus;
+  paymentMethod: PaymentMethod;
+  amountPaid: number;
+  balanceDue: number;
+  notes?: string;
+  createdBy: string;
+  createdAt: string;
 }
 
 export interface CatalogProduct {
