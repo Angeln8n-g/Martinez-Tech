@@ -1,0 +1,4 @@
+* Usuarios de Demostración Iniciales:
+* admin@martineztech.com / admin123 (Rafael Martínez - Administrador)
+* tecnico@martineztech.com / tecnico123 (Carlos Gómez - Técnico Instalador)
+
