@@ -29,48 +29,9 @@ app.get('/api/bootstrap', (req, res) => {
   const db = readDb();
   const safeUsers = (db.users || []).map(({ password, ...u }) => u);
   
-  // Seed sample work orders if empty
-  if (!db.workOrders || db.workOrders.length === 0) {
-    db.workOrders = [
-      {
-        id: 'wo-1',
-        orderNumber: 'OT-2026-001',
-        dealId: 'deal-1',
-        dealCode: 'NEG-2026-001',
-        quoteId: 'quote-1',
-        quoteNumber: 'COT-2026-001',
-        clientName: 'Ing. Carlos Mendoza / Centro Logístico',
-        clientPhone: '809-555-0192',
-        clientAddress: 'Aut. Duarte Km 22, Parque Industrial Duarte',
-        serviceCategory: 'camaras',
-        assignedTechnician: 'Rafael Martínez (Técnico Líder)',
-        scheduledDate: '2026-08-30',
-        completedDate: '2026-08-30',
-        status: 'completed',
-        scopeOfWork: 'Instalación y configuración de 16 cámaras IP 4K con NVR 32 canales y peinado de rack.',
-        checklist: [
-          { id: 'chk-1', task: 'Tendido y canalización de tubería EMT y cable UTP Cat6', completed: true },
-          { id: 'chk-2', task: 'Fijación y sellado impermeable de 16 cámaras Domo y Bullet 4K', completed: true },
-          { id: 'chk-3', task: 'Ponchado de conectores RJ45 blindados y certificación de señal', completed: true },
-          { id: 'chk-4', task: 'Montaje de Switch PoE Gigabit y NVR en Rack con UPS 1500VA', completed: true },
-          { id: 'chk-5', task: 'Enfoque de lentes, calibración de visión nocturna y máscaras de privacidad', completed: true },
-          { id: 'chk-6', task: 'Configuración de acceso remoto P2P en celulares y PC de monitoreo', completed: true }
-        ],
-        beforeImages: [
-          'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=600&q=80'
-        ],
-        afterImages: [
-          'https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=600&q=80'
-        ],
-        technicianNotes: 'Instalación finalizada sin contratiempos. Se instruyó al personal de seguridad en el manejo de grabaciones.',
-        clientSignature: 'data:image/png;base64,sample_signature',
-        clientFeedback: 'Excelente trabajo, el cableado quedó impecable.',
-        signedAt: '2026-08-30T17:30:00Z',
-        signedByName: 'Ing. Carlos Mendoza',
-        createdBy: 'Rafael Martínez',
-        createdAt: '2026-08-28T10:00:00Z'
-      }
-    ];
+  // Ensure collections exist
+  if (db.workOrders === undefined) {
+    db.workOrders = [];
     writeDb(db);
   }
 

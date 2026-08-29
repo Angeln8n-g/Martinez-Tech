@@ -7,7 +7,8 @@ import {
   Upload, 
   RotateCcw, 
   Plus, 
-  Trash2 
+  Trash2,
+  Sparkles
 } from 'lucide-react';
 
 export const SettingsModal: React.FC = () => {
@@ -18,7 +19,8 @@ export const SettingsModal: React.FC = () => {
     updateCompanySettings, 
     exportDataBackup, 
     importDataBackup, 
-    resetToDefaultData 
+    resetToDefaultData,
+    clearTestDataForProduction
   } = useAppState();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -327,7 +329,7 @@ export const SettingsModal: React.FC = () => {
               4. Respaldos de Datos & Seguridad
             </h4>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <button
                 type="button"
                 onClick={exportDataBackup}
@@ -358,6 +360,18 @@ export const SettingsModal: React.FC = () => {
                 accept=".json"
                 className="hidden"
               />
+
+              <button
+                type="button"
+                onClick={clearTestDataForProduction}
+                className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 border border-emerald-300 dark:border-emerald-500/30 text-left transition-colors flex items-center justify-between shadow-sm"
+              >
+                <div>
+                  <div className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Limpiar para Producción</div>
+                  <div className="text-[10px] text-emerald-600 dark:text-emerald-400">Vaciar cotizaciones y demo</div>
+                </div>
+                <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              </button>
 
               <button
                 type="button"

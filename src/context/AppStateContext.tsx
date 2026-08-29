@@ -139,6 +139,7 @@ interface AppStateContextType {
   exportDataBackup: () => void;
   importDataBackup: (jsonString: string) => Promise<boolean>;
   resetToDefaultData: () => void;
+  clearTestDataForProduction: () => Promise<void>;
 
   // Modals & Active State
   activeQuoteForView: Quote | null;
@@ -1046,6 +1047,44 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
+  const clearTestDataForProduction = async () => {
+    if (confirm('¿Deseas vaciar todas las cotizaciones, negociaciones, pagos, órdenes de trabajo, visitas y clientes de prueba para iniciar en limpio en producción?\n\n(Tus ajustes de empresa, catálogo de productos y servicios se conservarán intactos).')) {
+      setDeals([]);
+      setQuotes([]);
+      setPayments([]);
+      setWorkOrders([]);
+      setVisits([]);
+      setClients([]);
+
+      if (isServerConnected) {
+        try {
+          await api.restoreBackup({
+            companySettings,
+            catalog,
+            portfolio,
+            deals: [],
+            quotes: [],
+            clients: [],
+            payments: [],
+            visits: [],
+            workOrders: []
+          });
+        } catch (err) {
+          console.error('Error clearing test data via API', err);
+        }
+      }
+
+      localStorage.setItem(STORAGE_KEYS.DEALS, JSON.stringify([]));
+      localStorage.setItem(STORAGE_KEYS.QUOTES, JSON.stringify([]));
+      localStorage.setItem(STORAGE_KEYS.PAYMENTS, JSON.stringify([]));
+      localStorage.setItem(STORAGE_KEYS.WORK_ORDERS, JSON.stringify([]));
+      localStorage.setItem(STORAGE_KEYS.VISITS, JSON.stringify([]));
+      localStorage.setItem(STORAGE_KEYS.CLIENTS, JSON.stringify([]));
+
+      alert('✅ El sistema se ha limpiado correctamente. ¡Está 100% listo para producción!');
+    }
+  };
+
   const openPaymentForQuote = (quote: Quote) => {
     setQuoteForPayment(quote);
     setIsPaymentModalOpen(true);
@@ -1124,6 +1163,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         exportDataBackup,
         importDataBackup,
         resetToDefaultData,
+        clearTestDataForProduction,
 
         activeQuoteForView,
         setActiveQuoteForView,

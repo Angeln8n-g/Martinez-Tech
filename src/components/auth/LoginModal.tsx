@@ -11,17 +11,19 @@ import {
   X, 
   Eye, 
   EyeOff,
-  AlertCircle
+  AlertCircle,
+  HelpCircle
 } from 'lucide-react';
 
 export const LoginModal: React.FC = () => {
   const { isLoginModalOpen, setIsLoginModalOpen, login } = useAppState();
 
-  const [email, setEmail] = useState('admin@martineztech.com');
-  const [password, setPassword] = useState('admin123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showDemoLogins, setShowDemoLogins] = useState(false);
 
   if (!isLoginModalOpen) return null;
 
@@ -87,9 +89,9 @@ export const LoginModal: React.FC = () => {
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
-                type="text"
+                type="email"
                 required
-                placeholder="ejemplo@martineztech.com"
+                placeholder="tu-correo@martineztech.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
@@ -139,36 +141,44 @@ export const LoginModal: React.FC = () => {
 
         </form>
 
-        {/* Demo Fast Logins Strip */}
-        <div className="pt-4 border-t-2 border-slate-200 dark:border-slate-800 space-y-2">
-          <div className="text-[11px] font-bold text-slate-600 dark:text-slate-400 text-center uppercase tracking-wider">
-            Acceso Rápido de Prueba (Demo)
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => handleQuickFill('admin@martineztech.com', 'admin123')}
-              className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 hover:bg-brand-teal-50 dark:hover:bg-brand-teal-950/60 border border-slate-300 dark:border-slate-700 text-left transition-colors shadow-sm"
-            >
-              <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-brand-teal-700 dark:text-brand-teal-400" />
-                <span>Administrador</span>
-              </div>
-              <div className="text-[10px] text-slate-600 dark:text-slate-400 truncate">admin@martineztech.com</div>
-            </button>
+        {/* Optional Demo Logins Accordion */}
+        <div className="pt-3 border-t border-slate-200 dark:border-slate-800 text-center">
+          <button
+            type="button"
+            onClick={() => setShowDemoLogins(!showDemoLogins)}
+            className="text-[11px] text-slate-500 hover:text-brand-teal-600 dark:hover:text-brand-teal-400 font-medium inline-flex items-center gap-1"
+          >
+            <HelpCircle className="w-3.5 h-3.5" />
+            <span>{showDemoLogins ? 'Ocultar accesos demo' : '¿Ver cuentas demo de prueba?'}</span>
+          </button>
 
-            <button
-              type="button"
-              onClick={() => handleQuickFill('tecnico@martineztech.com', 'tecnico123')}
-              className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 hover:bg-brand-green-50 dark:hover:bg-brand-green-950/60 border border-slate-300 dark:border-slate-700 text-left transition-colors shadow-sm"
-            >
-              <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <UserCheck className="w-3.5 h-3.5 text-brand-green-700 dark:text-brand-green-400" />
-                <span>Técnico Campo</span>
-              </div>
-              <div className="text-[10px] text-slate-600 dark:text-slate-400 truncate">tecnico@martineztech.com</div>
-            </button>
-          </div>
+          {showDemoLogins && (
+            <div className="mt-3 grid grid-cols-2 gap-2 animate-fadeIn">
+              <button
+                type="button"
+                onClick={() => handleQuickFill('admin@martineztech.com', 'admin123')}
+                className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 hover:bg-brand-teal-50 dark:hover:bg-brand-teal-950/60 border border-slate-300 dark:border-slate-700 text-left transition-colors shadow-sm"
+              >
+                <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-brand-teal-700 dark:text-brand-teal-400" />
+                  <span>Administrador</span>
+                </div>
+                <div className="text-[10px] text-slate-600 dark:text-slate-400 truncate">admin@martineztech.com</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleQuickFill('tecnico@martineztech.com', 'tecnico123')}
+                className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 hover:bg-brand-green-50 dark:hover:bg-brand-green-950/60 border border-slate-300 dark:border-slate-700 text-left transition-colors shadow-sm"
+              >
+                <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <UserCheck className="w-3.5 h-3.5 text-brand-green-700 dark:text-brand-green-400" />
+                  <span>Técnico Campo</span>
+                </div>
+                <div className="text-[10px] text-slate-600 dark:text-slate-400 truncate">tecnico@martineztech.com</div>
+              </button>
+            </div>
+          )}
         </div>
 
       </div>
