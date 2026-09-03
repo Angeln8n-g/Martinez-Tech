@@ -12,9 +12,21 @@ import {
   TrendingUp,
   Percent,
   Eye,
-  EyeOff
+  EyeOff,
+  AlertTriangle,
+  RotateCcw,
+  CheckCircle2,
+  ShieldAlert
 } from 'lucide-react';
-import { formatCurrency } from '../../utils/formatters';
+import { 
+  formatCurrency, 
+  validateDominicanRNC, 
+  formatDominicanPhone, 
+  saveDraft, 
+  loadDraft, 
+  clearDraft, 
+  RNCValidationResult 
+} from '../../utils/formatters';
 
 export const QuoteBuilderModal: React.FC = () => {
   const { 
@@ -56,6 +68,131 @@ export const QuoteBuilderModal: React.FC = () => {
   const [showCostMargin, setShowCostMargin] = useState(true);
 
   const [selectedCatalogId, setSelectedCatalogId] = useState('');
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [draftRestoredAt, setDraftRestoredAt] = useState<string | null>(null);
+  const [rncValidation, setRncValidation] = useState<RNCValidationResult>({ isValid: false, type: 'Inválido', formatted: '', message: '' });
+
+  // Dirty state tracking
+  const isDirty = Boolean(
+    clientName.trim() || 
+    clientCompany.trim() || 
+    clientPhone.trim() || 
+    clientRnc.trim() || 
+    clientAddress.trim() || 
+    notes.trim() || 
+    items.length > 1 || 
+    (items.length === 1 && items[0].name !== 'Instalación y Configuración Técnica')
+  );
+
+  // Auto-save draft debounced
+  useEffect(() => {
+    if (!isQuoteModalOpen || activeQuoteForEdit) return;
+    if (!isDirty) return;
+
+    const timer = setTimeout(() => {
+      saveDraft('quote_builder', {
+        clientName,
+        clientCompany,
+        clientPhone,
+        clientEmail,
+        clientRnc,
+        clientAddress,
+        selectedDealId,
+        date,
+        validUntil,
+        currency,
+        items,
+        discountPercent,
+        applyTax,
+        taxPercent,
+        deliveryTime,
+        warrantyNotes,
+        paymentTerms,
+        notes
+      });
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [
+    isQuoteModalOpen,
+    activeQuoteForEdit,
+    isDirty,
+    clientName,
+    clientCompany,
+    clientPhone,
+    clientEmail,
+    clientRnc,
+    clientAddress,
+    selectedDealId,
+    date,
+    validUntil,
+    currency,
+    items,
+    discountPercent,
+    applyTax,
+    taxPercent,
+    deliveryTime,
+    warrantyNotes,
+    paymentTerms,
+    notes
+  ]);
+
+  // Restore draft on initial open if exists
+  useEffect(() => {
+    if (isQuoteModalOpen && !activeQuoteForEdit && !quoteDealPreload) {
+      const draft = loadDraft<any>('quote_builder');
+      if (draft && draft.data && (draft.data.clientName || draft.data.items?.length > 1)) {
+        const d = draft.data;
+        setClientName(d.clientName || '');
+        setClientCompany(d.clientCompany || '');
+        setClientPhone(d.clientPhone || '');
+        setClientEmail(d.clientEmail || '');
+        setClientRnc(d.clientRnc || '');
+        setClientAddress(d.clientAddress || '');
+        setSelectedDealId(d.selectedDealId || '');
+        setDate(d.date || new Date().toISOString().slice(0, 10));
+        setValidUntil(d.validUntil || '');
+        setCurrency(d.currency || 'DOP');
+        if (d.items?.length) setItems(d.items);
+        setDiscountPercent(d.discountPercent || 0);
+        setApplyTax(Boolean(d.applyTax));
+        setTaxPercent(d.taxPercent || 18);
+        setDeliveryTime(d.deliveryTime || '2 a 4 días laborables');
+        setWarrantyNotes(d.warrantyNotes || companySettings.defaultWarranty);
+        setPaymentTerms(d.paymentTerms || companySettings.defaultTerms);
+        setNotes(d.notes || '');
+        setDraftRestoredAt(draft.savedAt);
+      }
+    }
+  }, [isQuoteModalOpen, activeQuoteForEdit, quoteDealPreload]);
+
+  // Update RNC validation
+  useEffect(() => {
+    if (clientRnc) {
+      setRncValidation(validateDominicanRNC(clientRnc));
+    } else {
+      setRncValidation({ isValid: false, type: 'Inválido', formatted: '', message: '' });
+    }
+  }, [clientRnc]);
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setClientPhone(formatDominicanPhone(e.target.value));
+  };
+
+  const handleSafeClose = () => {
+    if (isDirty) {
+      setShowExitConfirm(true);
+    } else {
+      setIsQuoteModalOpen(false);
+    }
+  };
+
+  const handleDiscardAndClose = () => {
+    clearDraft('quote_builder');
+    setShowExitConfirm(false);
+    setDraftRestoredAt(null);
+    setIsQuoteModalOpen(false);
+  };
 
   useEffect(() => {
     if (activeQuoteForEdit) {
@@ -111,7 +248,7 @@ export const QuoteBuilderModal: React.FC = () => {
       setWarrantyNotes(companySettings.defaultWarranty);
       setPaymentTerms(companySettings.defaultTerms);
       setNotes('');
-    } else {
+    } else if (!draftRestoredAt) {
       setClientName('');
       setClientCompany('');
       setClientPhone('');
@@ -287,14 +424,67 @@ export const QuoteBuilderModal: React.FC = () => {
       });
     }
 
+    clearDraft('quote_builder');
+    setDraftRestoredAt(null);
     setIsQuoteModalOpen(false);
     setActiveQuoteForView(savedQuote);
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+      
+      {/* Exit Confirmation Dialog */}
+      {showExitConfirm && (
+        <div className="fixed inset-0 z-60 bg-black/70 flex items-center justify-center p-4 backdrop-blur-xs">
+          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn">
+            <div className="flex items-center gap-3 text-amber-600 dark:text-amber-400">
+              <AlertTriangle className="w-6 h-6 flex-shrink-0" />
+              <h4 className="text-base font-black text-slate-900 dark:text-white">
+                ¿Descartar cambios no guardados?
+              </h4>
+            </div>
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Tienes información ingresada en esta cotización. Si decides salir, los cambios no guardados se perderán.
+            </p>
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+              <button
+                type="button"
+                onClick={() => setShowExitConfirm(false)}
+                className="px-4 py-2 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-sm"
+              >
+                Continuar Editando
+              </button>
+              <button
+                type="button"
+                onClick={handleDiscardAndClose}
+                className="px-3 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 hover:bg-rose-100 font-bold text-xs border border-rose-300 dark:border-rose-800"
+              >
+                Descartar y Salir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl max-w-4xl w-full p-5 sm:p-7 relative max-h-[95vh] overflow-y-auto shadow-2xl space-y-6">
         
+        {/* Draft Restored Banner */}
+        {draftRestoredAt && (
+          <div className="p-3 rounded-xl bg-cyan-50 dark:bg-cyan-950/40 border border-cyan-300 dark:border-cyan-500/30 flex items-center justify-between text-xs text-cyan-900 dark:text-cyan-300">
+            <div className="flex items-center gap-2">
+              <RotateCcw className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+              <span>Borrador restaurado automáticamente ({new Date(draftRestoredAt).toLocaleTimeString()}).</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => { clearDraft('quote_builder'); setDraftRestoredAt(null); }}
+              className="text-[11px] font-bold underline hover:no-underline text-cyan-800 dark:text-cyan-200"
+            >
+              Descartar Borrador
+            </button>
+          </div>
+        )}
+
         {/* Header */}
         <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-4">
           <div className="flex items-center gap-3">
@@ -326,8 +516,10 @@ export const QuoteBuilderModal: React.FC = () => {
             </button>
 
             <button
-              onClick={() => setIsQuoteModalOpen(false)}
+              type="button"
+              onClick={handleSafeClose}
               className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-300 dark:border-slate-700"
+              aria-label="Cerrar Modal"
             >
               <X className="w-5 h-5" />
             </button>
@@ -376,25 +568,40 @@ export const QuoteBuilderModal: React.FC = () => {
                 </label>
                 <input
                   type="tel"
-                  placeholder="Ej. 809-555-4321"
+                  placeholder="Ej. (809) 555-4321"
                   value={clientPhone}
-                  onChange={(e) => setClientPhone(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                  onChange={handlePhoneChange}
+                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm font-mono"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-800 dark:text-slate-300">
-                  RNC / Cédula (Opcional)
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-bold text-slate-800 dark:text-slate-300">
+                    RNC / Cédula (Opcional)
+                  </label>
+                  {clientRnc && (
+                    <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                      rncValidation.isValid 
+                        ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30' 
+                        : 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-300 dark:border-rose-500/30'
+                    }`}>
+                      {rncValidation.isValid ? `✓ ${rncValidation.type}` : 'Inválido'}
+                    </span>
+                  )}
+                </div>
                 <input
                   type="text"
                   placeholder="Ej. 131-99887-2"
                   value={clientRnc}
                   onChange={(e) => setClientRnc(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                  className={`w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border text-xs text-slate-900 dark:text-white focus:outline-none shadow-sm font-mono ${
+                    clientRnc && !rncValidation.isValid
+                      ? 'border-rose-400 focus:border-rose-500'
+                      : 'border-slate-300 dark:border-slate-700 focus:border-brand-teal-500'
+                  }`}
                 />
               </div>
 

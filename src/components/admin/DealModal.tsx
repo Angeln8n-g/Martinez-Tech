@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAppState } from '../../context/AppStateContext';
 import { DealStage, PriorityLevel, ServiceCategory, ClientType } from '../../types';
 import { X, Save } from 'lucide-react';
+import { formatDominicanPhone } from '../../utils/formatters';
 
 export const DealModal: React.FC = () => {
   const { 
@@ -196,10 +197,10 @@ export const DealModal: React.FC = () => {
               <input
                 type="tel"
                 required
-                placeholder="Ej. 809-555-1234"
+                placeholder="Ej. (809) 555-1234"
                 value={clientPhone}
-                onChange={(e) => setClientPhone(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                onChange={(e) => setClientPhone(formatDominicanPhone(e.target.value))}
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm font-mono"
               />
             </div>
           </div>

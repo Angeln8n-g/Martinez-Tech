@@ -15,8 +15,16 @@ import {
   Eye, 
   Maximize2,
   FileCheck2,
-  FolderOpen
+  FolderOpen,
+  AlertTriangle,
+  RotateCcw
 } from 'lucide-react';
+import { 
+  formatDominicanPhone, 
+  saveDraft, 
+  loadDraft, 
+  clearDraft 
+} from '../../utils/formatters';
 
 const PRESET_EVIDENCE_GALLERIES: Record<ServiceCategory, { label: string; before: string[]; after: string[] }> = {
   camaras: {
@@ -147,9 +155,114 @@ export const WorkOrderModal: React.FC = () => {
   const [beforeImgInput, setBeforeImgInput] = useState('');
   const [afterImgInput, setAfterImgInput] = useState('');
   const [previewZoomImage, setPreviewZoomImage] = useState<string | null>(null);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [draftRestoredAt, setDraftRestoredAt] = useState<string | null>(null);
 
   const beforeFileInputRef = useRef<HTMLInputElement>(null);
   const afterFileInputRef = useRef<HTMLInputElement>(null);
+
+  // Dirty state tracking
+  const isDirty = Boolean(
+    clientName.trim() || 
+    clientPhone.trim() || 
+    clientAddress.trim() || 
+    technicianNotes.trim() || 
+    clientFeedback.trim() || 
+    beforeImages.length > 2 || 
+    afterImages.length > 2
+  );
+
+  // Auto-save draft debounced
+  useEffect(() => {
+    if (!isWorkOrderModalOpen || activeWorkOrderForEdit) return;
+    if (!isDirty) return;
+
+    const timer = setTimeout(() => {
+      saveDraft('work_order_builder', {
+        selectedQuoteId,
+        clientName,
+        clientPhone,
+        clientAddress,
+        serviceCategory,
+        assignedTechnician,
+        scheduledDate,
+        completedDate,
+        status,
+        scopeOfWork,
+        checklist,
+        beforeImages,
+        afterImages,
+        technicianNotes,
+        clientFeedback
+      });
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [
+    isWorkOrderModalOpen,
+    activeWorkOrderForEdit,
+    isDirty,
+    selectedQuoteId,
+    clientName,
+    clientPhone,
+    clientAddress,
+    serviceCategory,
+    assignedTechnician,
+    scheduledDate,
+    completedDate,
+    status,
+    scopeOfWork,
+    checklist,
+    beforeImages,
+    afterImages,
+    technicianNotes,
+    clientFeedback
+  ]);
+
+  // Restore draft on initial open if exists
+  useEffect(() => {
+    if (isWorkOrderModalOpen && !activeWorkOrderForEdit) {
+      const draft = loadDraft<any>('work_order_builder');
+      if (draft && draft.data && (draft.data.clientName || draft.data.beforeImages?.length > 2)) {
+        const d = draft.data;
+        setSelectedQuoteId(d.selectedQuoteId || '');
+        setClientName(d.clientName || '');
+        setClientPhone(d.clientPhone || '');
+        setClientAddress(d.clientAddress || '');
+        setServiceCategory(d.serviceCategory || 'camaras');
+        setAssignedTechnician(d.assignedTechnician || 'Rafael Martínez (Técnico Líder)');
+        setScheduledDate(d.scheduledDate || new Date().toISOString().slice(0, 10));
+        setCompletedDate(d.completedDate || new Date().toISOString().slice(0, 10));
+        setStatus(d.status || 'in_progress');
+        setScopeOfWork(d.scopeOfWork || '');
+        if (d.checklist?.length) setChecklist(d.checklist);
+        if (d.beforeImages?.length) setBeforeImages(d.beforeImages);
+        if (d.afterImages?.length) setAfterImages(d.afterImages);
+        setTechnicianNotes(d.technicianNotes || '');
+        setClientFeedback(d.clientFeedback || '');
+        setDraftRestoredAt(draft.savedAt);
+      }
+    }
+  }, [isWorkOrderModalOpen, activeWorkOrderForEdit]);
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setClientPhone(formatDominicanPhone(e.target.value));
+  };
+
+  const handleSafeClose = () => {
+    if (isDirty) {
+      setShowExitConfirm(true);
+    } else {
+      setIsWorkOrderModalOpen(false);
+    }
+  };
+
+  const handleDiscardAndClose = () => {
+    clearDraft('work_order_builder');
+    setShowExitConfirm(false);
+    setDraftRestoredAt(null);
+    setIsWorkOrderModalOpen(false);
+  };
 
   useEffect(() => {
     if (activeWorkOrderForEdit) {
@@ -168,7 +281,7 @@ export const WorkOrderModal: React.FC = () => {
       setAfterImages(activeWorkOrderForEdit.afterImages || []);
       setTechnicianNotes(activeWorkOrderForEdit.technicianNotes || '');
       setClientFeedback(activeWorkOrderForEdit.clientFeedback || '');
-    } else {
+    } else if (!draftRestoredAt) {
       setSelectedQuoteId('');
       setClientName('');
       setClientPhone('');
@@ -337,13 +450,66 @@ export const WorkOrderModal: React.FC = () => {
       });
     }
 
+    clearDraft('work_order_builder');
+    setDraftRestoredAt(null);
     setIsWorkOrderModalOpen(false);
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+      
+      {/* Exit Confirmation Dialog */}
+      {showExitConfirm && (
+        <div className="fixed inset-0 z-60 bg-black/70 flex items-center justify-center p-4 backdrop-blur-xs">
+          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn">
+            <div className="flex items-center gap-3 text-amber-600 dark:text-amber-400">
+              <AlertTriangle className="w-6 h-6 flex-shrink-0" />
+              <h4 className="text-base font-black text-slate-900 dark:text-white">
+                ¿Descartar cambios de la orden?
+              </h4>
+            </div>
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Tienes datos o fotos cargadas en esta orden de trabajo. Si decides salir, los cambios no guardados se perderán.
+            </p>
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+              <button
+                type="button"
+                onClick={() => setShowExitConfirm(false)}
+                className="px-4 py-2 rounded-xl bg-brand-green-600 hover:bg-brand-green-500 text-slate-950 font-bold text-xs shadow-sm"
+              >
+                Continuar Editando
+              </button>
+              <button
+                type="button"
+                onClick={handleDiscardAndClose}
+                className="px-3 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 hover:bg-rose-100 font-bold text-xs border border-rose-300 dark:border-rose-800"
+              >
+                Descartar y Salir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-3xl max-w-4xl w-full p-5 sm:p-7 relative max-h-[95vh] overflow-y-auto shadow-2xl space-y-6">
         
+        {/* Draft Restored Banner */}
+        {draftRestoredAt && (
+          <div className="p-3 rounded-xl bg-cyan-50 dark:bg-cyan-950/40 border border-cyan-300 dark:border-cyan-500/30 flex items-center justify-between text-xs text-cyan-900 dark:text-cyan-300">
+            <div className="flex items-center gap-2">
+              <RotateCcw className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+              <span>Borrador de orden restaurado ({new Date(draftRestoredAt).toLocaleTimeString()}).</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => { clearDraft('work_order_builder'); setDraftRestoredAt(null); }}
+              className="text-[11px] font-bold underline hover:no-underline text-cyan-800 dark:text-cyan-200"
+            >
+              Descartar Borrador
+            </button>
+          </div>
+        )}
+
         {/* Header */}
         <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-4">
           <div className="flex items-center gap-3">
@@ -360,8 +526,10 @@ export const WorkOrderModal: React.FC = () => {
             </div>
           </div>
           <button
-            onClick={() => setIsWorkOrderModalOpen(false)}
+            type="button"
+            onClick={handleSafeClose}
             className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-300 dark:border-slate-700"
+            aria-label="Cerrar Modal"
           >
             <X className="w-5 h-5" />
           </button>
@@ -410,9 +578,9 @@ export const WorkOrderModal: React.FC = () => {
                 type="tel"
                 required
                 value={clientPhone}
-                onChange={(e) => setClientPhone(e.target.value)}
-                placeholder="809-555-1234"
-                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                onChange={handlePhoneChange}
+                placeholder="Ej. (809) 555-4321"
+                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm font-mono"
               />
             </div>
 
@@ -522,7 +690,7 @@ export const WorkOrderModal: React.FC = () => {
                   onClick={() => handleToggleChecklist(item.id)}
                   className={`p-2.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
                     item.completed
-                      ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-500/40 text-slate-900 dark:text-white'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-500/40 text-emerald-950 dark:text-white'
                       : 'bg-slate-50 dark:bg-slate-800/60 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300'
                   }`}
                 >
@@ -592,6 +760,7 @@ export const WorkOrderModal: React.FC = () => {
               ref={beforeFileInputRef}
               onChange={handleUploadBeforeFile}
               accept="image/*"
+              capture="environment"
               multiple
               className="hidden"
             />
@@ -600,6 +769,7 @@ export const WorkOrderModal: React.FC = () => {
               ref={afterFileInputRef}
               onChange={handleUploadAfterFile}
               accept="image/*"
+              capture="environment"
               multiple
               className="hidden"
             />

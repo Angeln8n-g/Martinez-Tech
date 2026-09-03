@@ -178,7 +178,7 @@ export const PortfolioManager: React.FC = () => {
                     {catInfo.label}
                   </span>
                   {project.featured && (
-                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-400 text-slate-950 shadow-sm">
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-400 text-amber-950 shadow-sm">
                       Destacado
                     </span>
                   )}

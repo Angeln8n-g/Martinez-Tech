@@ -20,7 +20,7 @@ import {
   ShieldCheck,
   AlertCircle
 } from 'lucide-react';
-import { formatCurrency } from '../../utils/formatters';
+import { formatCurrency, validateDominicanRNC, formatDominicanPhone } from '../../utils/formatters';
 
 export const FiscalInvoiceModal: React.FC = () => {
   const { 
@@ -264,9 +264,16 @@ export const FiscalInvoiceModal: React.FC = () => {
       return;
     }
 
-    if (ncfType === 'B01' && !clientRnc.trim()) {
-      setError('El Comprobante Fiscal B01 (Crédito Fiscal) exige un RNC o Cédula válido.');
-      return;
+    if (ncfType === 'B01') {
+      if (!clientRnc.trim()) {
+        setError('El Comprobante Fiscal B01 (Crédito Fiscal) exige un RNC o Cédula válido.');
+        return;
+      }
+      const rncCheck = validateDominicanRNC(clientRnc);
+      if (!rncCheck.isValid) {
+        setError(`RNC inválido para B01 Crédito Fiscal: ${rncCheck.message}`);
+        return;
+      }
     }
 
     if (items.length === 0 || subtotal <= 0) {
@@ -447,15 +454,30 @@ export const FiscalInvoiceModal: React.FC = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
-                  RNC o Cédula {ncfType === 'B01' ? '*' : '(Opcional)'}
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                    RNC o Cédula {ncfType === 'B01' ? '*' : '(Opcional)'}
+                  </label>
+                  {clientRnc && (
+                    <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                      validateDominicanRNC(clientRnc).isValid 
+                        ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30' 
+                        : 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-300 dark:border-rose-500/30'
+                    }`}>
+                      {validateDominicanRNC(clientRnc).isValid ? `✓ ${validateDominicanRNC(clientRnc).type}` : 'Inválido'}
+                    </span>
+                  )}
+                </div>
                 <input
                   type="text"
                   placeholder="Ej. 131-99887-2"
                   value={clientRnc}
                   onChange={(e) => setClientRnc(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono"
+                  className={`w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border text-xs text-slate-900 dark:text-white font-mono ${
+                    clientRnc && !validateDominicanRNC(clientRnc).isValid
+                      ? 'border-rose-400 focus:border-rose-500'
+                      : 'border-slate-300 dark:border-slate-700 focus:border-brand-teal-500'
+                  }`}
                 />
               </div>
             </div>
@@ -475,11 +497,11 @@ export const FiscalInvoiceModal: React.FC = () => {
               <div className="space-y-1">
                 <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Teléfono Contacto</label>
                 <input
-                  type="text"
-                  placeholder="Ej. 809-555-0192"
+                  type="tel"
+                  placeholder="Ej. (809) 555-0192"
                   value={clientPhone}
-                  onChange={(e) => setClientPhone(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  onChange={(e) => setClientPhone(formatDominicanPhone(e.target.value))}
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono"
                 />
               </div>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppState } from '../../context/AppStateContext';
 import { Quote } from '../../types';
 import { 
@@ -12,7 +12,8 @@ import {
   PenTool,
   CheckCircle2,
   Wrench,
-  Receipt
+  Receipt,
+  MoreHorizontal
 } from 'lucide-react';
 import { 
   formatCurrency, 
@@ -36,6 +37,24 @@ export const QuotesList: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [actionMenuQuoteId, setActionMenuQuoteId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActionMenuQuoteId(null);
+    };
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest('.action-menu-container')) {
+        setActionMenuQuoteId(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('click', handleClickOutside);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   const filteredQuotes = quotes.filter(quote => {
     const matchesSearch = 
@@ -232,79 +251,117 @@ export const QuotesList: React.FC = () => {
 
                       {/* Actions */}
                       <td className="py-3.5 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
+                        <div className="flex items-center justify-end gap-2 action-menu-container relative">
                           
-                          {/* View Letterhead Document */}
+                          {/* Primary CTA: View Document */}
                           <button
                             onClick={() => setActiveQuoteForView(quote)}
-                            className="p-1.5 rounded-lg bg-purple-50 dark:bg-purple-950/80 hover:bg-purple-100 text-purple-700 dark:text-purple-300 border border-purple-300 dark:border-purple-500/30"
+                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-purple-50 dark:bg-purple-950/80 hover:bg-purple-100 text-purple-700 dark:text-purple-300 border border-purple-300 dark:border-purple-500/30 text-xs font-bold transition-all shadow-xs"
                             title="Ver Cotización Membretada Oficial / Firmar / PDF"
                           >
-                            <Eye className="w-4 h-4" />
+                            <Eye className="w-3.5 h-3.5" />
+                            <span className="hidden sm:inline">Ver Propuesta</span>
                           </button>
 
-                          {/* Register Payment */}
-                          <button
-                            onClick={() => openPaymentForQuote(quote)}
-                            className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30"
-                            title="Registrar Cobro / Anticipo"
-                          >
-                            <DollarSign className="w-4 h-4" />
-                          </button>
-
-                          {/* Fiscal Invoice (DGII) */}
-                          <button
-                            onClick={() => openNewInvoiceForQuote(quote)}
-                            className="p-1.5 rounded-lg bg-amber-50 dark:bg-amber-950/80 hover:bg-amber-100 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-500/30"
-                            title="Emitir Factura Fiscal (DGII / NCF)"
-                          >
-                            <Receipt className="w-4 h-4" />
-                          </button>
-
-                          {/* WhatsApp Template */}
+                          {/* Quick WhatsApp */}
                           <button
                             onClick={() => handleWhatsApp(quote)}
-                            className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30"
+                            className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30 transition-all shadow-xs"
                             title="Enviar por WhatsApp"
                           >
                             <MessageCircle className="w-4 h-4" />
                           </button>
 
-                          {/* Work Order if signed/accepted */}
-                          {(quote.status === 'accepted' || quote.clientSignature) && (
+                          {/* More Options Dropdown Trigger */}
+                          <div className="relative">
                             <button
-                              onClick={() => handleCreateWorkOrder(quote)}
-                              className="p-1.5 rounded-lg bg-brand-green-50 dark:bg-brand-green-950/80 hover:bg-brand-green-100 text-brand-green-800 dark:text-brand-green-300 border border-brand-green-300 dark:border-brand-green-500/30"
-                              title="Generar Orden de Trabajo / Conduce"
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActionMenuQuoteId(actionMenuQuoteId === quote.id ? null : quote.id);
+                              }}
+                              className={`p-1.5 rounded-lg border transition-all ${
+                                actionMenuQuoteId === quote.id
+                                  ? 'bg-slate-200 dark:bg-slate-700 text-slate-950 dark:text-white border-slate-400'
+                                  : 'bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-slate-600 dark:text-slate-300 border-slate-300 dark:border-slate-700'
+                              }`}
+                              title="Más opciones comerciales y fiscales"
                             >
-                              <Wrench className="w-4 h-4" />
+                              <MoreHorizontal className="w-4 h-4" />
                             </button>
-                          )}
 
-                          {/* Edit */}
-                          <button
-                            onClick={() => {
-                              setActiveQuoteForEdit(quote);
-                              setIsQuoteModalOpen(true);
-                            }}
-                            className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
-                            title="Editar"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </button>
+                            {/* Dropdown Menu */}
+                            {actionMenuQuoteId === quote.id && (
+                              <div className="absolute right-0 top-full mt-1.5 w-52 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl shadow-xl z-30 py-1.5 text-xs text-left animate-fadeIn">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setActionMenuQuoteId(null);
+                                    openPaymentForQuote(quote);
+                                  }}
+                                  className="w-full px-3.5 py-2 flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"
+                                >
+                                  <DollarSign className="w-4 h-4 text-emerald-600" />
+                                  <span>Registrar Cobro / Anticipo</span>
+                                </button>
 
-                          {/* Delete */}
-                          <button
-                            onClick={() => {
-                              if (confirm(`¿Eliminar la cotización ${quote.quoteNumber}?`)) {
-                                deleteQuote(quote.id);
-                              }
-                            }}
-                            className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 text-rose-600 dark:text-rose-400 border border-slate-300 dark:border-slate-700"
-                            title="Eliminar"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setActionMenuQuoteId(null);
+                                    openNewInvoiceForQuote(quote);
+                                  }}
+                                  className="w-full px-3.5 py-2 flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"
+                                >
+                                  <Receipt className="w-4 h-4 text-amber-600" />
+                                  <span>Emitir Factura Fiscal NCF</span>
+                                </button>
+
+                                {(quote.status === 'accepted' || quote.clientSignature) && (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setActionMenuQuoteId(null);
+                                      handleCreateWorkOrder(quote);
+                                    }}
+                                    className="w-full px-3.5 py-2 flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"
+                                  >
+                                    <Wrench className="w-4 h-4 text-brand-green-600" />
+                                    <span>Generar Orden de Trabajo</span>
+                                  </button>
+                                )}
+
+                                <div className="my-1 border-t border-slate-200 dark:border-slate-800" />
+
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setActionMenuQuoteId(null);
+                                    setActiveQuoteForEdit(quote);
+                                    setIsQuoteModalOpen(true);
+                                  }}
+                                  className="w-full px-3.5 py-2 flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"
+                                >
+                                  <Edit className="w-4 h-4 text-slate-500" />
+                                  <span>Editar Presupuesto</span>
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setActionMenuQuoteId(null);
+                                    if (confirm(`¿Eliminar la cotización ${quote.quoteNumber}?`)) {
+                                      deleteQuote(quote.id);
+                                    }
+                                  }}
+                                  className="w-full px-3.5 py-2 flex items-center gap-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 font-medium"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                  <span>Eliminar Presupuesto</span>
+                                </button>
+                              </div>
+                            )}
+                          </div>
 
                         </div>
                       </td>

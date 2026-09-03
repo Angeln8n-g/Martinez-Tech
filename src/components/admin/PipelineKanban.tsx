@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppState } from '../../context/AppStateContext';
 import { Deal, DealStage } from '../../types';
 import { 
@@ -12,7 +12,8 @@ import {
   MapPin, 
   Eye, 
   Calculator,
-  Wrench
+  Wrench,
+  MoreHorizontal
 } from 'lucide-react';
 import { 
   formatCurrency, 
@@ -50,6 +51,24 @@ export const PipelineKanban: React.FC = () => {
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'kanban' | 'list'>('kanban');
+  const [actionMenuDealId, setActionMenuDealId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActionMenuDealId(null);
+    };
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest('.deal-action-menu-container')) {
+        setActionMenuDealId(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('click', handleClickOutside);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   const filteredDeals = deals.filter(deal => {
     const matchesSearch = 
@@ -182,7 +201,7 @@ export const PipelineKanban: React.FC = () => {
               >
                 
                 {/* Column Header */}
-                <div className={`p-3.5 rounded-t-2xl border-b-2 ${stage.headerColor} flex flex-col gap-1`}>
+                <div className={`p-3.5 rounded-t-2xl border-b ${stage.headerColor} flex flex-col gap-1`}>
                   <div className="flex items-center justify-between">
                     <h3 className="font-bold text-xs uppercase tracking-wider">{stage.label}</h3>
                     <span className="w-5 h-5 rounded-full bg-white/80 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-[11px] font-bold flex items-center justify-center shadow-sm">
@@ -239,98 +258,137 @@ export const PipelineKanban: React.FC = () => {
                             )}
                           </div>
 
-                          {/* Value & Category */}
-                          <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
-                            <span className={`px-2 py-0.5 rounded text-[9px] font-bold border ${catInfo.color}`}>
-                              {catInfo.label.split(' ')[0]}
-                            </span>
-                            <span className="text-xs font-black text-brand-teal-800 dark:text-brand-teal-300 font-mono">
-                              {formatCurrency(deal.estimatedValue)}
-                            </span>
-                          </div>
+                          {/* Value & Actions Bar */}
+                          <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-1.5">
+                            <div>
+                              <span className="text-xs font-black text-brand-teal-800 dark:text-brand-teal-300 font-mono block">
+                                {formatCurrency(deal.estimatedValue)}
+                              </span>
+                              <span className={`inline-block px-1.5 py-0.5 rounded text-[9px] font-bold border mt-0.5 ${catInfo.color}`}>
+                                {catInfo.label.split(' ')[0]}
+                              </span>
+                            </div>
 
-                          {/* Quick Actions Row */}
-                          <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between gap-1 text-slate-600 dark:text-slate-400">
-                            
-                            <div className="flex items-center gap-1">
+                            {/* Quick Actions & Menu */}
+                            <div className="flex items-center gap-1 deal-action-menu-container relative">
                               <button
+                                type="button"
                                 onClick={() => handleOpenWhatsApp(deal)}
                                 title="Enviar Plantilla por WhatsApp"
-                                className="p-1.5 rounded bg-slate-50 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-slate-300 dark:border-slate-700 shadow-sm"
+                                className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-600/30 shadow-2xs"
                               >
                                 <MessageCircle className="w-3.5 h-3.5" />
                               </button>
-                              <a
-                                href={`tel:${deal.clientPhone}`}
-                                title="Llamar al cliente"
-                                className="p-1.5 rounded bg-slate-50 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-950 text-blue-700 dark:text-blue-400 border border-slate-300 dark:border-slate-700 shadow-sm"
-                              >
-                                <Phone className="w-3.5 h-3.5" />
-                              </a>
-                              {!deal.quoteId ? (
+
+                              <div className="relative">
                                 <button
-                                  onClick={() => openNewQuoteForDeal(deal)}
-                                  title="Crear Cotización"
-                                  className="p-1.5 rounded bg-slate-50 dark:bg-slate-800 hover:bg-brand-teal-100 dark:hover:bg-brand-teal-950 text-brand-teal-700 dark:text-brand-teal-400 border border-slate-300 dark:border-slate-700 shadow-sm"
-                                >
-                                  <Calculator className="w-3.5 h-3.5" />
-                                </button>
-                              ) : (
-                                <button
-                                  onClick={() => {
-                                    const q = quotes.find(quote => quote.id === deal.quoteId);
-                                    if (q) setActiveQuoteForView(q);
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setActionMenuDealId(actionMenuDealId === deal.id ? null : deal.id);
                                   }}
-                                  title="Ver Presupuesto Membretado"
-                                  className="p-1.5 rounded bg-slate-50 dark:bg-slate-800 hover:bg-purple-100 dark:hover:bg-purple-950 text-purple-700 dark:text-purple-300 border border-slate-300 dark:border-slate-700 shadow-sm"
+                                  className={`p-1.5 rounded-lg border transition-all ${
+                                    actionMenuDealId === deal.id
+                                      ? 'bg-slate-200 dark:bg-slate-700 text-slate-950 dark:text-white border-slate-400'
+                                      : 'bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-slate-600 dark:text-slate-300 border-slate-300 dark:border-slate-700'
+                                  }`}
+                                  title="Más opciones de la negociación"
                                 >
-                                  <Eye className="w-3.5 h-3.5" />
+                                  <MoreHorizontal className="w-3.5 h-3.5" />
                                 </button>
-                              )}
-                              
-                              {(deal.stage === 'won' || deal.stage === 'installation') && (
-                                <button
-                                  onClick={() => handleCreateWorkOrder(deal)}
-                                  title="Crear Orden de Trabajo / Acta"
-                                  className="p-1.5 rounded bg-brand-green-50 dark:bg-brand-green-950 hover:bg-brand-green-100 text-brand-green-700 dark:text-brand-green-300 border border-brand-green-300 dark:border-brand-green-700 shadow-sm"
-                                >
-                                  <Wrench className="w-3.5 h-3.5" />
-                                </button>
-                              )}
-                            </div>
 
-                            <div className="flex items-center gap-1">
-                              <button
-                                onClick={() => {
-                                  setActiveDealForEdit(deal);
-                                  setIsDealModalOpen(true);
-                                }}
-                                title="Editar Negociación"
-                                className="p-1.5 rounded bg-slate-50 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 shadow-sm"
-                              >
-                                <Edit className="w-3.5 h-3.5" />
-                              </button>
-                              <button
-                                onClick={() => {
-                                  if (confirm(`¿Eliminar la negociación ${deal.code}?`)) {
-                                    deleteDeal(deal.id);
-                                  }
-                                }}
-                                title="Eliminar"
-                                className="p-1.5 rounded bg-slate-50 dark:bg-slate-800 hover:bg-rose-100 dark:hover:bg-rose-950 text-rose-600 dark:text-rose-400 border border-slate-300 dark:border-slate-700 shadow-sm"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            </div>
+                                {actionMenuDealId === deal.id && (
+                                  <div className="absolute right-0 bottom-full mb-1.5 w-48 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl shadow-xl z-30 py-1.5 text-xs text-left animate-fadeIn">
+                                    {!deal.quoteId ? (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setActionMenuDealId(null);
+                                          openNewQuoteForDeal(deal);
+                                        }}
+                                        className="w-full px-3 py-1.5 flex items-center gap-2 text-brand-teal-800 dark:text-brand-teal-300 hover:bg-brand-teal-50 dark:hover:bg-brand-teal-950/40 font-bold"
+                                      >
+                                        <Calculator className="w-3.5 h-3.5" />
+                                        <span>Elaborar Cotización</span>
+                                      </button>
+                                    ) : (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setActionMenuDealId(null);
+                                          const q = quotes.find(quote => quote.id === deal.quoteId);
+                                          if (q) setActiveQuoteForView(q);
+                                        }}
+                                        className="w-full px-3 py-1.5 flex items-center gap-2 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/40 font-bold"
+                                      >
+                                        <Eye className="w-3.5 h-3.5" />
+                                        <span>Ver Presupuesto</span>
+                                      </button>
+                                    )}
 
+                                    {(deal.stage === 'won' || deal.stage === 'installation') && (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setActionMenuDealId(null);
+                                          handleCreateWorkOrder(deal);
+                                        }}
+                                        className="w-full px-3 py-1.5 flex items-center gap-2 text-brand-green-800 dark:text-brand-green-300 hover:bg-brand-green-50 dark:hover:bg-brand-green-950/40 font-bold"
+                                      >
+                                        <Wrench className="w-3.5 h-3.5" />
+                                        <span>Crear Orden / Acta</span>
+                                      </button>
+                                    )}
+
+                                    <a
+                                      href={`tel:${deal.clientPhone}`}
+                                      onClick={() => setActionMenuDealId(null)}
+                                      className="w-full px-3 py-1.5 flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"
+                                    >
+                                      <Phone className="w-3.5 h-3.5 text-blue-600" />
+                                      <span>Llamar al Cliente</span>
+                                    </a>
+
+                                    <div className="my-1 border-t border-slate-200 dark:border-slate-800" />
+
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActionMenuDealId(null);
+                                        setActiveDealForEdit(deal);
+                                        setIsDealModalOpen(true);
+                                      }}
+                                      className="w-full px-3 py-1.5 flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"
+                                    >
+                                      <Edit className="w-3.5 h-3.5 text-slate-500" />
+                                      <span>Editar Negociación</span>
+                                    </button>
+
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setActionMenuDealId(null);
+                                        if (confirm(`¿Eliminar la negociación ${deal.code}?`)) {
+                                          deleteDeal(deal.id);
+                                        }
+                                      }}
+                                      className="w-full px-3 py-1.5 flex items-center gap-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 font-medium"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                      <span>Eliminar Negociación</span>
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
                           </div>
 
                           {/* Stage Selector Dropdown */}
-                          <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
+                          <div className="pt-1.5">
                             <select
                               value={deal.stage}
                               onChange={(e) => moveDealStage(deal.id, e.target.value as DealStage)}
-                              className="w-full text-[10px] font-bold py-1 px-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                              className="w-full text-[10px] font-bold py-1 px-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-brand-teal-500 shadow-2xs"
                             >
                               {STAGES.map(s => (
                                 <option key={s.id} value={s.id}>{s.label}</option>

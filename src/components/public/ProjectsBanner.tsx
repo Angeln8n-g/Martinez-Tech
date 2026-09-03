@@ -179,8 +179,8 @@ export const ProjectsBanner: React.FC = () => {
                     {catInfo.label}
                   </span>
                   {current.featured && (
-                    <span className="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-amber-400 text-slate-950 shadow-md flex items-center gap-1">
-                      <Star className="w-3.5 h-3.5 fill-slate-950" />
+                    <span className="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-amber-400 text-amber-950 shadow-md flex items-center gap-1">
+                      <Star className="w-3.5 h-3.5 fill-amber-950" />
                       Destacado
                     </span>
                   )}
