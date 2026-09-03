@@ -359,7 +359,7 @@ export const WorkOrderDocumentView: React.FC = () => {
                               <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <Maximize2 className="w-4 h-4 text-white drop-shadow" />
                               </div>
-                              <span className="absolute bottom-1 left-1 px-1.5 py-0.2 rounded bg-black/75 text-[9px] font-bold text-amber-300">
+                              <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/75 text-[9px] font-bold text-amber-300">
                                 Antes #{i + 1}
                               </span>
                             </div>
@@ -399,7 +399,7 @@ export const WorkOrderDocumentView: React.FC = () => {
                               <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <Maximize2 className="w-4 h-4 text-white drop-shadow" />
                               </div>
-                              <span className="absolute bottom-1 left-1 px-1.5 py-0.2 rounded bg-emerald-950 text-[9px] font-bold text-emerald-300">
+                              <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-emerald-950 text-[9px] font-bold text-emerald-300">
                                 Después #{i + 1}
                               </span>
                             </div>

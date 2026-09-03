@@ -173,7 +173,7 @@ export const CalendarSchedule: React.FC = () => {
                   className={`h-20 sm:h-24 p-1.5 rounded-xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
                     isSelected
                       ? 'bg-brand-teal-50 dark:bg-brand-teal-950/60 border-brand-teal-600 ring-2 ring-brand-teal-500/40 shadow-sm'
-                      : 'bg-slate-50/60 dark:bg-slate-800/60 border-slate-250 dark:border-slate-700/60 hover:border-brand-teal-500 shadow-sm'
+                      : 'bg-slate-50/60 dark:bg-slate-800/60 border-slate-300 dark:border-slate-700/60 hover:border-brand-teal-500 shadow-sm'
                   }`}
                 >
                   <div className="flex items-center justify-between">

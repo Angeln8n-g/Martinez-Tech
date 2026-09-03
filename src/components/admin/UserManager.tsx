@@ -331,7 +331,7 @@ export const UserManager: React.FC = () => {
                           {user.name}
                         </h4>
                         {isMe && (
-                          <span className="px-1.5 py-0.2 rounded bg-brand-teal-500 text-slate-950 text-[10px] font-black uppercase shadow-xs">
+                          <span className="px-1.5 py-0.5 rounded bg-brand-teal-500 text-slate-950 text-[10px] font-black uppercase shadow-xs">
                             Tú
                           </span>
                         )}

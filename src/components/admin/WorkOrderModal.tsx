@@ -685,7 +685,7 @@ export const WorkOrderModal: React.FC = () => {
                           </button>
                         </div>
 
-                        <span className="absolute bottom-1 left-1 px-1.5 py-0.2 rounded bg-black/70 text-[9px] font-bold text-amber-300">
+                        <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/70 text-[9px] font-bold text-amber-300">
                           Antes #{i + 1}
                         </span>
                       </div>
@@ -773,7 +773,7 @@ export const WorkOrderModal: React.FC = () => {
                           </button>
                         </div>
 
-                        <span className="absolute bottom-1 left-1 px-1.5 py-0.2 rounded bg-emerald-950 text-[9px] font-bold text-emerald-300">
+                        <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-emerald-950 text-[9px] font-bold text-emerald-300">
                           Después #{i + 1}
                         </span>
                       </div>

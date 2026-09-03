@@ -57,7 +57,7 @@ export const Hero: React.FC = () => {
           {/* Main Headline */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.1]">
             Soluciones Tecnológicas con{' '}
-            <span className="bg-gradient-to-r from-brand-teal-600 via-emerald-600 to-brand-green-600 dark:from-brand-teal-400 dark:via-emerald-400 dark:to-brand-green-400 bg-clip-text text-transparent">
+            <span className="text-brand-teal-600 dark:text-brand-teal-400">
               Calidad y Garantía
             </span>
           </h1>

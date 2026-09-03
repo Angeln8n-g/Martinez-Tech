@@ -47,10 +47,27 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
       },
       boxShadow: {
         'glow-green': '0 0 25px -5px rgba(106, 179, 41, 0.3)',
         'glow-teal': '0 0 25px -5px rgba(0, 168, 150, 0.3)',
+        'xs': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        '2xs': '0 1px 1px 0 rgba(0, 0, 0, 0.03)',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'scale(0.98)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        slideUp: {
+          '0%': { opacity: '0', transform: 'translateY(8px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        fadeIn: 'fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        slideUp: 'slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
       }
     },
   },

@@ -94,7 +94,7 @@ export const WhyUs: React.FC = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center divide-y lg:divide-y-0 lg:divide-x divide-slate-300 dark:divide-slate-800">
             {stats.map((stat, idx) => (
               <div key={idx} className={`${idx > 0 ? 'pt-4 lg:pt-0' : ''} space-y-1`}>
-                <div className="text-3xl sm:text-4xl font-black text-brand-teal-700 dark:bg-gradient-to-r dark:from-brand-teal-400 dark:to-brand-green-400 dark:bg-clip-text dark:text-transparent">
+                <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-brand-teal-700 dark:text-brand-teal-400">
                   {stat.value}
                 </div>
                 <div className="text-xs font-bold text-slate-700 dark:text-slate-300">

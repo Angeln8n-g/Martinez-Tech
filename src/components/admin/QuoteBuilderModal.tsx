@@ -495,7 +495,7 @@ export const QuoteBuilderModal: React.FC = () => {
                       placeholder="Descripción técnica o detalles (opcional)"
                       value={item.description || ''}
                       onChange={(e) => handleUpdateItem(item.id, { description: e.target.value })}
-                      className="w-full px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-900/60 border border-slate-250 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 focus:outline-none focus:border-brand-teal-500"
+                      className="w-full px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-900/60 border border-slate-300 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 focus:outline-none focus:border-brand-teal-500"
                     />
                   </div>
 
@@ -667,7 +667,7 @@ export const QuoteBuilderModal: React.FC = () => {
 
               {/* Cost & Profit Margin Analysis (Confidential for Admin) */}
               {showCostMargin && (
-                <div className="pt-3 border-t-2 border-dashed border-amber-300 dark:border-amber-700/60 bg-amber-50/60 dark:bg-amber-950/30 p-3 rounded-lg space-y-2 text-xs">
+                <div className="border border-amber-300/80 dark:border-amber-700/60 bg-amber-50/60 dark:bg-amber-950/30 p-3 rounded-lg space-y-2 text-xs">
                   <div className="flex items-center justify-between text-[11px] font-bold text-amber-900 dark:text-amber-300 uppercase">
                     <span className="flex items-center gap-1">
                       <TrendingUp className="w-3.5 h-3.5" />
