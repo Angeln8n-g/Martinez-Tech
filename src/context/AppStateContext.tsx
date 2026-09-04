@@ -14,7 +14,11 @@ import {
   TechnicalVisit,
   WorkOrder,
   FiscalInvoice,
-  NCFType
+  NCFType,
+  AuditLog,
+  UserRole,
+  InventoryMovement,
+  InventoryMovementType
 } from '../types';
 import { 
   initialCompanySettings, 
@@ -27,6 +31,8 @@ import {
 } from '../data/initialData';
 import { initialCatalogProducts } from '../data/catalogItems';
 import { api } from '../services/api';
+import { supabaseDb } from '../services/supabase';
+import { deductStockFromItems } from '../utils/inventoryManager';
 
 export type AdminTab = 
   | 'dashboard' 
@@ -40,7 +46,8 @@ export type AdminTab =
   | 'clients' 
   | 'portfolio' 
   | 'users'
-  | 'settings';
+  | 'settings'
+  | 'audit';
 
 type ThemeMode = 'light' | 'dark';
 
@@ -96,6 +103,11 @@ interface AppStateContextType {
   visits: TechnicalVisit[];
   workOrders: WorkOrder[];
   invoices: FiscalInvoice[];
+  auditLogs: AuditLog[];
+  inventoryMovements: InventoryMovement[];
+
+  // Audit Actions
+  logActivity: (action: string, entityType: string, entityId: string | undefined, details: string) => Promise<void>;
 
   // User Actions
   addUser: (userData: Omit<User, 'id' | 'createdAt'>) => Promise<User>;
@@ -151,6 +163,15 @@ interface AppStateContextType {
   updateCatalogProduct: (id: string, updates: Partial<CatalogProduct>) => Promise<void>;
   deleteCatalogProduct: (id: string) => Promise<void>;
   bulkUpsertCatalog: (products: Partial<CatalogProduct>[]) => Promise<{ addedCount: number; updatedCount: number; total: number }>;
+  adjustStock: (params: {
+    productId: string;
+    newStock?: number;
+    delta?: number;
+    movementType: InventoryMovementType;
+    reason: string;
+    referenceDocument?: string;
+    notes?: string;
+  }) => Promise<void>;
 
   // Settings Actions
   updateCompanySettings: (newSettings: Partial<CompanySettings>) => Promise<void>;
@@ -235,7 +256,8 @@ const STORAGE_KEYS = {
   PAYMENTS: 'mt_payments_v1',
   VISITS: 'mt_visits_v1',
   WORK_ORDERS: 'mt_work_orders_v1',
-  INVOICES: 'mt_invoices_v1'
+  INVOICES: 'mt_invoices_v1',
+  INVENTORY_MOVEMENTS: 'mt_inventory_movements_v1'
 };
 
 export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -378,6 +400,109 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return saved ? JSON.parse(saved) : initialCatalogProducts;
   });
 
+  const [inventoryMovements, setInventoryMovements] = useState<InventoryMovement[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.INVENTORY_MOVEMENTS);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        // fallback
+      }
+    }
+    return [
+      {
+        id: 'mov-init-1',
+        productId: 'cat-1',
+        productName: 'Cámara IP Domo 4MP ColorVu 24/7',
+        productCode: 'CAM-IP-4MP',
+        type: 'purchase_entry',
+        quantityChange: 20,
+        previousStock: 0,
+        newStock: 20,
+        reason: 'Reabastecimiento inicial de bodega por compra a distribuidor',
+        referenceDocument: 'FACT-PROV-8421',
+        userName: 'Rafael Martínez',
+        userRole: 'admin',
+        createdAt: '2026-08-01T10:00:00Z'
+      },
+      {
+        id: 'mov-init-2',
+        productId: 'cat-1',
+        productName: 'Cámara IP Domo 4MP ColorVu 24/7',
+        productCode: 'CAM-IP-4MP',
+        type: 'sale_deduction',
+        quantityChange: -4,
+        previousStock: 20,
+        newStock: 16,
+        reason: 'Deducción por aprobación y firma de cotización COT-2026-001',
+        referenceDocument: 'COT-2026-001',
+        userName: 'Manuel Gómez',
+        userRole: 'technician',
+        createdAt: '2026-08-15T14:30:00Z'
+      },
+      {
+        id: 'mov-init-3',
+        productId: 'cat-3',
+        productName: 'Kit Motor para Portón Corredizo 800KG Uso Continuo',
+        productCode: 'MOT-CORR-800',
+        type: 'purchase_entry',
+        quantityChange: 8,
+        previousStock: 0,
+        newStock: 8,
+        reason: 'Entrada de lote motores BFT importados',
+        referenceDocument: 'BL-BFT-2026',
+        userName: 'Rafael Martínez',
+        userRole: 'admin',
+        createdAt: '2026-08-05T09:15:00Z'
+      },
+      {
+        id: 'mov-init-4',
+        productId: 'cat-3',
+        productName: 'Kit Motor para Portón Corredizo 800KG Uso Continuo',
+        productCode: 'MOT-CORR-800',
+        type: 'manual_adjustment',
+        quantityChange: -1,
+        previousStock: 8,
+        newStock: 7,
+        reason: 'Ajuste por conteo físico: unidad apartada para exhibición técnica',
+        referenceDocument: 'AUDIT-INT-08',
+        userName: 'Rafael Martínez',
+        userRole: 'admin',
+        createdAt: '2026-08-22T16:00:00Z'
+      },
+      {
+        id: 'mov-init-5',
+        productId: 'cat-4',
+        productName: 'Cerradura Magnética Electroimán 600 Lbs con Soporte LZ',
+        productCode: 'MAG-LOCK-600',
+        type: 'purchase_entry',
+        quantityChange: 12,
+        previousStock: 0,
+        newStock: 12,
+        reason: 'Reabastecimiento de cerraduras y electroimanes YLI',
+        referenceDocument: 'FAC-YLI-449',
+        userName: 'Rafael Martínez',
+        userRole: 'admin',
+        createdAt: '2026-08-12T11:00:00Z'
+      },
+      {
+        id: 'mov-init-6',
+        productId: 'cat-5',
+        productName: 'Cable de Red UTP Cat6 100% Cobre por Metro',
+        productCode: 'CAB-CAT6-100',
+        type: 'purchase_entry',
+        quantityChange: 1000,
+        previousStock: 0,
+        newStock: 1000,
+        reason: 'Entrada bobinas Panduit 305m',
+        referenceDocument: 'FACT-PAN-902',
+        userName: 'Rafael Martínez',
+        userRole: 'admin',
+        createdAt: '2026-08-10T11:20:00Z'
+      }
+    ];
+  });
+
   const [payments, setPayments] = useState<Payment[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.PAYMENTS);
     return saved ? JSON.parse(saved) : [
@@ -471,6 +596,34 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => {
+    const saved = localStorage.getItem('martinez_crm_audit_logs');
+    if (saved) {
+      try { return JSON.parse(saved); } catch {}
+    }
+    return [
+      {
+        id: 'log-seed-1',
+        userName: 'Ing. Rafael Martínez',
+        userRole: 'admin',
+        action: 'system_boot',
+        entityType: 'company_settings',
+        details: 'Configuración de comprobantes fiscales NCF y catálogo oficial de Martínez Tech.',
+        createdAt: '2026-08-20T10:00:00Z'
+      },
+      {
+        id: 'log-seed-2',
+        userName: 'Ing. Rafael Martínez',
+        userRole: 'admin',
+        action: 'invoice_issued',
+        entityType: 'fiscal_invoice',
+        entityId: 'B0100000001',
+        details: 'Comprobante Fiscal B01 emitido a Constructora Mendoza & Asocs por RD$ 159,300.00.',
+        createdAt: '2026-08-20T14:35:00Z'
+      }
+    ];
+  });
+
   const [services] = useState<ServiceItem[]>(initialServices);
 
   // Modals & Active State
@@ -522,8 +675,19 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           if (data.visits?.length) setVisits(data.visits);
           if (data.workOrders?.length) setWorkOrders(data.workOrders);
           if (data.invoices?.length) setInvoices(data.invoices);
+          if (data.inventoryMovements?.length) setInventoryMovements(data.inventoryMovements);
           if (data.companySettings && Object.keys(data.companySettings).length > 0) {
             setCompanySettings(prev => ({ ...prev, ...data.companySettings }));
+          }
+
+          // Fetch Audit Trail from Supabase
+          try {
+            const remoteLogs = await supabaseDb.fetchAuditLogs();
+            if (remoteLogs && remoteLogs.length > 0) {
+              setAuditLogs(remoteLogs);
+            }
+          } catch (logErr) {
+            console.warn('Could not load audit logs from Supabase:', logErr);
           }
         }
       } catch (err) {
@@ -546,7 +710,39 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem(STORAGE_KEYS.VISITS, JSON.stringify(visits));
     localStorage.setItem(STORAGE_KEYS.WORK_ORDERS, JSON.stringify(workOrders));
     localStorage.setItem(STORAGE_KEYS.INVOICES, JSON.stringify(invoices));
-  }, [users, deals, quotes, clients, portfolio, companySettings, catalog, payments, visits, workOrders, invoices]);
+    localStorage.setItem(STORAGE_KEYS.INVENTORY_MOVEMENTS, JSON.stringify(inventoryMovements.slice(0, 250)));
+    localStorage.setItem('martinez_crm_audit_logs', JSON.stringify(auditLogs.slice(0, 100)));
+  }, [users, deals, quotes, clients, portfolio, companySettings, catalog, payments, visits, workOrders, invoices, inventoryMovements, auditLogs]);
+
+  // Log Activity Helper (Audit Trail)
+  const logActivity = async (action: string, entityType: string, entityId: string | undefined, details: string) => {
+    const user = currentUser || { id: 'usr-admin', name: 'Administrador', role: 'admin' as UserRole };
+    const newLog: AuditLog = {
+      id: `log-${Date.now()}`,
+      userId: user.id,
+      userName: user.name,
+      userRole: user.role,
+      action,
+      entityType,
+      entityId,
+      details,
+      createdAt: new Date().toISOString()
+    };
+
+    setAuditLogs(prev => [newLog, ...prev]);
+
+    if (isServerConnected) {
+      supabaseDb.createAuditLog({
+        userId: user.id,
+        userName: user.name,
+        userRole: user.role,
+        action,
+        entityType,
+        entityId,
+        details
+      }).catch((err: any) => console.warn('Background audit log save:', err));
+    }
+  };
 
   // Open WhatsApp Templates Helper
   const openWhatsAppTemplates = (templateType: WhatsAppTemplateType, data?: Partial<WhatsAppModalPayload>) => {
@@ -822,6 +1018,60 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       if (updated.dealId) {
         moveDealStage(updated.dealId, 'installation');
       }
+
+      // Deducción automática de stock de inventario con trazabilidad Kardex
+      if (updated.items && updated.items.length > 0) {
+        const { updatedCatalog, deductedItems } = deductStockFromItems(updated.items, catalog);
+        if (deductedItems.length > 0) {
+          setCatalog(updatedCatalog);
+          const currentActor = currentUser || { id: 'usr-admin', name: 'Administrador', role: 'admin' as UserRole };
+          const newMovements: InventoryMovement[] = [];
+
+          deductedItems.forEach(item => {
+            api.updateCatalogProduct(item.productId, { stock: item.newStock }).catch(err => {
+              console.warn('Error al sincronizar stock en base de datos:', err);
+            });
+
+            const movement: InventoryMovement = {
+              id: `mov-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+              productId: item.productId,
+              productName: item.productName,
+              type: 'sale_deduction',
+              quantityChange: -item.quantityDeducted,
+              previousStock: item.previousStock,
+              newStock: item.newStock,
+              reason: `Salida automática por cotización aprobada y firmada (${signedQuote.clientName})`,
+              referenceDocument: signedQuote.quoteNumber,
+              userId: currentActor.id,
+              userName: currentActor.name,
+              userRole: currentActor.role,
+              createdAt: new Date().toISOString()
+            };
+
+            newMovements.push(movement);
+
+            if (isServerConnected) {
+              api.createInventoryMovement(movement).catch(err => console.warn('Background inventory movement save:', err));
+            }
+
+            logActivity(
+              'stock_deducted',
+              'inventory_movement',
+              signedQuote.quoteNumber,
+              `Deducción de ${item.quantityDeducted} unidad(es) de "${item.productName}" por aprobación de Cotización ${signedQuote.quoteNumber} (Stock: ${item.previousStock} → ${item.newStock})`
+            );
+          });
+
+          setInventoryMovements(prev => [...newMovements, ...prev]);
+        }
+      }
+
+      logActivity(
+        'quote_signed',
+        'quote',
+        signedQuote.quoteNumber,
+        `Cotización ${signedQuote.quoteNumber} formalmente aceptada y firmada digitalmente por ${signedBy || signedQuote.clientName}`
+      );
     }
   };
 
@@ -934,6 +1184,12 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       try {
         const created = await api.createPayment(paymentData);
         setPayments(prev => [created, ...prev]);
+        logActivity(
+          'payment_registered',
+          'payment',
+          created.receiptNumber,
+          `Cobro de RD$ ${created.amount.toLocaleString('es-DO')} registrado vía ${created.paymentMethod} (${created.clientName})`
+        );
         return created;
       } catch (err) {
         console.error('Error creating payment via API', err);
@@ -948,6 +1204,12 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       createdAt: new Date().toISOString()
     };
     setPayments(prev => [newPayment, ...prev]);
+    logActivity(
+      'payment_registered',
+      'payment',
+      newPayment.receiptNumber,
+      `Cobro de RD$ ${newPayment.amount.toLocaleString('es-DO')} registrado vía ${newPayment.paymentMethod} (${newPayment.clientName})`
+    );
     return newPayment;
   };
 
@@ -1069,37 +1331,190 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const updated = workOrders.find(w => w.id === id);
     if (updated) {
       setActiveWorkOrderForView({ ...updated, ...updates });
+      logActivity(
+        'work_order_signed',
+        'work_order',
+        updated.orderNumber,
+        `Acta de Entrega de Orden de Trabajo ${updated.orderNumber} certificada y firmada formalmente por el cliente ${signedByName || ''}`
+      );
     }
   };
 
   // Catalog Actions
   const addCatalogProduct = async (productData: Omit<CatalogProduct, 'id'>) => {
+    let createdProduct: CatalogProduct;
     if (isServerConnected) {
       try {
         const created = await api.createCatalogProduct(productData);
         setCatalog(prev => [created, ...prev]);
-        return;
+        createdProduct = created;
       } catch (err) {
         console.error('Error creating catalog product via API', err);
+        createdProduct = { ...productData, id: `cat-${Date.now()}` };
+        setCatalog(prev => [createdProduct, ...prev]);
       }
+    } else {
+      createdProduct = { ...productData, id: `cat-${Date.now()}` };
+      setCatalog(prev => [createdProduct, ...prev]);
     }
 
-    const newItem: CatalogProduct = {
-      ...productData,
-      id: `cat-${Date.now()}`
-    };
-    setCatalog(prev => [newItem, ...prev]);
+    // Si tiene stock inicial y es físico, registrar alta en Kardex
+    if ((createdProduct.type === 'product' || createdProduct.type === 'material') && typeof createdProduct.stock === 'number' && createdProduct.stock > 0) {
+      const user = currentUser || { id: 'usr-admin', name: 'Administrador', role: 'admin' as UserRole };
+      const initMovement: InventoryMovement = {
+        id: `mov-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        productId: createdProduct.id,
+        productName: createdProduct.name,
+        productCode: createdProduct.code,
+        type: 'initial',
+        quantityChange: createdProduct.stock,
+        previousStock: 0,
+        newStock: createdProduct.stock,
+        reason: 'Stock inicial registrado al dar de alta el producto en catálogo',
+        userId: user.id,
+        userName: user.name,
+        userRole: user.role,
+        createdAt: new Date().toISOString()
+      };
+      setInventoryMovements(prev => [initMovement, ...prev]);
+      if (isServerConnected) {
+        api.createInventoryMovement(initMovement).catch(err => console.warn('Background movement save:', err));
+      }
+      logActivity(
+        'product_created',
+        'catalog_product',
+        createdProduct.code || createdProduct.id,
+        `Nuevo ítem registrado en catálogo: "${createdProduct.name}" con stock inicial de ${createdProduct.stock} ${createdProduct.unit || 'unidades'}`
+      );
+    }
   };
 
-  const updateCatalogProduct = async (id: string, updates: Partial<CatalogProduct>) => {
+  const updateCatalogProduct = async (id: string, updates: Partial<CatalogProduct> & { movementReason?: string; referenceDocument?: string }) => {
+    const existing = catalog.find(c => c.id === id);
+
     if (isServerConnected) {
       try {
-        await api.updateCatalogProduct(id, updates);
+        const { movementReason, referenceDocument, ...cleanUpdates } = updates;
+        await api.updateCatalogProduct(id, cleanUpdates);
       } catch (err) {
         console.error('Error updating catalog product via API', err);
       }
     }
-    setCatalog(prev => prev.map(c => (c.id === id ? { ...c, ...updates } : c)));
+
+    // Registrar en Kardex si el stock fue modificado directamente
+    if (existing && updates.stock !== undefined && updates.stock !== existing.stock) {
+      const prevStock = typeof existing.stock === 'number' ? existing.stock : 0;
+      const newStock = Number(updates.stock);
+      const quantityChange = newStock - prevStock;
+      const user = currentUser || { id: 'usr-admin', name: 'Administrador', role: 'admin' as UserRole };
+
+      const mov: InventoryMovement = {
+        id: `mov-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        productId: existing.id,
+        productName: updates.name || existing.name,
+        productCode: updates.code || existing.code,
+        type: quantityChange >= 0 ? 'manual_adjustment' : 'manual_adjustment',
+        quantityChange,
+        previousStock: prevStock,
+        newStock,
+        reason: updates.movementReason || (quantityChange >= 0 ? 'Ajuste manual de stock (Entrada)' : 'Ajuste manual de stock (Salida)'),
+        referenceDocument: updates.referenceDocument,
+        userId: user.id,
+        userName: user.name,
+        userRole: user.role,
+        createdAt: new Date().toISOString()
+      };
+
+      setInventoryMovements(prev => [mov, ...prev]);
+      if (isServerConnected) {
+        api.createInventoryMovement(mov).catch(err => console.warn('Background movement save:', err));
+      }
+
+      const diffFormatted = quantityChange > 0 ? `+${quantityChange}` : `${quantityChange}`;
+      logActivity(
+        'stock_adjusted',
+        'inventory_movement',
+        existing.code || existing.id,
+        `Stock de "${existing.name}" actualizado de ${prevStock} a ${newStock} (${diffFormatted} un.) | Motivo: ${mov.reason}${updates.referenceDocument ? ` | Ref: ${updates.referenceDocument}` : ''}`
+      );
+    }
+
+    const { movementReason: _mr, referenceDocument: _rd, ...fieldsToSave } = updates;
+    setCatalog(prev => prev.map(c => (c.id === id ? { ...c, ...fieldsToSave, lastStockUpdate: updates.stock !== undefined ? new Date().toISOString() : c.lastStockUpdate } : c)));
+  };
+
+  const adjustStock = async ({
+    productId,
+    newStock,
+    delta,
+    movementType,
+    reason,
+    referenceDocument,
+    notes
+  }: {
+    productId: string;
+    newStock?: number;
+    delta?: number;
+    movementType: InventoryMovementType;
+    reason: string;
+    referenceDocument?: string;
+    notes?: string;
+  }) => {
+    const product = catalog.find(p => p.id === productId);
+    if (!product) return;
+
+    const prevStock = typeof product.stock === 'number' ? product.stock : 0;
+    let targetStock = prevStock;
+
+    if (typeof newStock === 'number') {
+      targetStock = Math.max(0, newStock);
+    } else if (typeof delta === 'number') {
+      targetStock = Math.max(0, prevStock + delta);
+    }
+
+    const quantityChange = targetStock - prevStock;
+    if (quantityChange === 0 && newStock === undefined) return;
+
+    const user = currentUser || { id: 'usr-admin', name: 'Administrador', role: 'admin' as UserRole };
+
+    const newMovement: InventoryMovement = {
+      id: `mov-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+      productId: product.id,
+      productName: product.name,
+      productCode: product.code,
+      type: movementType,
+      quantityChange,
+      previousStock: prevStock,
+      newStock: targetStock,
+      reason: reason || 'Ajuste manual de existencias',
+      referenceDocument,
+      userId: user.id,
+      userName: user.name,
+      userRole: user.role,
+      notes,
+      createdAt: new Date().toISOString()
+    };
+
+    // Update catalog item
+    await updateCatalogProduct(product.id, {
+      stock: targetStock,
+      lastStockUpdate: new Date().toISOString()
+    });
+
+    // Append to movements
+    setInventoryMovements(prev => [newMovement, ...prev]);
+
+    if (isServerConnected) {
+      api.createInventoryMovement(newMovement).catch(err => console.warn('Background inventory movement save:', err));
+    }
+
+    const directionText = quantityChange > 0 ? `+${quantityChange}` : `${quantityChange}`;
+    logActivity(
+      'stock_adjusted',
+      'inventory_movement',
+      product.code || product.id,
+      `Ajuste de inventario en "${product.name}": ${prevStock} → ${targetStock} (${directionText} un.) | Motivo: ${reason}${referenceDocument ? ` | Ref: ${referenceDocument}` : ''}`
+    );
   };
 
   const deleteCatalogProduct = async (id: string) => {
@@ -1203,6 +1618,12 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             setCompanySettings(updatedSettings);
           }
         }
+        logActivity(
+          'invoice_issued',
+          'fiscal_invoice',
+          created.ncf,
+          `Comprobante Fiscal ${created.ncf} emitido a ${created.clientName} por RD$ ${(created.total || 0).toLocaleString('es-DO')}`
+        );
         return created;
       } catch (err) {
         console.error('Error creating invoice via API', err);
@@ -1218,6 +1639,13 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     };
 
     setInvoices(prev => [newInvoice, ...prev]);
+
+    logActivity(
+      'invoice_issued',
+      'fiscal_invoice',
+      newInvoice.ncf,
+      `Comprobante Fiscal ${newInvoice.ncf} emitido a ${newInvoice.clientName} por RD$ ${(newInvoice.total || 0).toLocaleString('es-DO')}`
+    );
 
     if (companySettings.ncfSequences) {
       const seqKey = `${invoiceData.ncfType.toLowerCase()}Next` as keyof typeof companySettings.ncfSequences;
@@ -1295,6 +1723,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       payments,
       visits,
       workOrders,
+      inventoryMovements,
       exportedAt: new Date().toISOString(),
       version: '2.0'
     };
@@ -1333,6 +1762,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       if (data.payments) setPayments(data.payments);
       if (data.visits) setVisits(data.visits);
       if (data.workOrders) setWorkOrders(data.workOrders);
+      if (data.inventoryMovements) setInventoryMovements(data.inventoryMovements);
       return true;
     } catch {
       return false;
@@ -1439,6 +1869,8 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         visits,
         workOrders,
         invoices,
+        auditLogs,
+        logActivity,
 
         addDeal,
         updateDeal,
@@ -1479,6 +1911,8 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         updateCatalogProduct,
         deleteCatalogProduct,
         bulkUpsertCatalog,
+        inventoryMovements,
+        adjustStock,
 
         updateCompanySettings,
         exportDataBackup,

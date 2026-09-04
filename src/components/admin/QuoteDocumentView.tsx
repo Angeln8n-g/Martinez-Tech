@@ -17,11 +17,14 @@ import {
   PenTool,
   CheckCircle2,
   Lock,
-  Receipt
+  Receipt,
+  ExternalLink,
+  Check
 } from 'lucide-react';
 import { formatCurrency, formatDate, generateQuoteWhatsAppText, createWhatsAppUrl } from '../../utils/formatters';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { useToast } from '../ui/ToastNotification';
 
 export const QuoteDocumentView: React.FC = () => {
   const { 
@@ -35,14 +38,24 @@ export const QuoteDocumentView: React.FC = () => {
     signQuote,
     openWhatsAppTemplates
   } = useAppState();
+  const { showToast } = useToast();
 
   const printRef = useRef<HTMLDivElement>(null);
   const [downloading, setDownloading] = useState(false);
   const [isSigningOpen, setIsSigningOpen] = useState(false);
+  const [copiedPortalLink, setCopiedPortalLink] = useState(false);
 
   if (!activeQuoteForView) return null;
 
   const quote = activeQuoteForView;
+
+  const handleCopyPortalLink = () => {
+    const url = `${window.location.origin}/?propuesta=${quote.quoteNumber}`;
+    navigator.clipboard.writeText(url);
+    setCopiedPortalLink(true);
+    showToast(`Enlace de ${quote.quoteNumber} copiado al portapapeles`, 'success');
+    setTimeout(() => setCopiedPortalLink(false), 2500);
+  };
 
   const handlePrint = () => {
     window.print();
@@ -84,9 +97,10 @@ export const QuoteDocumentView: React.FC = () => {
       }
 
       pdf.save(`Cotizacion_${quote.quoteNumber}_${quote.clientName.replace(/\s+/g, '_')}.pdf`);
+      showToast('PDF descargado exitosamente', 'success');
     } catch (err) {
       console.error('Error generating PDF', err);
-      alert('Hubo un inconveniente al generar el PDF. Puedes utilizar la opción "Imprimir / Guardar como PDF".');
+      showToast('Hubo un inconveniente al generar el PDF. Puedes utilizar la opción "Imprimir / Guardar como PDF".', 'error');
     } finally {
       setDownloading(false);
     }
@@ -162,6 +176,15 @@ export const QuoteDocumentView: React.FC = () => {
             >
               <Receipt className="w-4 h-4" />
               <span>Emitir Factura Fiscal</span>
+            </button>
+
+            <button
+              onClick={handleCopyPortalLink}
+              className="px-3 py-1.5 rounded-xl bg-purple-700 hover:bg-purple-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-md transition-all"
+              title="Copiar enlace público para que el cliente revise y firme desde su celular"
+            >
+              {copiedPortalLink ? <Check className="w-4 h-4 text-emerald-300" /> : <ExternalLink className="w-4 h-4" />}
+              <span>{copiedPortalLink ? '¡Enlace Copiado!' : 'Enlace Cliente'}</span>
             </button>
 
             <button

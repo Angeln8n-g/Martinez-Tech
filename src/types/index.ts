@@ -247,10 +247,41 @@ export interface CatalogProduct {
   unitPrice: number;
   costPrice?: number;
   stock?: number;
+  minStock?: number;
+  location?: string;
+  lastStockUpdate?: string;
+  barcode?: string;
   unit: string;
 }
 
-export type UserRole = 'admin' | 'technician';
+export type InventoryMovementType = 
+  | 'initial'           // Stock inicial / Alta de producto
+  | 'purchase_entry'    // Entrada por compra / Reabastecimiento
+  | 'manual_adjustment' // Ajuste por conteo físico o corrección manual
+  | 'sale_deduction'    // Salida por cotización / venta aceptada
+  | 'damage_loss'       // Salida por avería, merma o daño físico
+  | 'return'            // Devolución (de cliente o a proveedor)
+  | 'work_order_use';   // Consumo en orden de trabajo / instalación
+
+export interface InventoryMovement {
+  id: string;
+  productId: string;
+  productName: string;
+  productCode?: string;
+  type: InventoryMovementType;
+  quantityChange: number; // Positivo (+) para entradas, Negativo (-) para salidas
+  previousStock: number;
+  newStock: number;
+  reason: string;
+  referenceDocument?: string; // e.g. COT-2026-001, FACT-102, AJUSTE-01
+  userId?: string;
+  userName: string;
+  userRole: UserRole;
+  notes?: string;
+  createdAt: string;
+}
+
+export type UserRole = 'admin' | 'technician' | 'seller';
 
 export interface User {
   id: string;
@@ -263,6 +294,18 @@ export interface User {
   active?: boolean;
   createdAt?: string;
   lastLogin?: string;
+}
+
+export interface AuditLog {
+  id: string;
+  userId?: string;
+  userName: string;
+  userRole: UserRole;
+  action: string;
+  entityType: string;
+  entityId?: string;
+  details: string;
+  createdAt: string;
 }
 
 export type PaymentMethod = 'transferencia' | 'efectivo' | 'tarjeta' | 'cheque';

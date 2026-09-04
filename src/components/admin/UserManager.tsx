@@ -21,7 +21,8 @@ import {
   Lock,
   RefreshCw,
   AlertCircle,
-  Sparkles
+  Sparkles,
+  Briefcase
 } from 'lucide-react';
 
 export const UserManager: React.FC = () => {
@@ -174,6 +175,7 @@ export const UserManager: React.FC = () => {
   // KPI Metrics
   const totalUsers = users.length;
   const adminCount = users.filter((u) => u.role === 'admin').length;
+  const sellerCount = users.filter((u) => u.role === 'seller').length;
   const techCount = users.filter((u) => u.role === 'technician').length;
   const activeCount = users.filter((u) => u.active !== false).length;
 
@@ -181,59 +183,73 @@ export const UserManager: React.FC = () => {
     <div className="space-y-6 animate-fadeIn">
       
       {/* Header & KPI Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3.5">
         
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3.5">
-          <div className="p-3 rounded-xl bg-brand-teal-50 dark:bg-brand-teal-950/60 text-brand-teal-600 dark:text-brand-teal-400">
-            <Users className="w-5 h-5" />
+        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-brand-teal-50 dark:bg-brand-teal-950/60 text-brand-teal-600 dark:text-brand-teal-400">
+            <Users className="w-4 h-4" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
-              Total Usuarios
+            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+              Total
             </span>
-            <span className="text-xl font-black text-slate-900 dark:text-white">
+            <span className="text-lg font-black text-slate-900 dark:text-white">
               {totalUsers}
             </span>
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3.5">
-          <div className="p-3 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400">
-            <ShieldCheck className="w-5 h-5" />
+        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400">
+            <ShieldCheck className="w-4 h-4" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
-              Administradores
+            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+              Admins
             </span>
-            <span className="text-xl font-black text-slate-900 dark:text-white">
+            <span className="text-lg font-black text-slate-900 dark:text-white">
               {adminCount}
             </span>
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3.5">
-          <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
-            <Wrench className="w-5 h-5" />
+        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400">
+            <Briefcase className="w-4 h-4" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
-              Técnicos de Campo
+            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+              Ventas
             </span>
-            <span className="text-xl font-black text-slate-900 dark:text-white">
+            <span className="text-lg font-black text-slate-900 dark:text-white">
+              {sellerCount}
+            </span>
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
+            <Wrench className="w-4 h-4" />
+          </div>
+          <div>
+            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+              Técnicos
+            </span>
+            <span className="text-lg font-black text-slate-900 dark:text-white">
               {techCount}
             </span>
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3.5">
-          <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
-            <CheckCircle2 className="w-5 h-5" />
+        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3 col-span-2 lg:col-span-1">
+          <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
+            <CheckCircle2 className="w-4 h-4" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
-              Cuentas Activas
+            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+              Activos
             </span>
-            <span className="text-xl font-black text-slate-900 dark:text-white">
+            <span className="text-lg font-black text-slate-900 dark:text-white">
               {activeCount}
             </span>
           </div>
@@ -265,6 +281,7 @@ export const UserManager: React.FC = () => {
           >
             <option value="all">Todos los Roles</option>
             <option value="admin">Administradores</option>
+            <option value="seller">Vendedores / Comerciales</option>
             <option value="technician">Técnicos de Campo</option>
           </select>
 
@@ -296,6 +313,7 @@ export const UserManager: React.FC = () => {
         {filteredUsers.map((user) => {
           const isMe = currentUser?.id === user.id;
           const isAdmin = user.role === 'admin';
+          const isSeller = user.role === 'seller';
           const isActive = user.active !== false;
 
           return (
@@ -306,6 +324,8 @@ export const UserManager: React.FC = () => {
                   ? 'border-slate-300 dark:border-slate-800 opacity-70 bg-slate-50/60 dark:bg-slate-900/50'
                   : isAdmin
                   ? 'border-slate-300 dark:border-slate-800 hover:border-purple-500'
+                  : isSeller
+                  ? 'border-slate-300 dark:border-slate-800 hover:border-cyan-500'
                   : 'border-slate-300 dark:border-slate-800 hover:border-brand-teal-500'
               }`}
             >
@@ -319,6 +339,8 @@ export const UserManager: React.FC = () => {
                       className={`w-12 h-12 rounded-2xl flex items-center justify-center text-sm font-black shadow-inner ${
                         isAdmin
                           ? 'bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-300 dark:border-purple-500/40'
+                          : isSeller
+                          ? 'bg-cyan-100 dark:bg-cyan-950/80 text-cyan-700 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-500/40'
                           : 'bg-brand-teal-100 dark:bg-brand-teal-950/80 text-brand-teal-700 dark:text-brand-teal-300 border border-brand-teal-300 dark:border-brand-teal-500/40'
                       }`}
                     >
@@ -342,11 +364,13 @@ export const UserManager: React.FC = () => {
                           className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wide border shadow-xs ${
                             isAdmin
                               ? 'bg-purple-50 text-purple-800 dark:bg-purple-950/50 dark:text-purple-300 border-purple-300 dark:border-purple-500/30'
+                              : isSeller
+                              ? 'bg-cyan-50 text-cyan-800 dark:bg-cyan-950/50 dark:text-cyan-300 border-cyan-300 dark:border-cyan-500/30'
                               : 'bg-blue-50 text-blue-800 dark:bg-blue-950/50 dark:text-blue-300 border-blue-300 dark:border-blue-500/30'
                           }`}
                         >
-                          {isAdmin ? <ShieldCheck className="w-3 h-3" /> : <Wrench className="w-3 h-3" />}
-                          <span>{isAdmin ? 'Administrador' : 'Técnico de Campo'}</span>
+                          {isAdmin ? <ShieldCheck className="w-3 h-3" /> : isSeller ? <Briefcase className="w-3 h-3" /> : <Wrench className="w-3 h-3" />}
+                          <span>{isAdmin ? 'Administrador' : isSeller ? 'Vendedor Comercial' : 'Técnico de Campo'}</span>
                         </span>
 
                         <span
@@ -535,8 +559,9 @@ export const UserManager: React.FC = () => {
                     onChange={(e) => setRole(e.target.value as UserRole)}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-xs"
                   >
-                    <option value="admin">Administrador (Acceso Total)</option>
-                    <option value="technician">Técnico de Campo</option>
+                    <option value="admin">Administrador (Acceso Total & Auditoría)</option>
+                    <option value="seller">Vendedor / Comercial (Pipeline & Cotizaciones)</option>
+                    <option value="technician">Técnico de Campo (Órdenes & Levantamientos)</option>
                   </select>
                 </div>
 

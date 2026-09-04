@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAppState } from '../../context/AppStateContext';
+import { useToast } from '../ui/ToastNotification';
 import { Quote } from '../../types';
 import { 
   Plus, 
@@ -13,7 +14,8 @@ import {
   CheckCircle2,
   Wrench,
   Receipt,
-  MoreHorizontal
+  MoreHorizontal,
+  ExternalLink
 } from 'lucide-react';
 import { 
   formatCurrency, 
@@ -34,6 +36,8 @@ export const QuotesList: React.FC = () => {
     setActiveWorkOrderForEdit,
     setIsWorkOrderModalOpen
   } = useAppState();
+
+  const { showToast } = useToast();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -292,7 +296,21 @@ export const QuotesList: React.FC = () => {
 
                             {/* Dropdown Menu */}
                             {actionMenuQuoteId === quote.id && (
-                              <div className="absolute right-0 top-full mt-1.5 w-52 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl shadow-xl z-30 py-1.5 text-xs text-left animate-fadeIn">
+                              <div className="absolute right-0 top-full mt-1.5 w-56 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl shadow-xl z-30 py-1.5 text-xs text-left animate-fadeIn">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setActionMenuQuoteId(null);
+                                    const url = `${window.location.origin}/?propuesta=${quote.quoteNumber}`;
+                                    navigator.clipboard.writeText(url);
+                                    showToast(`Enlace de ${quote.quoteNumber} copiado al portapapeles`, 'success');
+                                  }}
+                                  className="w-full px-3.5 py-2 flex items-center gap-2 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/40 font-bold"
+                                >
+                                  <ExternalLink className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                                  <span>Copiar Enlace para Cliente</span>
+                                </button>
+
                                 <button
                                   type="button"
                                   onClick={() => {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAppState } from '../../context/AppStateContext';
+import { useToast } from '../ui/ToastNotification';
 import { PaymentMethod } from '../../types';
 import { X, Save, DollarSign, CheckCircle } from 'lucide-react';
 import { formatCurrency } from '../../utils/formatters';
@@ -15,6 +16,8 @@ export const PaymentRegisterModal: React.FC = () => {
     setActiveReceiptForView,
     currentUser 
   } = useAppState();
+
+  const { showToast } = useToast();
 
   const [selectedQuoteId, setSelectedQuoteId] = useState('');
   const [clientName, setClientName] = useState('');
@@ -69,7 +72,7 @@ export const PaymentRegisterModal: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!clientName || amount <= 0) {
-      alert('Por favor ingrese el nombre del cliente y un monto válido.');
+      showToast('Por favor ingrese el nombre del cliente y un monto válido.', 'warning');
       return;
     }
 
@@ -94,6 +97,7 @@ export const PaymentRegisterModal: React.FC = () => {
       createdBy: currentUser?.name || 'Rafael Martínez'
     });
 
+    showToast('Recibo de pago registrado exitosamente', 'success');
     setIsPaymentModalOpen(false);
     setActiveReceiptForView(newPayment);
   };

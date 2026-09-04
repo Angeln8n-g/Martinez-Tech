@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAppState } from '../../context/AppStateContext';
+import { useToast } from '../ui/ToastNotification';
 import { WorkOrder, WorkOrderChecklistItem, ServiceCategory, WorkOrderStatus } from '../../types';
 import { 
   X, 
@@ -17,8 +18,12 @@ import {
   FileCheck2,
   FolderOpen,
   AlertTriangle,
-  RotateCcw
+  RotateCcw,
+  Loader2,
+  MapPin
 } from 'lucide-react';
+import { uploadWorkOrderImage } from '../../services/supabase';
+import { compressImage, getCurrentGpsLocation } from '../../utils/imageCompression';
 import { 
   formatDominicanPhone, 
   saveDraft, 
@@ -125,6 +130,8 @@ export const WorkOrderModal: React.FC = () => {
     currentUser 
   } = useAppState();
 
+  const { showToast } = useToast();
+
   const [selectedQuoteId, setSelectedQuoteId] = useState('');
   const [clientName, setClientName] = useState('');
   const [clientPhone, setClientPhone] = useState('');
@@ -154,6 +161,10 @@ export const WorkOrderModal: React.FC = () => {
   const [afterImages, setAfterImages] = useState<string[]>([]);
   const [beforeImgInput, setBeforeImgInput] = useState('');
   const [afterImgInput, setAfterImgInput] = useState('');
+  const [isUploadingBefore, setIsUploadingBefore] = useState(false);
+  const [isUploadingAfter, setIsUploadingAfter] = useState(false);
+  const [isGettingGps, setIsGettingGps] = useState(false);
+  const [gpsSuccess, setGpsSuccess] = useState(false);
   const [previewZoomImage, setPreviewZoomImage] = useState<string | null>(null);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [draftRestoredAt, setDraftRestoredAt] = useState<string | null>(null);
@@ -344,36 +355,80 @@ export const WorkOrderModal: React.FC = () => {
     setChecklist(prev => prev.filter(c => c.id !== id));
   };
 
-  // Upload Local Files as Base64 for Before Images
-  const handleUploadBeforeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Upload Local Files to Supabase Storage for Before Images (with Auto-Compression)
+  const handleUploadBeforeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    Array.from(files).forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          setBeforeImages(prev => [...prev, event.target!.result as string]);
+    setIsUploadingBefore(true);
+    try {
+      for (const file of Array.from(files)) {
+        try {
+          const compressed = await compressImage(file, { maxWidth: 1280, quality: 0.82 });
+          const publicUrl = await uploadWorkOrderImage(compressed);
+          setBeforeImages(prev => [...prev, publicUrl]);
+        } catch (uploadErr) {
+          console.warn('Storage upload error, using local fallback:', uploadErr);
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            if (event.target?.result) {
+              setBeforeImages(prev => [...prev, event.target!.result as string]);
+            }
+          };
+          reader.readAsDataURL(file);
         }
-      };
-      reader.readAsDataURL(file);
-    });
+      }
+    } finally {
+      setIsUploadingBefore(false);
+      if (e.target) e.target.value = '';
+    }
   };
 
-  // Upload Local Files as Base64 for After Images
-  const handleUploadAfterFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Upload Local Files to Supabase Storage for After Images (with Auto-Compression)
+  const handleUploadAfterFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    Array.from(files).forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          setAfterImages(prev => [...prev, event.target!.result as string]);
+    setIsUploadingAfter(true);
+    try {
+      for (const file of Array.from(files)) {
+        try {
+          const compressed = await compressImage(file, { maxWidth: 1280, quality: 0.82 });
+          const publicUrl = await uploadWorkOrderImage(compressed);
+          setAfterImages(prev => [...prev, publicUrl]);
+        } catch (uploadErr) {
+          console.warn('Storage upload error, using local fallback:', uploadErr);
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            if (event.target?.result) {
+              setAfterImages(prev => [...prev, event.target!.result as string]);
+            }
+          };
+          reader.readAsDataURL(file);
         }
-      };
-      reader.readAsDataURL(file);
-    });
+      }
+    } finally {
+      setIsUploadingAfter(false);
+      if (e.target) e.target.value = '';
+    }
+  };
+
+  // GPS Check-in Handler
+  const handleGpsCheckIn = async () => {
+    setIsGettingGps(true);
+    try {
+      const loc = await getCurrentGpsLocation();
+      const timeStr = new Date().toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' });
+      const gpsLine = `[📍 Check-in GPS: Lat ${loc.latitude.toFixed(5)}, Lng ${loc.longitude.toFixed(5)} (${timeStr}) - Ver mapa: ${loc.googleMapsUrl}]`;
+      setTechnicianNotes(prev => prev ? `${prev}\n${gpsLine}` : gpsLine);
+      setGpsSuccess(true);
+      showToast('📍 Coordenadas GPS registradas con éxito', 'success');
+      setTimeout(() => setGpsSuccess(false), 4000);
+    } catch (err: any) {
+      showToast(err.message || 'No se pudo obtener la ubicación GPS.', 'error');
+    } finally {
+      setIsGettingGps(false);
+    }
   };
 
   const handleAddBeforeImage = () => {
@@ -398,7 +453,7 @@ export const WorkOrderModal: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!clientName || !clientPhone) {
-      alert('Por favor ingrese el nombre y teléfono del cliente.');
+      showToast('Por favor ingrese el nombre y teléfono del cliente.', 'warning');
       return;
     }
 
@@ -452,6 +507,7 @@ export const WorkOrderModal: React.FC = () => {
 
     clearDraft('work_order_builder');
     setDraftRestoredAt(null);
+    showToast('Orden de trabajo guardada exitosamente', 'success');
     setIsWorkOrderModalOpen(false);
   };
 
@@ -795,11 +851,21 @@ export const WorkOrderModal: React.FC = () => {
                   <div className="flex gap-2">
                     <button
                       type="button"
+                      disabled={isUploadingBefore}
                       onClick={() => beforeFileInputRef.current?.click()}
-                      className="flex-1 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-2 shadow-sm transition-all"
+                      className="flex-1 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-60"
                     >
-                      <Camera className="w-4 h-4 text-amber-600" />
-                      <span>Subir / Tomar Foto</span>
+                      {isUploadingBefore ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin text-amber-600" />
+                          <span>Subiendo a Supabase...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Camera className="w-4 h-4 text-amber-600" />
+                          <span>Subir / Tomar Foto</span>
+                        </>
+                      )}
                     </button>
                   </div>
 
@@ -883,11 +949,21 @@ export const WorkOrderModal: React.FC = () => {
                   <div className="flex gap-2">
                     <button
                       type="button"
+                      disabled={isUploadingAfter}
                       onClick={() => afterFileInputRef.current?.click()}
-                      className="flex-1 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-emerald-50 dark:hover:bg-slate-800 border border-emerald-300 dark:border-emerald-500/40 text-xs font-bold text-emerald-950 dark:text-emerald-200 flex items-center justify-center gap-2 shadow-sm transition-all"
+                      className="flex-1 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-emerald-50 dark:hover:bg-slate-800 border border-emerald-300 dark:border-emerald-500/40 text-xs font-bold text-emerald-950 dark:text-emerald-200 flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-60"
                     >
-                      <Camera className="w-4 h-4 text-emerald-600" />
-                      <span>Subir / Tomar Foto</span>
+                      {isUploadingAfter ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
+                          <span>Subiendo a Supabase...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Camera className="w-4 h-4 text-emerald-600" />
+                          <span>Subir / Tomar Foto</span>
+                        </>
+                      )}
                     </button>
                   </div>
 
@@ -958,7 +1034,23 @@ export const WorkOrderModal: React.FC = () => {
           {/* Notes & Feedback */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-800 dark:text-slate-300">Observaciones del Técnico</label>
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-slate-800 dark:text-slate-300">Observaciones del Técnico</label>
+                <button
+                  type="button"
+                  onClick={handleGpsCheckIn}
+                  disabled={isGettingGps}
+                  className="px-2 py-0.5 rounded-md bg-brand-teal-50 dark:bg-brand-teal-950/60 hover:bg-brand-teal-100 text-[11px] font-bold text-brand-teal-800 dark:text-brand-teal-300 border border-brand-teal-300 dark:border-brand-teal-600/40 flex items-center gap-1 transition-all shadow-sm"
+                  title="Registrar coordenadas GPS como constancia de visita"
+                >
+                  {isGettingGps ? (
+                    <Loader2 className="w-3 h-3 animate-spin text-brand-teal-600" />
+                  ) : (
+                    <MapPin className="w-3 h-3 text-brand-teal-600" />
+                  )}
+                  <span>{gpsSuccess ? '✓ GPS Registrado' : '📍 Check-in GPS'}</span>
+                </button>
+              </div>
               <textarea
                 rows={2}
                 value={technicianNotes}

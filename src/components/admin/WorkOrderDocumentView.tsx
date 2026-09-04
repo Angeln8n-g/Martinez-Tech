@@ -22,6 +22,7 @@ import {
 import { formatDate } from '../../utils/formatters';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { useToast } from '../ui/ToastNotification';
 
 export const WorkOrderDocumentView: React.FC = () => {
   const { 
@@ -32,6 +33,7 @@ export const WorkOrderDocumentView: React.FC = () => {
     setIsWorkOrderModalOpen,
     signWorkOrder 
   } = useAppState();
+  const { showToast } = useToast();
 
   const printRef = useRef<HTMLDivElement>(null);
   const [downloading, setDownloading] = useState(false);
@@ -82,9 +84,10 @@ export const WorkOrderDocumentView: React.FC = () => {
       }
 
       pdf.save(`Acta_Entrega_${order.orderNumber}_${order.clientName.replace(/\s+/g, '_')}.pdf`);
+      showToast('Acta de entrega descargada en PDF', 'success');
     } catch (err) {
       console.error('Error generating PDF', err);
-      alert('Hubo un inconveniente al generar el PDF. Puedes utilizar la opción "Imprimir / Guardar como PDF".');
+      showToast('Hubo un inconveniente al generar el PDF. Puedes usar "Imprimir / Guardar como PDF".', 'error');
     } finally {
       setDownloading(false);
     }

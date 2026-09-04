@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppStateProvider, useAppState } from './context/AppStateContext';
+import { ToastProvider } from './components/ui/ToastNotification';
 
 // Public Components
 import { Navbar } from './components/public/Navbar';
@@ -11,6 +12,7 @@ import { WhyUs } from './components/public/WhyUs';
 import { TestimonialsSection } from './components/public/TestimonialsSection';
 import { ContactSection } from './components/public/ContactSection';
 import { Footer } from './components/public/Footer';
+import { ClientProposalPortal } from './components/public/ClientProposalPortal';
 
 // Admin Components
 import { AdminHeader } from './components/admin/AdminHeader';
@@ -25,6 +27,7 @@ import { CatalogManager } from './components/admin/CatalogManager';
 import { ClientDirectory } from './components/admin/ClientDirectory';
 import { PortfolioManager } from './components/admin/PortfolioManager';
 import { UserManager } from './components/admin/UserManager';
+import { AuditTrailView } from './components/admin/AuditTrailView';
 
 // Modals
 import { LoginModal } from './components/auth/LoginModal';
@@ -57,10 +60,61 @@ const MainContent: React.FC = () => {
     setIsLoginModalOpen 
   } = useAppState();
 
+  const [proposalParam, setProposalParam] = useState<string | null>(() => {
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get('propuesta') || params.get('quote') || params.get('cotizacion');
+    if (p) return p;
+    const hash = window.location.hash;
+    if (hash.includes('propuesta/')) {
+      return hash.split('propuesta/')[1]?.split('?')[0] || null;
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const p = params.get('propuesta') || params.get('quote') || params.get('cotizacion');
+      if (p) {
+        setProposalParam(p);
+      } else {
+        const hash = window.location.hash;
+        if (hash.includes('propuesta/')) {
+          setProposalParam(hash.split('propuesta/')[1]?.split('?')[0] || null);
+        } else {
+          setProposalParam(null);
+        }
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handlePopState);
+    };
+  }, []);
+
   const handleWhatsAppFloating = () => {
     const text = `¡Hola! Me comunico desde el sitio web de Martínez Tech para una consulta técnica.`;
     window.open(createWhatsAppUrl(companySettings.whatsapp, text), '_blank');
   };
+
+  // Render Public Proposal Portal if accessed via proposal link
+  if (proposalParam) {
+    return (
+      <ClientProposalPortal 
+        quoteIdentifier={proposalParam} 
+        onBackToHome={() => {
+          setProposalParam(null);
+          const url = new URL(window.location.href);
+          url.searchParams.delete('propuesta');
+          url.searchParams.delete('quote');
+          url.searchParams.delete('cotizacion');
+          window.history.pushState({}, '', url.pathname);
+        }} 
+      />
+    );
+  }
 
   // Protect Admin Access
   if (currentView === 'admin' && !isAuthenticated) {
@@ -134,6 +188,7 @@ const MainContent: React.FC = () => {
             {adminTab === 'clients' && <ClientDirectory />}
             {adminTab === 'portfolio' && <PortfolioManager />}
             {adminTab === 'users' && <UserManager />}
+            {adminTab === 'audit' && <AuditTrailView />}
           </main>
         </div>
       )}
@@ -162,7 +217,9 @@ const MainContent: React.FC = () => {
 export default function App() {
   return (
     <AppStateProvider>
-      <MainContent />
+      <ToastProvider>
+        <MainContent />
+      </ToastProvider>
     </AppStateProvider>
   );
 }

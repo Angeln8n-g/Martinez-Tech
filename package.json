@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.115.0",
     "@types/canvas-confetti": "^1.9.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",

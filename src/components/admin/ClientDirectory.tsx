@@ -14,6 +14,8 @@ import {
   X
 } from 'lucide-react';
 import { formatCurrency, createWhatsAppUrl } from '../../utils/formatters';
+import { RncValidatorBadge } from '../ui/RncValidatorBadge';
+import { formatDgiiInput } from '../../utils/dgiiValidator';
 
 export const ClientDirectory: React.FC = () => {
   const { clients, deals, quotes, addClient, updateClient, deleteClient } = useAppState();
@@ -349,11 +351,12 @@ export const ClientDirectory: React.FC = () => {
                   <label className="text-xs font-bold text-slate-800 dark:text-slate-300">RNC o Cédula</label>
                   <input
                     type="text"
-                    placeholder="131-99887-1"
+                    placeholder="131-99445-1 o 001-1234567-8"
                     value={rnc}
-                    onChange={(e) => setRnc(e.target.value)}
+                    onChange={(e) => setRnc(formatDgiiInput(e.target.value))}
                     className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono shadow-sm"
                   />
+                  <RncValidatorBadge value={rnc} />
                 </div>
 
                 <div className="space-y-1">

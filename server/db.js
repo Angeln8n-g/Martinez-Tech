@@ -24,7 +24,8 @@ function ensureDbFile() {
       deals: [],
       quotes: [],
       clients: [],
-      portfolio: []
+      portfolio: [],
+      inventoryMovements: []
     };
     fs.writeFileSync(DB_PATH, JSON.stringify(emptyDb, null, 2), 'utf-8');
   }
@@ -40,6 +41,9 @@ export function readDb() {
     }
     if (!parsed.invoices) {
       parsed.invoices = [];
+    }
+    if (!parsed.inventoryMovements) {
+      parsed.inventoryMovements = [];
     }
     if (!parsed.users || parsed.users.length === 0) {
       parsed.users = [

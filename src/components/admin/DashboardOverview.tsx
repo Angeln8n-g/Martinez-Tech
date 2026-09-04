@@ -13,15 +13,19 @@ import {
   Plus, 
   MessageCircle,
   Phone,
-  Eye
+  Eye,
+  AlertTriangle,
+  LayoutGrid
 } from 'lucide-react';
 import { formatCurrency, formatDate, getStageInfo, getPriorityBadge, getCategoryInfo } from '../../utils/formatters';
+import { ModuleCardsGrid } from './ModuleCardsGrid';
 
 export const DashboardOverview: React.FC = () => {
   const { 
     deals, 
     quotes, 
     clients, 
+    catalog,
     setAdminTab, 
     setIsDealModalOpen, 
     setActiveDealForEdit,
@@ -49,6 +53,7 @@ export const DashboardOverview: React.FC = () => {
   };
 
   const recentDeals = deals.slice(0, 5);
+  const lowStockItems = (catalog || []).filter(p => p.type === 'product' && (typeof p.stock !== 'number' || p.stock <= 3));
 
   return (
     <div className="space-y-8 animate-fadeIn">
@@ -76,6 +81,32 @@ export const DashboardOverview: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Low Stock Alert Banner */}
+      {lowStockItems.length > 0 && (
+        <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-600/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center text-amber-700 dark:text-amber-400 shrink-0">
+              <AlertTriangle className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-xs font-black text-amber-950 dark:text-amber-200">
+                Alerta de Inventario: {lowStockItems.length} {lowStockItems.length === 1 ? 'producto tiene' : 'productos tienen'} existencia crítica (&le; 3 unidades)
+              </h4>
+              <p className="text-[11px] text-amber-800/80 dark:text-amber-400 font-medium">
+                {lowStockItems.slice(0, 3).map(p => `${p.name} (${p.stock || 0} disp.)`).join(', ')}
+                {lowStockItems.length > 3 ? ` y ${lowStockItems.length - 3} más...` : ''}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setAdminTab('catalog')}
+            className="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-sm whitespace-nowrap self-start sm:self-auto transition-colors"
+          >
+            Gestionar Stock &rarr;
+          </button>
+        </div>
+      )}
 
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -152,6 +183,30 @@ export const DashboardOverview: React.FC = () => {
           </div>
         </div>
 
+      </div>
+
+      {/* Primary Navigation Hub: Accessible Module Cards Grid */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-2.5">
+            <div className="p-1.5 rounded-lg bg-brand-teal-500 text-slate-950 shadow-sm">
+              <LayoutGrid className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                Módulos del Sistema CRM & Operaciones
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Acceso directo en cuadrícula a todas las áreas de gestión de Martínez Tech.
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] text-brand-teal-700 dark:text-brand-teal-400 font-mono font-bold hidden sm:inline">
+            10 Módulos Disponibles
+          </span>
+        </div>
+
+        <ModuleCardsGrid />
       </div>
 
       {/* Pipeline Funnel Visual Strip */}

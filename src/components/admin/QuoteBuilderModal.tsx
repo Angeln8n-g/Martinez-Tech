@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAppState } from '../../context/AppStateContext';
+import { useToast } from '../ui/ToastNotification';
 import { QuoteItem, Quote, CatalogProduct } from '../../types';
 import { 
   X, 
@@ -38,8 +39,12 @@ export const QuoteBuilderModal: React.FC = () => {
     updateQuote, 
     setActiveQuoteForView, 
     catalog, 
+    currentUser,
     companySettings 
   } = useAppState();
+
+  const canViewCosts = currentUser?.role === 'admin' || !currentUser?.role;
+  const { showToast } = useToast();
 
   const [clientName, setClientName] = useState('');
   const [clientCompany, setClientCompany] = useState('');
@@ -65,7 +70,7 @@ export const QuoteBuilderModal: React.FC = () => {
   const [warrantyNotes, setWarrantyNotes] = useState(companySettings.defaultWarranty);
   const [paymentTerms, setPaymentTerms] = useState(companySettings.defaultTerms);
   const [notes, setNotes] = useState('');
-  const [showCostMargin, setShowCostMargin] = useState(true);
+  const [showCostMargin, setShowCostMargin] = useState(canViewCosts);
 
   const [selectedCatalogId, setSelectedCatalogId] = useState('');
   const [showExitConfirm, setShowExitConfirm] = useState(false);
@@ -356,7 +361,7 @@ export const QuoteBuilderModal: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!clientName || items.length === 0) {
-      alert('Por favor ingrese el nombre del cliente y al menos un ítem cotizado.');
+      showToast('Por favor ingrese el nombre del cliente y al menos un ítem cotizado.', 'warning');
       return;
     }
 
@@ -426,6 +431,7 @@ export const QuoteBuilderModal: React.FC = () => {
 
     clearDraft('quote_builder');
     setDraftRestoredAt(null);
+    showToast('Presupuesto guardado exitosamente', 'success');
     setIsQuoteModalOpen(false);
     setActiveQuoteForView(savedQuote);
   };
@@ -644,11 +650,15 @@ export const QuoteBuilderModal: React.FC = () => {
                 className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-medium focus:outline-none focus:border-brand-teal-500"
               >
                 <option value="">-- Agregar ítem rápido desde el Catálogo Martínez Tech --</option>
-                {catalog.map(c => (
-                  <option key={c.id} value={c.id}>
-                    [{c.type.toUpperCase()}] {c.name} - Venta: {formatCurrency(c.unitPrice, currency)} {c.costPrice ? `(Costo: ${formatCurrency(c.costPrice, currency)})` : ''}
-                  </option>
-                ))}
+                {catalog.map(c => {
+                  const isPhysical = c.type === 'product' || c.type === 'material';
+                  const stockText = isPhysical ? ` [Stock: ${c.stock ?? 0}${c.stock === 0 ? ' - AGOTADO' : ''}]` : '';
+                  return (
+                    <option key={c.id} value={c.id}>
+                      [{c.type.toUpperCase()}]{stockText} {c.name} - Venta: {formatCurrency(c.unitPrice, currency)} {canViewCosts && c.costPrice ? `(Costo: ${formatCurrency(c.costPrice, currency)})` : ''}
+                    </option>
+                  );
+                })}
               </select>
             </div>
             <button
@@ -669,14 +679,26 @@ export const QuoteBuilderModal: React.FC = () => {
                 <FileText className="w-4 h-4 text-brand-green-600 dark:text-brand-green-400" />
                 2. Detalle de Equipos, Materiales y Mano de Obra ({items.length})
               </div>
-              <button
-                type="button"
-                onClick={() => handleAddItem()}
-                className="text-xs text-brand-teal-700 dark:text-brand-teal-400 hover:underline font-bold flex items-center gap-1"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>+ Fila Personalizada</span>
-              </button>
+              
+              <div className="flex items-center gap-3">
+                {canViewCosts && (
+                  <button
+                    type="button"
+                    onClick={() => setShowCostMargin(!showCostMargin)}
+                    className="text-[11px] text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-bold"
+                  >
+                    {showCostMargin ? 'Ocultar Costos' : 'Mostrar Costos'}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleAddItem()}
+                  className="text-xs text-brand-teal-700 dark:text-brand-teal-400 hover:underline font-bold flex items-center gap-1"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>+ Fila Personalizada</span>
+                </button>
+              </div>
             </div>
 
             <div className="space-y-2.5">
@@ -689,7 +711,7 @@ export const QuoteBuilderModal: React.FC = () => {
                     #{idx + 1}
                   </div>
 
-                  <div className={`space-y-1 ${showCostMargin ? 'col-span-11 sm:col-span-4' : 'col-span-11 sm:col-span-5'}`}>
+                  <div className={`space-y-1 ${(showCostMargin && canViewCosts) ? 'col-span-11 sm:col-span-4' : 'col-span-11 sm:col-span-6'}`}>
                     <input
                       type="text"
                       placeholder="Nombre del equipo o servicio"
@@ -718,7 +740,7 @@ export const QuoteBuilderModal: React.FC = () => {
                     />
                   </div>
 
-                  {showCostMargin && (
+                  {(showCostMargin && canViewCosts) && (
                     <div className="col-span-4 sm:col-span-2 space-y-0.5">
                       <span className="text-[10px] font-bold text-slate-500 block sm:hidden">Costo Unit.</span>
                       <input
@@ -873,7 +895,7 @@ export const QuoteBuilderModal: React.FC = () => {
               </div>
 
               {/* Cost & Profit Margin Analysis (Confidential for Admin) */}
-              {showCostMargin && (
+              {(showCostMargin && canViewCosts) && (
                 <div className="border border-amber-300/80 dark:border-amber-700/60 bg-amber-50/60 dark:bg-amber-950/30 p-3 rounded-lg space-y-2 text-xs">
                   <div className="flex items-center justify-between text-[11px] font-bold text-amber-900 dark:text-amber-300 uppercase">
                     <span className="flex items-center gap-1">

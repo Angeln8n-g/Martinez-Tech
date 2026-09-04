@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAppState } from '../../context/AppStateContext';
+import { useToast } from '../ui/ToastNotification';
 import { FiscalInvoice, NCFType, InvoicePaymentStatus } from '../../types';
 import { 
   Receipt, 
@@ -30,6 +31,8 @@ export const FiscalInvoicesList: React.FC = () => {
     deleteInvoice,
     openWhatsAppTemplates 
   } = useAppState();
+
+  const { showToast } = useToast();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [ncfFilter, setNcfFilter] = useState<string>('all');
@@ -77,7 +80,7 @@ export const FiscalInvoicesList: React.FC = () => {
   // Export DGII Formato 607 (Ventas de Bienes y Servicios)
   const handleExport607 = () => {
     if (invoices.length === 0) {
-      alert('No hay facturas fiscales emitidas para generar el reporte DGII 607.');
+      showToast('No hay facturas fiscales emitidas para generar el reporte DGII 607.', 'warning');
       return;
     }
 
@@ -128,6 +131,7 @@ export const FiscalInvoicesList: React.FC = () => {
     link.download = `reporte_607_dgii_martinez_tech_${new Date().toISOString().slice(0, 10)}.csv`;
     document.body.appendChild(link);
     link.click();
+    showToast('Reporte DGII 607 exportado en CSV', 'success');
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };

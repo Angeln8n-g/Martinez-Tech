@@ -43,6 +43,7 @@ app.get('/api/bootstrap', (req, res) => {
     invoices: db.invoices || [],
     companySettings: db.companySettings || {},
     catalog: db.catalog || [],
+    inventoryMovements: db.inventoryMovements || [],
     deals: db.deals || [],
     quotes: db.quotes || [],
     clients: db.clients || [],
@@ -354,6 +355,26 @@ app.post('/api/catalog/bulk', (req, res) => {
   db.catalog = current;
   writeDb(db);
   res.json({ success: true, addedCount, updatedCount, total: current.length, catalog: current });
+});
+
+/* ========================================================
+   INVENTORY MOVEMENTS & AUDIT (KARDEX)
+======================================================== */
+app.get('/api/inventory/movements', (req, res) => {
+  const db = readDb();
+  res.json(db.inventoryMovements || []);
+});
+
+app.post('/api/inventory/movements', (req, res) => {
+  const db = readDb();
+  const movement = {
+    ...req.body,
+    id: req.body.id || `mov-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+    createdAt: req.body.createdAt || new Date().toISOString()
+  };
+  db.inventoryMovements = [movement, ...(db.inventoryMovements || [])];
+  writeDb(db);
+  res.status(201).json(movement);
 });
 
 /* ========================================================
@@ -672,6 +693,7 @@ app.post('/api/backup/restore', (req, res) => {
     workOrders: backupData.workOrders || [],
     companySettings: backupData.companySettings || {},
     catalog: backupData.catalog || [],
+    inventoryMovements: backupData.inventoryMovements || [],
     deals: backupData.deals || [],
     quotes: backupData.quotes || [],
     clients: backupData.clients || [],
