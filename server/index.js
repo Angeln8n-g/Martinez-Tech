@@ -412,6 +412,32 @@ app.post('/api/invoices', (req, res) => {
     }
   }
 
+  // If amountPaid > 0, automatically create corresponding payment receipt
+  if (Number(newInvoice.amountPaid) > 0) {
+    const nextPayNum = (db.payments || []).length + 1;
+    const autoPayment = {
+      id: `pay-inv-${newInvoice.id}`,
+      receiptNumber: `REC-${new Date().getFullYear()}-${String(nextPayNum).padStart(3, '0')}`,
+      quoteId: newInvoice.quoteId,
+      quoteNumber: newInvoice.quoteNumber,
+      invoiceId: newInvoice.id,
+      invoiceNcf: newInvoice.ncf,
+      dealId: newInvoice.dealId,
+      dealCode: newInvoice.dealCode,
+      clientName: newInvoice.clientName,
+      clientPhone: newInvoice.clientPhone,
+      amount: Number(newInvoice.amountPaid),
+      currency: newInvoice.currency || 'DOP',
+      date: newInvoice.date || new Date().toISOString().slice(0, 10),
+      paymentMethod: newInvoice.paymentMethod || 'transferencia',
+      concept: `Abono a Factura Fiscal ${newInvoice.invoiceNumber} (NCF: ${newInvoice.ncf})`,
+      notes: newInvoice.notes || 'Abono registrado automáticamente al emitir comprobante fiscal.',
+      createdBy: newInvoice.createdBy || 'Administrador',
+      createdAt: new Date().toISOString()
+    };
+    db.payments = [autoPayment, ...(db.payments || [])];
+  }
+
   db.invoices = [newInvoice, ...(db.invoices || [])];
   writeDb(db);
   res.status(201).json(newInvoice);

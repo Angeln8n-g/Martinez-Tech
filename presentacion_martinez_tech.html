@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Presentación Ejecutiva | MARTÍNEZ TECH</title>
+  <title>Presentación Ejecutiva v1.0.2 | MARTÍNEZ TECH</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -40,7 +40,7 @@
     .slide {
       display: none;
       opacity: 0;
-      transition: opacity 0.4s ease-in-out;
+      transition: opacity 0.35s ease-in-out;
     }
     .slide.active {
       display: flex;
@@ -49,160 +49,215 @@
     .glow-teal {
       box-shadow: 0 0 50px -10px rgba(20, 184, 166, 0.3);
     }
+    .glow-emerald {
+      box-shadow: 0 0 50px -10px rgba(16, 185, 129, 0.25);
+    }
+    /* Custom scrollbar for slides */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(45, 212, 191, 0.3);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(45, 212, 191, 0.6);
+    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between select-none overflow-hidden">
 
   <!-- TOP BAR / HEADER -->
-  <header class="w-full px-6 py-4 border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md flex items-center justify-between z-30">
+  <header class="w-full px-4 sm:px-8 py-3.5 border-b border-slate-800/80 bg-slate-900/80 backdrop-blur-md flex items-center justify-between z-30">
     <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-brand-teal-500 to-brand-green-500 p-0.5 flex items-center justify-center shadow-lg shadow-teal-500/20">
+      <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-brand-teal-500 to-brand-green-500 p-0.5 flex items-center justify-center shadow-lg shadow-teal-500/20 flex-shrink-0">
         <div class="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
           <i data-lucide="shield-check" class="w-5 h-5 text-brand-teal-400"></i>
         </div>
       </div>
       <div>
-        <h1 class="text-sm font-black tracking-wider uppercase text-white">
-          MARTÍNEZ <span class="text-brand-teal-400">TECH</span>
-        </h1>
-        <p class="text-[10px] text-slate-400 font-medium tracking-widest uppercase">Soluciones · Servicios · Calidad</p>
+        <div class="flex items-center gap-2">
+          <h1 class="text-sm font-black tracking-wider uppercase text-white">
+            MARTÍNEZ <span class="text-brand-teal-400">TECH</span>
+          </h1>
+          <span class="px-2 py-0.5 rounded-full bg-brand-teal-950 border border-brand-teal-500/40 text-[10px] font-bold text-brand-teal-300 font-mono">
+            v1.0.2 Enterprise
+          </span>
+        </div>
+        <p class="text-[10px] text-slate-400 font-medium tracking-widest uppercase hidden sm:block">Soluciones · Servicios · Calidad</p>
+      </div>
+
+      <!-- Current Slide Title Indicator -->
+      <div class="hidden md:flex items-center border-l border-slate-800 pl-4 ml-3">
+        <span id="slideTitle" class="text-xs font-semibold text-slate-300 truncate max-w-sm"></span>
       </div>
     </div>
 
-    <!-- Slide Indicator -->
+    <!-- Slide Indicator & Action Controls -->
     <div class="flex items-center gap-3">
-      <span id="slideCounter" class="text-xs font-bold text-slate-400 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">
-        1 / 10
+      <span id="slideCounter" class="text-xs font-bold text-slate-300 bg-slate-800/90 px-3 py-1 rounded-full border border-slate-700 font-mono shadow-inner">
+        1 / 15
       </span>
-      <button onclick="toggleFullscreen()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors" title="Pantalla Completa">
+      <button onclick="toggleFullscreen()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors border border-slate-700 shadow-sm" title="Pantalla Completa (Tecla F)">
         <i data-lucide="maximize" class="w-4 h-4"></i>
       </button>
     </div>
   </header>
 
   <!-- SLIDES CONTAINER -->
-  <main class="flex-1 relative flex items-center justify-center p-6 md:p-12 overflow-y-auto">
+  <main class="flex-1 relative flex items-center justify-center p-4 sm:p-8 md:p-10 overflow-y-auto">
 
-    <!-- SLIDE 1: PORTADA -->
-    <section class="slide active flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-8 animate-fadeIn">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-teal-950/80 border border-brand-teal-500/40 text-brand-teal-400 text-xs font-bold uppercase tracking-wider">
+    <!-- SLIDE 1: PORTADA & ECOSISTEMA INTEGRAL -->
+    <section class="slide active flex-col items-center justify-center text-center max-w-5xl mx-auto space-y-7 animate-fadeIn py-4">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-teal-950/90 border border-brand-teal-500/40 text-brand-teal-400 text-xs font-bold uppercase tracking-wider shadow-lg shadow-teal-950/50">
         <i data-lucide="sparkles" class="w-4 h-4"></i>
-        <span>Presentación de Proyecto & Plataforma Digital</span>
+        <span>Presentación Ejecutiva · Ecosistema Integral v1.0.2</span>
       </div>
 
       <div class="space-y-4">
-        <h1 class="text-4xl md:text-6xl font-black tracking-tight text-white leading-tight">
-          Transformación Digital & CRM de Operaciones <br>
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-tight">
+          Transformación Digital, CRM & <br>
           <span class="bg-gradient-to-r from-brand-teal-400 via-emerald-400 to-brand-green-400 bg-clip-text text-transparent">
-            MARTÍNEZ TECH
+            Facturación Fiscal Martínez Tech
           </span>
         </h1>
-        <p class="text-base md:text-xl text-slate-300 max-w-2xl mx-auto font-normal">
-          Plataforma web de alta conversión y sistema corporativo integral para cotizaciones, actas de entrega fotográficas, firma digital y cobranzas.
+        <p class="text-sm sm:text-lg text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed">
+          Plataforma web de alta conversión y suite empresarial integral que automatiza la captación de prospectos, cotizaciones con firma digital, emisión de comprobantes fiscales NCF (DGII), control de inventario Kardex y actas fotográficas de entrega en campo.
         </p>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full pt-4">
-        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-left">
-          <i data-lucide="globe" class="w-6 h-6 text-brand-teal-400 mb-2"></i>
-          <div class="text-xs font-bold text-white">Sitio Web Público</div>
-          <div class="text-[11px] text-slate-400">Catálogo & Estimador Rápido</div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5 w-full pt-2">
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-left hover:border-brand-teal-500/50 transition-all group">
+          <div class="w-9 h-9 rounded-xl bg-brand-teal-950/80 border border-brand-teal-500/30 flex items-center justify-center mb-2.5 text-brand-teal-400 group-hover:scale-110 transition-transform">
+            <i data-lucide="globe" class="w-5 h-5"></i>
+          </div>
+          <div class="text-xs font-bold text-white">Presencia Web & Portal</div>
+          <div class="text-[11px] text-slate-400 mt-1">Estimador en línea & portal web interactivo para clientes</div>
         </div>
-        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-left">
-          <i data-lucide="file-signature" class="w-6 h-6 text-emerald-400 mb-2"></i>
-          <div class="text-xs font-bold text-white">Firma Digital</div>
-          <div class="text-[11px] text-slate-400">Aprobación Legal en Pantalla</div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-left hover:border-emerald-500/50 transition-all group">
+          <div class="w-9 h-9 rounded-xl bg-emerald-950/80 border border-emerald-500/30 flex items-center justify-center mb-2.5 text-emerald-400 group-hover:scale-110 transition-transform">
+            <i data-lucide="file-signature" class="w-5 h-5"></i>
+          </div>
+          <div class="text-xs font-bold text-white">Pipeline & Firma Digital</div>
+          <div class="text-[11px] text-slate-400 mt-1">Cotizador en 1 min, cálculo de márgenes y firma en pantalla</div>
         </div>
-        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-left">
-          <i data-lucide="camera" class="w-6 h-6 text-cyan-400 mb-2"></i>
-          <div class="text-xs font-bold text-white">Actas de Entrega</div>
-          <div class="text-[11px] text-slate-400">Evidencia Antes vs Después</div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-left hover:border-amber-500/50 transition-all group">
+          <div class="w-9 h-9 rounded-xl bg-amber-950/80 border border-amber-500/30 flex items-center justify-center mb-2.5 text-amber-400 group-hover:scale-110 transition-transform">
+            <i data-lucide="receipt" class="w-5 h-5"></i>
+          </div>
+          <div class="text-xs font-bold text-white">Facturación Fiscal DGII</div>
+          <div class="text-[11px] text-slate-400 mt-1">Comprobantes NCF, validador de RNC y reportes 606 / 607 / 608</div>
         </div>
-        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-left">
-          <i data-lucide="trending-up" class="w-6 h-6 text-amber-400 mb-2"></i>
-          <div class="text-xs font-bold text-white">Control Financiero</div>
-          <div class="text-[11px] text-slate-400">Márgenes de Ganancia & Cobros</div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-left hover:border-cyan-500/50 transition-all group">
+          <div class="w-9 h-9 rounded-xl bg-cyan-950/80 border border-cyan-500/30 flex items-center justify-center mb-2.5 text-cyan-400 group-hover:scale-110 transition-transform">
+            <i data-lucide="boxes" class="w-5 h-5"></i>
+          </div>
+          <div class="text-xs font-bold text-white">Kardex & App PWA</div>
+          <div class="text-[11px] text-slate-400 mt-1">Inventario inteligente, modo offline y evidencia fotográfica</div>
         </div>
       </div>
     </section>
 
-    <!-- SLIDE 2: EL RETO VS LA SOLUCIÓN -->
+    <!-- SLIDE 2: EL RETO VS LA SOLUCIÓN INTEGRAL -->
     <section class="slide flex-col max-w-5xl mx-auto w-full space-y-6">
       <div class="text-center space-y-2">
-        <span class="text-xs font-bold text-brand-teal-400 uppercase tracking-widest">El Diagnóstico</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-white">De Procesos Manuales a una Operación Inteligente</h2>
+        <span class="text-xs font-bold text-brand-teal-400 uppercase tracking-widest">El Diagnóstico Operativo</span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">De Procesos Manuales a una Operación Inteligente</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
         <!-- ANTES -->
-        <div class="p-6 rounded-3xl bg-rose-950/20 border border-rose-800/40 space-y-4">
+        <div class="p-5 sm:p-6 rounded-3xl bg-rose-950/25 border border-rose-800/40 space-y-3.5">
           <div class="flex items-center gap-2 text-rose-400 font-bold text-sm uppercase tracking-wider">
             <i data-lucide="x-circle" class="w-5 h-5"></i>
-            <span>Flujo Tradicional (Antes)</span>
+            <span>Flujo Tradicional Disperso (Antes)</span>
           </div>
-          <ul class="space-y-3 text-xs text-slate-300">
+          <ul class="space-y-2.5 text-xs text-slate-300">
             <li class="flex items-start gap-2.5">
               <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 flex-shrink-0 mt-0.5"></i>
-              <span>Cotizaciones lentas en Word o PDF sin cálculo automático de margen ni costos.</span>
+              <span>Cotizaciones lentas en hojas de cálculo o Word sin cálculo automático de margen ni costos.</span>
             </li>
             <li class="flex items-start gap-2.5">
               <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 flex-shrink-0 mt-0.5"></i>
-              <span>Aprobaciones retrasadas esperando firmas físicas en papel o escaneos.</span>
+              <span>Aprobaciones retrasadas esperando impresiones, traslados o escaneos de firmas físicas.</span>
             </li>
             <li class="flex items-start gap-2.5">
               <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 flex-shrink-0 mt-0.5"></i>
-              <span>Fotos de instalaciones dispersas en chats de WhatsApp sin orden ni respaldo.</span>
+              <span>Facturación fiscal aislada propensa a errores humanos en números de RNC o Cédula.</span>
             </li>
             <li class="flex items-start gap-2.5">
               <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 flex-shrink-0 mt-0.5"></i>
-              <span>Dificultad para rastrear anticipos, saldos pendientes y cobranzas a tiempo.</span>
+              <span>Fotos de instalaciones dispersas en chats de WhatsApp sin geolocalización ni orden técnico.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 flex-shrink-0 mt-0.5"></i>
+              <span>Inventario a ciegas: stock desconocido en obra y sin deducción de insumos al instalar.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 flex-shrink-0 mt-0.5"></i>
+              <span>Horas perdidas al cierre de mes consolidando comprobantes para los reportes 606 y 607.</span>
             </li>
           </ul>
         </div>
 
         <!-- AHORA -->
-        <div class="p-6 rounded-3xl bg-emerald-950/20 border border-emerald-500/40 space-y-4 glow-teal">
+        <div class="p-5 sm:p-6 rounded-3xl bg-emerald-950/25 border border-emerald-500/40 space-y-3.5 glow-teal">
           <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm uppercase tracking-wider">
             <i data-lucide="check-circle-2" class="w-5 h-5"></i>
             <span>Con el Sistema Martínez Tech (Ahora)</span>
           </div>
-          <ul class="space-y-3 text-xs text-slate-200">
+          <ul class="space-y-2.5 text-xs text-slate-200">
             <li class="flex items-start gap-2.5">
               <i data-lucide="check" class="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5"></i>
-              <span><strong>Cotizaciones en 1 minuto</strong> con catálogo precargado y cálculo en vivo de margen de ganancia.</span>
+              <span><strong>Cotizaciones en 1 minuto</strong> con catálogo precargado, margen en vivo y autoguardado de borradores.</span>
             </li>
             <li class="flex items-start gap-2.5">
               <i data-lucide="check" class="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5"></i>
-              <span><strong>Firma Digital táctil</strong> desde el celular del cliente con avance automático de venta.</span>
+              <span><strong>Portal Web del Cliente</strong> con enlace interactivo único y firma táctil en pantalla de inmediato.</span>
             </li>
             <li class="flex items-start gap-2.5">
               <i data-lucide="check" class="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5"></i>
-              <span><strong>Actas de entrega formales</strong> con galería Antes vs Después y checklist técnico.</span>
+              <span><strong>Facturación NCF Dominicana</strong> con validador algorítmico DGII (Módulo 11 y Luhn) en tiempo real.</span>
             </li>
             <li class="flex items-start gap-2.5">
               <i data-lucide="check" class="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5"></i>
-              <span><strong>Control financiero total</strong>: cuentas por cobrar, recibos membretados y WhatsApp en 1 clic.</span>
+              <span><strong>Actas de Entrega con Fotos Antes vs Después</strong>, visor Lightbox HD y compresión en dispositivo.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5"></i>
+              <span><strong>Control Kardex & Valuación de Almacén</strong> con deducción automática de materiales instalados.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <i data-lucide="check" class="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5"></i>
+              <span><strong>Reportes DGII (606, 607 en TXT/CSV, 608)</strong> listos en 1 clic para la Oficina Virtual.</span>
             </li>
           </ul>
         </div>
       </div>
     </section>
 
-    <!-- SLIDE 3: SITIO WEB PÚBLICO -->
+    <!-- SLIDE 3: SITIO WEB PÚBLICO & ALTA CONVERSIÓN -->
     <section class="slide flex-col max-w-5xl mx-auto w-full space-y-6">
       <div class="text-center space-y-2">
         <span class="text-xs font-bold text-brand-teal-400 uppercase tracking-widest">Pilar 1: Presencia Digital</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-white">Sitio Web Corporativo de Alta Conversión</h2>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Sitio Web Corporativo de Alta Conversión</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-1">
         <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
           <div class="w-10 h-10 rounded-xl bg-brand-teal-950 border border-brand-teal-500/30 flex items-center justify-center text-brand-teal-400">
             <i data-lucide="sliders" class="w-5 h-5"></i>
           </div>
           <h3 class="text-sm font-bold text-white">Estimador Rápido en Línea</h3>
-          <p class="text-xs text-slate-400">
-            Permite al cliente calcular un presupuesto estimado al instante según puntos de cámara, metraje o tipo de motor, enviándolo directo al WhatsApp de ventas.
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Permite al cliente calcular un presupuesto estimado al instante según puntos de cámara, metraje de cable o tipo de motor, enviándolo directo al WhatsApp de ventas.
           </p>
         </div>
 
@@ -211,8 +266,8 @@
             <i data-lucide="grid" class="w-5 h-5"></i>
           </div>
           <h3 class="text-sm font-bold text-white">Catálogo de Especialidades</h3>
-          <p class="text-xs text-slate-400">
-            Secciones dedicadas a CCTV 4K, Redes estructuradas, Motores de portón, Cerraduras magnéticas, Biometría facial, Intercom IP y Alarmas.
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Secciones técnicas dedicadas a CCTV 4K, Redes estructuradas, Motores de portón, Cerraduras magnéticas, Biometría facial, Intercom IP y Alarmas.
           </p>
         </div>
 
@@ -221,36 +276,36 @@
             <i data-lucide="images" class="w-5 h-5"></i>
           </div>
           <h3 class="text-sm font-bold text-white">Portafolio & Testimonios</h3>
-          <p class="text-xs text-slate-400">
-            Muestra proyectos reales completados con fichas técnicas de equipos instalados y testimonios de clientes para generar máxima confianza comercial.
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Muestra proyectos reales completados con fichas técnicas de equipos instalados y testimonios de clientes para generar máxima credibilidad comercial.
           </p>
         </div>
       </div>
 
       <div class="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700 flex items-center justify-between text-xs">
         <div class="flex items-center gap-3">
-          <i data-lucide="sun-moon" class="w-5 h-5 text-amber-400"></i>
-          <span class="text-slate-300 font-medium">Diseño responsive 100% optimizado para móviles, tablets y PC con soporte para Modo Claro y Modo Oscuro.</span>
+          <i data-lucide="sun-moon" class="w-5 h-5 text-amber-400 flex-shrink-0"></i>
+          <span class="text-slate-300 font-medium">Diseño responsive de alto rendimiento con soporte total para Modo Claro y Modo Oscuro.</span>
         </div>
-        <span class="px-3 py-1 rounded-full bg-brand-teal-500/20 text-brand-teal-300 font-bold">Modo Dual 🌓</span>
+        <span class="px-3 py-1 rounded-full bg-brand-teal-500/20 text-brand-teal-300 font-bold font-mono">Modo Dual 🌓</span>
       </div>
     </section>
 
-    <!-- SLIDE 4: CRM PIPELINE & COTIZADOR -->
+    <!-- SLIDE 4: CRM PIPELINE & COTIZADOR PRO -->
     <section class="slide flex-col max-w-5xl mx-auto w-full space-y-6">
       <div class="text-center space-y-2">
         <span class="text-xs font-bold text-brand-teal-400 uppercase tracking-widest">Pilar 2: Gestión Comercial</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-white">Embudo de Ventas Kanban & Cotizador Pro</h2>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Embudo de Ventas Kanban & Cotizador Pro</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
         <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
           <div class="flex items-center gap-2 text-brand-teal-400 font-bold text-sm uppercase">
             <i data-lucide="kanban" class="w-5 h-5"></i>
             <span>Pipeline Comercial de 8 Etapas</span>
           </div>
           <p class="text-xs text-slate-300">
-            Control visual de cada negociación desde el primer contacto hasta el cierre:
+            Control visual del ciclo completo de cada negociación comercial en tiempo real:
           </p>
           <div class="grid grid-cols-2 gap-2 text-[11px] font-semibold text-slate-300">
             <div class="p-2 rounded-lg bg-slate-800 border border-slate-700">1. Prospecto Nuevo</div>
@@ -270,44 +325,96 @@
             <span>Calculadora Confidencial de Rentabilidad</span>
           </div>
           <p class="text-xs text-slate-300">
-            El administrador conoce en tiempo real la salud financiera de cada cotización antes de enviarla:
+            El administrador evalúa en vivo la salud financiera de la propuesta antes de enviarla:
           </p>
-          <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs">
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs">
             <div class="flex justify-between text-slate-400">
               <span>Costo Total de Equipos:</span>
-              <span class="font-mono text-white">RD$ 45,200</span>
+              <span class="font-mono text-white">RD$ 45,200.00</span>
             </div>
             <div class="flex justify-between text-slate-400">
               <span>Precio Venta al Cliente:</span>
-              <span class="font-mono text-white">RD$ 78,500</span>
+              <span class="font-mono text-white">RD$ 78,500.00</span>
             </div>
             <div class="flex justify-between text-emerald-400 font-bold border-t border-slate-800 pt-2">
               <span>Ganancia Neta & Margen:</span>
-              <span class="font-mono">+RD$ 33,300 (42.4% 🟢)</span>
+              <span class="font-mono">+RD$ 33,300.00 (42.4% 🟢)</span>
             </div>
           </div>
-          <p class="text-[11px] text-slate-400 italic">
-            * Información estrictamente confidencial oculta en el PDF del cliente.
-          </p>
+          <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700 flex items-center justify-between text-[11px] text-slate-300">
+            <span class="flex items-center gap-1.5"><i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-brand-teal-400"></i> Autoguardado de Borradores</span>
+            <span class="text-emerald-400 font-bold">Draft Recovery Activo</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- SLIDE 5: FIRMA DIGITAL & APROBACIÓN -->
+    <!-- SLIDE 5: [NUEVA IMPLEMENTACIÓN] PORTAL WEB DE PROPUESTAS PARA CLIENTES -->
     <section class="slide flex-col max-w-5xl mx-auto w-full space-y-6">
       <div class="text-center space-y-2">
-        <span class="text-xs font-bold text-brand-teal-400 uppercase tracking-widest">Cierre de Ventas Inmediato</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-white">Firma Digital & Aprobación en Pantalla</h2>
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-teal-950/80 border border-brand-teal-500/40 text-brand-teal-300 text-[11px] font-black uppercase tracking-wider mb-1">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>Nueva Innovación · Experiencia al Cliente</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Portal Web Interactivo de Propuestas para Clientes</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-1">
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-brand-teal-950 border border-brand-teal-500/30 flex items-center justify-center text-brand-teal-400">
+            <i data-lucide="link" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">Enlace Web Único & Directo</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Cada cotización genera su propia URL web (ej: <code>/?propuesta=COT-2026-001</code>). El cliente abre el presupuesto en su celular o laptop sin descargar apps ni archivos pesados.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <i data-lucide="layers" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">Transparencia & Especificaciones</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Desglose visual interactivo por partidas, marcas, modelos, garantías, tiempos de instalación y formas de pago oficiales con copia en 1 clic de cuentas bancarias.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <i data-lucide="check-check" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">Aprobación en Línea con Confetti</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            El cliente firma formalmente en su pantalla, confirma los términos de contratación y el sistema actualiza el estado de la negociación notificando al equipo al instante.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-900/90 border border-brand-teal-500/30 flex items-center justify-between text-xs flex-wrap gap-2">
+        <div class="flex items-center gap-3">
+          <i data-lucide="smartphone" class="w-5 h-5 text-brand-teal-400 flex-shrink-0"></i>
+          <span class="text-slate-300">100% optimizado para visualización en WhatsApp y dispositivos táctiles.</span>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold font-mono">Cierre Comercial Inmediato 🚀</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: FIRMA DIGITAL & CERTIFICACIÓN LEGAL -->
+    <section class="slide flex-col max-w-5xl mx-auto w-full space-y-6">
+      <div class="text-center space-y-2">
+        <span class="text-xs font-bold text-brand-teal-400 uppercase tracking-widest">Cierre Legal Inmediato</span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Firma Digital & Certificación en Pantalla</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-1">
         <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
           <div class="w-10 h-10 rounded-xl bg-teal-950 border border-teal-500/30 flex items-center justify-center text-teal-400">
             <i data-lucide="pen-tool" class="w-5 h-5"></i>
           </div>
-          <h3 class="text-sm font-bold text-white">Firma Táctil y con Mouse</h3>
-          <p class="text-xs text-slate-400">
-            El cliente puede firmar directamente desde la pantalla de su teléfono móvil o tablet durante la visita técnica o reunión comercial.
+          <h3 class="text-sm font-bold text-white">Lienzo Táctil de Alta Precisión</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            El cliente firma directamente con el dedo o stylus desde su teléfono móvil o tablet durante la visita técnica o reunión comercial presencial/virtual.
           </p>
         </div>
 
@@ -315,9 +422,9 @@
           <div class="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
             <i data-lucide="stamp" class="w-5 h-5"></i>
           </div>
-          <h3 class="text-sm font-bold text-white">Estampado Legal Oficial</h3>
-          <p class="text-xs text-slate-400">
-            La cotización se sella con el nombre del firmante, fecha, hora exacta y sello de verificación en la hoja membretada de la empresa.
+          <h3 class="text-sm font-bold text-white">Estampado Oficial de Timestamp</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            La cotización se sella con el nombre del titular, documento de identidad, fecha, hora exacta y sello oficial de verificación de Martínez Tech.
           </p>
         </div>
 
@@ -325,9 +432,9 @@
           <div class="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
             <i data-lucide="workflow" class="w-5 h-5"></i>
           </div>
-          <h3 class="text-sm font-bold text-white">Automatización de Estado</h3>
-          <p class="text-xs text-slate-400">
-            Al firmar, el presupuesto pasa a "Aceptado & Firmado", la oportunidad avanza automáticamente a "En Instalación" y se dispara confetti visual.
+          <h3 class="text-sm font-bold text-white">Flujo Automatizado de Entrega</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Al firmar, el presupuesto pasa a "Aceptado", la negociación avanza de inmediato a "En Instalación" y se habilita la creación de la orden de trabajo.
           </p>
         </div>
       </div>
@@ -335,19 +442,154 @@
       <div class="p-4 rounded-2xl bg-slate-900/80 border border-brand-teal-500/30 flex items-center gap-4">
         <i data-lucide="file-check" class="w-8 h-8 text-brand-teal-400 flex-shrink-0"></i>
         <div class="text-xs text-slate-300">
-          <strong class="text-white">Generación de PDF Membretado en 1 Clic:</strong> Descarga inmediata del presupuesto formal listo para enviar por correo o archivar, con términos de garantía y datos bancarios.
+          <strong class="text-white">Generación de PDF Membretado en 1 Clic:</strong> Descarga inmediata del presupuesto formal listo para imprimir o enviar por WhatsApp y correo, con términos de garantía legal y cuentas bancarias.
         </div>
       </div>
     </section>
 
-    <!-- SLIDE 6: ÓRDENES DE TRABAJO & EVIDENCIA FOTOGRÁFICA -->
+    <!-- SLIDE 7: [NUEVA IMPLEMENTACIÓN] FACTURACIÓN FISCAL NCF & REPORTES DGII -->
     <section class="slide flex-col max-w-5xl mx-auto w-full space-y-6">
       <div class="text-center space-y-2">
-        <span class="text-xs font-bold text-brand-teal-400 uppercase tracking-widest">Control de Calidad & Entrega Técnica</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-white">Órdenes de Trabajo & Actas de Entrega</h2>
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-500/40 text-amber-300 text-[11px] font-black uppercase tracking-wider mb-1">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>Nueva Innovación · Finanzas & Tributación Dominicana</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Facturación Fiscal con NCF & Reportes DGII</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
+        <!-- NCF TIPOS -->
+        <div class="p-5 sm:p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-3.5">
+          <div class="flex items-center gap-2 text-amber-400 font-bold text-sm uppercase">
+            <i data-lucide="receipt" class="w-5 h-5"></i>
+            <span>Emisión Oficial de Comprobantes Fiscales</span>
+          </div>
+          <p class="text-xs text-slate-300">
+            Soporte nativo para toda la estructura tributaria de República Dominicana:
+          </p>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+              <div class="font-bold text-white font-mono">B01 Crédito Fiscal</div>
+              <div class="text-[11px] text-slate-400">Para empresas y deducible de ITBIS</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+              <div class="font-bold text-white font-mono">B02 Consumo Final</div>
+              <div class="text-[11px] text-slate-400">Para consumidores particulares</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+              <div class="font-bold text-white font-mono">B14 Regímenes Especiales</div>
+              <div class="text-[11px] text-slate-400">Zonas francas y exenciones</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+              <div class="font-bold text-white font-mono">B15 Gubernamental</div>
+              <div class="text-[11px] text-slate-400">Instituciones del Estado</div>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400">
+            Cálculo automático de ITBIS (18%), retenciones de ITBIS/ISR y estado de pago.
+          </p>
+        </div>
+
+        <!-- VALIDADOR & 607/606 -->
+        <div class="p-5 sm:p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-3.5">
+          <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm uppercase">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+            <span>Validador Algorítmico & Reportes DGII</span>
+          </div>
+          <div class="space-y-2.5 text-xs text-slate-300">
+            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-white">Validador de RNC & Cédula en Vivo:</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800">Módulo 11 & Luhn</span>
+              </div>
+              <p class="text-[11px] text-slate-400">
+                Verificación matemática instantánea que previene facturas con identificaciones erróneas.
+              </p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-white">Generador Reporte 607 (Ventas):</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-brand-teal-950 text-brand-teal-300 border border-brand-teal-800">Archivos .TXT y .CSV</span>
+              </div>
+              <p class="text-[11px] text-slate-400">
+                Genera los formatos oficiales exactos exigidos por la DGII listos para subir a la Oficina Virtual.
+              </p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-white">Control Formatos 606 & 608:</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">Trazabilidad Total</span>
+              </div>
+              <p class="text-[11px] text-slate-400">
+                Auditoría continua de compras, gastos y comprobantes anulados sin descuadres contables.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: [NUEVA IMPLEMENTACIÓN] CONTROL DE INVENTARIO, KARDEX & VALUACIÓN -->
+    <section class="slide flex-col max-w-5xl mx-auto w-full space-y-6">
+      <div class="text-center space-y-2">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-[11px] font-black uppercase tracking-wider mb-1">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>Nueva Innovación · Gestión de Almacén & Logística</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Gestión de Inventario, Kardex & Valuación</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-1">
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <i data-lucide="boxes" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">Control de Stock en Vivo</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Monitoreo en tiempo real de existencias por producto, con alertas automáticas de inventario mínimo y quiebre de stock para evitar paradas operativas en obra.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-brand-teal-950 border border-brand-teal-500/30 flex items-center justify-center text-brand-teal-400">
+            <i data-lucide="history" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">Movimientos Tipo Kardex</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Bitácora inmutable de entradas (compras), salidas (órdenes de trabajo) y ajustes con motivos tipificados (garantía, daño, merma o corrección de conteo).
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <i data-lucide="trending-up" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">Valuación del Almacén</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Cálculo financiero dinámico del costo total inmovilizado en inventario, valor potencial de venta y margen proyectado de utilidad de todo el catálogo.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-xs flex-wrap gap-3">
+        <div class="flex items-center gap-3">
+          <i data-lucide="file-spreadsheet" class="w-5 h-5 text-emerald-400 flex-shrink-0"></i>
+          <span class="text-slate-300">Importación y exportación masiva de productos y precios mediante plantillas de Excel / CSV.</span>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-200 border border-slate-700 font-bold font-mono">Deducción Automática de Materiales ⚡</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: ÓRDENES DE TRABAJO & EVIDENCIA FOTOGRÁFICA -->
+    <section class="slide flex-col max-w-5xl mx-auto w-full space-y-6">
+      <div class="text-center space-y-2">
+        <span class="text-xs font-bold text-brand-teal-400 uppercase tracking-widest">Control de Calidad en Obra</span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Órdenes de Trabajo & Actas de Entrega</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
         <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
           <div class="flex items-center gap-2 text-cyan-400 font-bold text-sm uppercase">
             <i data-lucide="camera" class="w-5 h-5"></i>
@@ -359,7 +601,7 @@
           <ul class="space-y-2 text-xs text-slate-300">
             <li class="flex items-center gap-2">
               <i data-lucide="image-plus" class="w-4 h-4 text-cyan-400"></i>
-              <span>Carga directa desde la cámara del smartphone en la obra.</span>
+              <span>Carga directa desde la cámara del smartphone del instalador en obra.</span>
             </li>
             <li class="flex items-center gap-2">
               <i data-lucide="maximize-2" class="w-4 h-4 text-cyan-400"></i>
@@ -368,6 +610,10 @@
             <li class="flex items-center gap-2">
               <i data-lucide="columns" class="w-4 h-4 text-cyan-400"></i>
               <span>Comparativa lado a lado (🔴 Antes vs 🟢 Después).</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i data-lucide="map-pin" class="w-4 h-4 text-cyan-400"></i>
+              <span>Registro de geolocalización GPS y compresión inteligente en cliente.</span>
             </li>
           </ul>
         </div>
@@ -378,7 +624,7 @@
             <span>Checklist Técnico & Acta de Conformidad</span>
           </div>
           <p class="text-xs text-slate-300">
-            Garantía de satisfacción y soporte posventa:
+            Garantía de satisfacción y soporte posventa formal:
           </p>
           <ul class="space-y-2 text-xs text-slate-300">
             <li class="flex items-center gap-2">
@@ -387,25 +633,29 @@
             </li>
             <li class="flex items-center gap-2">
               <i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i>
-              <span>Conduce / Acta de entrega membretada en formato formal A4.</span>
+              <span>Conduce / Acta de entrega membretada en formato formal imprimible.</span>
             </li>
             <li class="flex items-center gap-2">
               <i data-lucide="pen-tool" class="w-4 h-4 text-emerald-400"></i>
-              <span>Firma de recepción y comentarios de satisfacción del cliente.</span>
+              <span>Firma de recepción y comentarios de satisfacción del cliente en obra.</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i data-lucide="save" class="w-4 h-4 text-emerald-400"></i>
+              <span>Guardado automático de borrador en dispositivo contra caídas de red.</span>
             </li>
           </ul>
         </div>
       </div>
     </section>
 
-    <!-- SLIDE 7: WHATSAPP 1-CLIC & GESTIÓN DE PAGOS -->
+    <!-- SLIDE 10: WHATSAPP 1-CLIC & GESTIÓN DE PAGOS -->
     <section class="slide flex-col max-w-5xl mx-auto w-full space-y-6">
       <div class="text-center space-y-2">
-        <span class="text-xs font-bold text-brand-teal-400 uppercase tracking-widest">Comunicación & Cobranzas</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-white">Centro de WhatsApp 1-Clic & Recibos de Pago</h2>
+        <span class="text-xs font-bold text-brand-teal-400 uppercase tracking-widest">Comunicación & Flujo de Caja</span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Centro de WhatsApp 1-Clic & Recibos de Pago</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
         <!-- WHATSAPP -->
         <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
           <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm uppercase">
@@ -413,10 +663,10 @@
             <span>5 Plantillas Inteligentes de WhatsApp</span>
           </div>
           <p class="text-xs text-slate-300">
-            Mensajes preformateados con variables automáticas del cliente y la cotización:
+            Mensajes preformateados con variables dinámicas de cliente y cotización:
           </p>
           <div class="space-y-2 text-xs text-slate-300">
-            <div class="p-2 rounded-lg bg-slate-800/80 border border-slate-700">1. 📄 Envío de Cotización con montos y vigencia</div>
+            <div class="p-2 rounded-lg bg-slate-800/80 border border-slate-700">1. 📄 Envío de Cotización con montos, link y vigencia</div>
             <div class="p-2 rounded-lg bg-slate-800/80 border border-slate-700">2. 📅 Confirmación de Visita Técnica e Instalación</div>
             <div class="p-2 rounded-lg bg-slate-800/80 border border-slate-700">3. 💳 Recordatorio de Saldo Pendiente y Cuentas Bancarias</div>
             <div class="p-2 rounded-lg bg-slate-800/80 border border-slate-700">4. 🧾 Comprobante de Pago & Recibo Oficial</div>
@@ -431,7 +681,7 @@
             <span>Emisión de Recibos Oficiales de Cobro</span>
           </div>
           <p class="text-xs text-slate-300">
-            Registro ágil de anticipos y liquidaciones:
+            Registro ágil de anticipos, abonos parciales y liquidaciones:
           </p>
           <ul class="space-y-2 text-xs text-slate-300">
             <li class="flex items-center gap-2">
@@ -440,11 +690,11 @@
             </li>
             <li class="flex items-center gap-2">
               <i data-lucide="hash" class="w-4 h-4 text-teal-400"></i>
-              <span>Numeración correlativa oficial (ej. <code>REC-2026-001</code>).</span>
+              <span>Numeración correlativa contable (ej. <code>REC-2026-001</code>).</span>
             </li>
             <li class="flex items-center gap-2">
               <i data-lucide="file-text" class="w-4 h-4 text-teal-400"></i>
-              <span>Recibo membretado imprimible en PDF con datos de RNC y firma.</span>
+              <span>Recibo membretado imprimible en PDF con datos fiscales y firma.</span>
             </li>
             <li class="flex items-center gap-2">
               <i data-lucide="pie-chart" class="w-4 h-4 text-teal-400"></i>
@@ -455,14 +705,14 @@
       </div>
     </section>
 
-    <!-- SLIDE 8: REPORTES FINANCIEROS & EXPORTADOR EXCEL -->
+    <!-- SLIDE 11: REPORTES FINANCIEROS & EXPORTADOR EXCEL -->
     <section class="slide flex-col max-w-5xl mx-auto w-full space-y-6">
       <div class="text-center space-y-2">
         <span class="text-xs font-bold text-brand-teal-400 uppercase tracking-widest">Inteligencia de Negocios</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-white">Reportes Financieros & Exportación a Excel / CSV</h2>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Reportes Financieros & Exportación a Excel / CSV</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
         <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 text-center space-y-2">
           <div class="text-2xl font-black text-brand-teal-400">Total Cotizado</div>
           <div class="text-xs text-slate-400">Volumen bruto de propuestas generadas</div>
@@ -473,7 +723,7 @@
         </div>
         <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 text-center space-y-2">
           <div class="text-2xl font-black text-amber-400">Cuentas por Cobrar</div>
-          <div class="text-xs text-slate-400">Balances pendientes de liquidación</div>
+          <div class="text-xs text-slate-400">Balances pendientes clasificados por cliente</div>
         </div>
       </div>
 
@@ -481,9 +731,9 @@
         <div class="flex items-center justify-between">
           <h3 class="text-sm font-bold text-white flex items-center gap-2">
             <i data-lucide="download" class="w-4 h-4 text-emerald-400"></i>
-            <span>Exportador en 1 Clic a formato Excel / CSV:</span>
+            <span>Exportador en 1 Clic compatible con Excel y Google Sheets:</span>
           </h3>
-          <span class="text-[11px] text-slate-400">Compatible con Microsoft Excel & Google Sheets</span>
+          <span class="text-[11px] text-slate-400">Formato CSV con codificación UTF-8</span>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
@@ -494,7 +744,7 @@
             💳 Recibos de Cobro
           </div>
           <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700 text-center font-bold text-slate-200">
-            ⏳ Cuentas por Cobrar
+            🧾 Facturas Fiscales NCF
           </div>
           <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700 text-center font-bold text-slate-200">
             👥 Directorio Clientes
@@ -503,100 +753,208 @@
       </div>
     </section>
 
-    <!-- SLIDE 9: AGENDA TÉCNICA & ROLES -->
+    <!-- SLIDE 12: [NUEVA IMPLEMENTACIÓN] PRODUCTIVIDAD: COMMAND PALETTE (CTRL+K) -->
     <section class="slide flex-col max-w-5xl mx-auto w-full space-y-6">
       <div class="text-center space-y-2">
-        <span class="text-xs font-bold text-brand-teal-400 uppercase tracking-widest">Coordinación en Campo</span>
-        <h2 class="text-3xl md:text-4xl font-extrabold text-white">Agenda Técnica & Seguridad por Roles</h2>
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-teal-950/80 border border-brand-teal-500/40 text-brand-teal-300 text-[11px] font-black uppercase tracking-wider mb-1">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>Nueva Innovación · Experiencia de Usuario & Velocidad</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Command Palette Global: Spotlight con Ctrl + K</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-        <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-          <div class="flex items-center gap-2 text-cyan-400 font-bold text-sm uppercase">
-            <i data-lucide="calendar" class="w-5 h-5"></i>
-            <span>Calendario Técnico de Visitas</span>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-1">
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-brand-teal-950 border border-brand-teal-500/30 flex items-center justify-center text-brand-teal-400">
+            <i data-lucide="search" class="w-5 h-5"></i>
           </div>
-          <p class="text-xs text-slate-300">
-            Organización de levantamientos, instalaciones y mantenimientos:
+          <h3 class="text-sm font-bold text-white">Búsqueda Global Unificada</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Encuentra clientes, presupuestos, facturas NCF, órdenes de trabajo y artículos del catálogo en milisegundos con búsqueda en tiempo real.
           </p>
-          <ul class="space-y-2 text-xs text-slate-300">
-            <li class="flex items-center gap-2">
-              <i data-lucide="user-check" class="w-4 h-4 text-cyan-400"></i>
-              <span>Asignación individual de técnicos a cada servicio.</span>
-            </li>
-            <li class="flex items-center gap-2">
-              <i data-lucide="map-pin" class="w-4 h-4 text-cyan-400"></i>
-              <span>Direcciones, teléfonos y notas técnicas visibles desde el móvil.</span>
-            </li>
-            <li class="flex items-center gap-2">
-              <i data-lucide="filter" class="w-4 h-4 text-cyan-400"></i>
-              <span>Filtros rápidos por estado: Programada, En Proceso, Completada.</span>
-            </li>
-          </ul>
         </div>
 
-        <div class="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-          <div class="flex items-center gap-2 text-brand-teal-400 font-bold text-sm uppercase">
-            <i data-lucide="shield" class="w-5 h-5"></i>
-            <span>Seguridad & Perfiles de Usuario</span>
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <i data-lucide="zap" class="w-5 h-5"></i>
           </div>
-          <div class="space-y-3">
-            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
-              <div class="text-xs font-bold text-brand-teal-400 flex items-center gap-1.5">
-                <i data-lucide="shield-check" class="w-4 h-4"></i>
-                <span>Perfil Administrador</span>
-              </div>
-              <p class="text-[11px] text-slate-400">Acceso total: ajustes de empresa, cotizador con márgenes de compra/costo, reportes financieros y eliminación de datos.</p>
-            </div>
-            <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
-              <div class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
-                <i data-lucide="wrench" class="w-4 h-4"></i>
-                <span>Perfil Técnico de Campo</span>
-              </div>
-              <p class="text-[11px] text-slate-400">Acceso operativo: agenda de visitas, órdenes de trabajo, carga de fotos y toma de firmas de entrega en obra.</p>
-            </div>
-          </div>
+          <h3 class="text-sm font-bold text-white">Acciones Rápidas Directas</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Crea una nueva cotización, emite un NCF, programa una visita técnica o exporta reportes directamente desde el teclado sin tocar el mouse.
+          </p>
         </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <i data-lucide="layout-grid" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">Navegación Agrupada</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Menú reorganizado por clústeres operativos (Comercial, Operaciones, Finanzas y Sistema) con vista rápida de tarjetas de módulos.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-900/90 border border-brand-teal-500/30 flex items-center justify-between text-xs flex-wrap gap-2">
+        <div class="flex items-center gap-3">
+          <i data-lucide="keyboard" class="w-5 h-5 text-brand-teal-400 flex-shrink-0"></i>
+          <span class="text-slate-300 font-medium">Accesible en cualquier momento pulsando <kbd class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-white font-mono font-bold">Ctrl + K</kbd> o haciendo clic en la barra superior.</span>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-slate-800 text-brand-teal-300 font-bold font-mono">Productividad x10 ⚡</span>
       </div>
     </section>
 
-    <!-- SLIDE 10: CONCLUSIÓN & PRÓXIMOS PASOS -->
-    <section class="slide flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-8">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 text-xs font-bold uppercase tracking-wider">
-        <i data-lucide="check-circle" class="w-4 h-4"></i>
-        <span>Listo para Lanzamiento a Producción</span>
+    <!-- SLIDE 13: [NUEVA IMPLEMENTACIÓN] SEGURIDAD: BITÁCORA DE AUDITORÍA (AUDIT TRAIL) -->
+    <section class="slide flex-col max-w-5xl mx-auto w-full space-y-6">
+      <div class="text-center space-y-2">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-[11px] font-black uppercase tracking-wider mb-1">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>Nueva Innovación · Seguridad & Cumplimiento</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Bitácora de Auditoría & Trazabilidad Inmutable</h2>
       </div>
 
-      <div class="space-y-4">
-        <h2 class="text-3xl md:text-5xl font-black text-white leading-tight">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-1">
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">Registro Inmutable de Eventos</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Cada creación, edición, firma, cobro o eliminación queda registrada cronológicamente sin posibilidad de alteración para garantizar transparencia total.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-brand-teal-950 border border-brand-teal-500/30 flex items-center justify-center text-brand-teal-400">
+            <i data-lucide="user-check" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">Identificación de Usuario & IP</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Guarda el nombre de usuario, rol, fecha, hora exacta, módulo intervenido y detalles específicos de cada cambio realizado en la plataforma.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <i data-lucide="filter" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">Filtros & Descarga de Bitácora</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Permite filtrar por tipo de operación (facturas, pagos, cotizaciones, órdenes), usuario responsable y rango temporal, exportable para auditorías externas.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-900/90 border border-emerald-500/30 flex items-center justify-between text-xs flex-wrap gap-2">
+        <div class="flex items-center gap-3">
+          <i data-lucide="lock" class="w-5 h-5 text-emerald-400 flex-shrink-0"></i>
+          <span class="text-slate-300">Protección corporativa contra discrepancias en cobros o modificaciones indebidas.</span>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 font-bold font-mono">Auditoría 100% Blindada 🛡️</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 14: [NUEVA IMPLEMENTACIÓN] ARQUITECTURA PWA OFFLINE-FIRST & NUBE HÍBRIDA -->
+    <section class="slide flex-col max-w-5xl mx-auto w-full space-y-6">
+      <div class="text-center space-y-2">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-[11px] font-black uppercase tracking-wider mb-1">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>Nueva Innovación · Infraestructura & Disponibilidad</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Arquitectura PWA Offline-First & Nube Híbrida</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-1">
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <i data-lucide="smartphone" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">PWA Instalable Nativa</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Se instala como app en smartphones Android, iOS y computadoras sin pasar por tiendas de aplicaciones, con icono propio en pantalla de inicio y modo fullscreen.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-brand-teal-950 border border-brand-teal-500/30 flex items-center justify-center text-brand-teal-400">
+            <i data-lucide="wifi-off" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">Operación Offline en Campo</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Con Service Worker (<code>sw.js</code>), los técnicos cargan actas y fotos incluso en sótanos o zonas sin internet; los datos se guardan y sincronizan al recuperar señal.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <i data-lucide="cloud" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-sm font-bold text-white">Sincronización Cloud Supabase</h3>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Arquitectura de triple capa: LocalStorage de ultra baja latencia, backend API REST y base de datos cloud con Supabase para respaldo en tiempo real.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-xs flex-wrap gap-2">
+        <div class="flex items-center gap-3">
+          <i data-lucide="shield" class="w-5 h-5 text-brand-teal-400 flex-shrink-0"></i>
+          <span class="text-slate-300">Seguridad por Roles (RBAC): Perfiles estrictos para Administrador, Vendedor y Técnico de Campo.</span>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-200 border border-slate-700 font-bold font-mono">Alta Disponibilidad 24/7 🌐</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 15: CONCLUSIÓN, IMPACTO & LANZAMIENTO -->
+    <section class="slide flex-col items-center justify-center text-center max-w-5xl mx-auto space-y-7 py-3">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/90 border border-emerald-500/40 text-emerald-400 text-xs font-bold uppercase tracking-wider shadow-lg shadow-emerald-950/50">
+        <i data-lucide="check-circle" class="w-4 h-4"></i>
+        <span>Plataforma 100% Operativa y Verificada</span>
+      </div>
+
+      <div class="space-y-3">
+        <h2 class="text-3xl sm:text-5xl font-black text-white leading-tight">
           Una Ventaja Competitiva Real para <br>
           <span class="bg-gradient-to-r from-brand-teal-400 to-brand-green-400 bg-clip-text text-transparent">
             MARTÍNEZ TECH
           </span>
         </h2>
-        <p class="text-sm md:text-base text-slate-300 max-w-2xl mx-auto">
-          La empresa cuenta ahora con una plataforma corporativa de nivel mundial que proyecta confianza inmediata, acelera las ventas y profesionaliza la entrega técnica.
+        <p class="text-xs sm:text-base text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          La empresa cuenta ahora con una suite corporativa de nivel mundial que proyecta confianza inmediata, acelera las ventas, automatiza los impuestos DGII y profesionaliza la entrega técnica en campo.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-left pt-2">
-        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
-          <div class="text-brand-teal-400 font-bold text-xs mb-1">1. Dominio & SSL</div>
-          <div class="text-[11px] text-slate-400">Publicación en dominio web con certificado HTTPS seguro.</div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-left pt-1">
+        <div class="p-4.5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-brand-teal-500/40 transition-all">
+          <div class="text-brand-teal-400 font-bold text-xs mb-1.5 flex items-center gap-1.5">
+            <i data-lucide="rocket" class="w-4 h-4"></i>
+            <span>1. Aceleración Comercial</span>
+          </div>
+          <div class="text-[11px] text-slate-400 leading-relaxed">Presupuestos en minutos, portal web interactivo para clientes y firma digital con cierre en el acto.</div>
         </div>
-        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
-          <div class="text-emerald-400 font-bold text-xs mb-1">2. Capacitación del Equipo</div>
-          <div class="text-[11px] text-slate-400">Entrenamiento al personal de ventas y técnicos de campo.</div>
+        <div class="p-4.5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-emerald-500/40 transition-all">
+          <div class="text-emerald-400 font-bold text-xs mb-1.5 flex items-center gap-1.5">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span>2. Blindaje Fiscal & Operativo</span>
+          </div>
+          <div class="text-[11px] text-slate-400 leading-relaxed">Comprobantes NCF, reportes DGII 606/607/608, control Kardex y actas fotográficas Antes/Después.</div>
         </div>
-        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
-          <div class="text-cyan-400 font-bold text-xs mb-1">3. Crecimiento & Ventas</div>
-          <div class="text-[11px] text-slate-400">Captación de clientes residenciales y corporativos 24/7.</div>
+        <div class="p-4.5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-cyan-500/40 transition-all">
+          <div class="text-cyan-400 font-bold text-xs mb-1.5 flex items-center gap-1.5">
+            <i data-lucide="trending-up" class="w-4 h-4"></i>
+            <span>3. Escalabilidad & Control</span>
+          </div>
+          <div class="text-[11px] text-slate-400 leading-relaxed">App PWA offline, Command Palette (Ctrl+K), bitácora de auditoría y respaldo seguro en la nube.</div>
         </div>
       </div>
 
-      <div class="pt-4">
+      <div class="pt-2">
         <p class="text-xs text-slate-400 font-semibold tracking-wider uppercase">
           ¡Muchas Gracias! · Soluciones · Servicios · Calidad
+        </p>
+        <p class="text-[11px] text-brand-teal-400/90 font-mono mt-1">
+          Martínez Tech © 2026 · República Dominicana
         </p>
       </div>
     </section>
@@ -604,21 +962,21 @@
   </main>
 
   <!-- BOTTOM NAVIGATION BAR -->
-  <footer class="w-full px-6 py-4 border-t border-slate-800/80 bg-slate-900/60 backdrop-blur-md flex items-center justify-between z-30">
+  <footer class="w-full px-4 sm:px-8 py-3.5 border-t border-slate-800/80 bg-slate-900/80 backdrop-blur-md flex items-center justify-between z-30">
     <div class="flex items-center gap-2">
       <button 
         id="prevBtn" 
         onclick="changeSlide(-1)" 
-        class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center gap-2 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+        class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center gap-1.5 transition-all disabled:opacity-30 disabled:cursor-not-allowed border border-slate-700 shadow-sm"
       >
         <i data-lucide="chevron-left" class="w-4 h-4"></i>
-        <span>Anterior</span>
+        <span class="hidden sm:inline">Anterior</span>
       </button>
 
       <button 
         id="nextBtn" 
         onclick="changeSlide(1)" 
-        class="px-5 py-2 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 hover:from-brand-teal-400 hover:to-brand-green-400 text-slate-950 font-black text-xs flex items-center gap-2 transition-all shadow-lg shadow-teal-500/20 disabled:opacity-30 disabled:cursor-not-allowed"
+        class="px-4.5 py-2 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 hover:from-brand-teal-400 hover:to-brand-green-400 text-slate-950 font-black text-xs flex items-center gap-1.5 transition-all shadow-lg shadow-teal-500/20 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
       >
         <span>Siguiente</span>
         <i data-lucide="chevron-right" class="w-4 h-4"></i>
@@ -631,11 +989,12 @@
     </div>
 
     <!-- Keyboard Hints -->
-    <div class="text-[10px] text-slate-500 hidden md:flex items-center gap-2">
-      <span>Teclas:</span>
+    <div class="text-[10px] text-slate-400 hidden md:flex items-center gap-1.5 font-mono">
+      <span>Navegar:</span>
       <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">←</kbd>
       <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">→</kbd>
       <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">Espacio</kbd>
+      <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">F</kbd>
     </div>
   </footer>
 
@@ -647,14 +1006,34 @@
     const slides = document.querySelectorAll('.slide');
     const totalSlides = slides.length;
     const slideCounter = document.getElementById('slideCounter');
+    const slideTitle = document.getElementById('slideTitle');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const dotsContainer = document.getElementById('dotsContainer');
+
+    const slideTitles = [
+      "Visión Integral del Ecosistema",
+      "Diagnóstico: Antes vs Ahora",
+      "Pilar 1: Presencia Web de Alta Conversión",
+      "Pilar 2: CRM Kanban & Cotizador Pro",
+      "Portal Web Interactivo de Propuestas",
+      "Firma Digital & Certificación Legal",
+      "Facturación Fiscal NCF & Cumplimiento DGII",
+      "Inventario Inteligente, Kardex & Valuación",
+      "Órdenes de Trabajo & Actas Fotográficas",
+      "Centro de Cobranzas & WhatsApp 1-Clic",
+      "Inteligencia Financiera & Exportación Excel",
+      "Productividad: Command Palette (Ctrl+K)",
+      "Seguridad: Bitácora de Auditoría (Audit Trail)",
+      "Arquitectura PWA Offline-First & Cloud",
+      "Conclusión & Lanzamiento a Producción"
+    ];
 
     // Create dots
     for (let i = 0; i < totalSlides; i++) {
       const dot = document.createElement('button');
       dot.className = `w-2.5 h-2.5 rounded-full transition-all ${i === 0 ? 'bg-brand-teal-400 w-6' : 'bg-slate-700 hover:bg-slate-500'}`;
+      dot.title = `${i + 1}. ${slideTitles[i] || 'Diapositiva'}`;
       dot.onclick = () => goToSlide(i);
       dotsContainer.appendChild(dot);
     }
@@ -665,6 +1044,9 @@
       });
 
       slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+      if (slideTitle && slideTitles[currentSlide]) {
+        slideTitle.textContent = `${currentSlide + 1}. ${slideTitles[currentSlide]}`;
+      }
       prevBtn.disabled = currentSlide === 0;
       nextBtn.disabled = currentSlide === totalSlides - 1;
 
@@ -672,7 +1054,7 @@
       const dots = dotsContainer.children;
       for (let i = 0; i < dots.length; i++) {
         if (i === currentSlide) {
-          dots[i].className = 'w-6 h-2.5 rounded-full bg-brand-teal-400 transition-all';
+          dots[i].className = 'w-6 h-2.5 rounded-full bg-brand-teal-400 transition-all shadow-sm shadow-teal-400/50';
         } else {
           dots[i].className = 'w-2.5 h-2.5 rounded-full bg-slate-700 hover:bg-slate-500 transition-all';
         }

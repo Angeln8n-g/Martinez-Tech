@@ -189,9 +189,10 @@ export function calculate607Summary(
   let otherNcfCount = 0;
 
   filtered.forEach(inv => {
-    totalInvoicedAmount += inv.total || 0;
-    totalTaxableAmount += inv.subtotal || 0;
-    totalTaxAmount += inv.taxAmount || 0;
+    const rate = inv.currency === 'USD' ? (inv.exchangeRate || 60.50) : 1;
+    totalInvoicedAmount += (inv.total || 0) * rate;
+    totalTaxableAmount += (inv.subtotal || 0) * rate;
+    totalTaxAmount += (inv.taxAmount || 0) * rate;
 
     if (inv.ncfType === 'B01') b01Count++;
     else if (inv.ncfType === 'B02') b02Count++;
@@ -242,10 +243,12 @@ export function generate607Txt(
     const invoiceDate = formatDgiiDate(inv.date);
     const retentionDate = ''; // Vacío si no hubo retención
 
-    // Monto facturado neto (sin ITBIS)
-    const taxableAmount = (inv.subtotal || 0).toFixed(2);
-    // ITBIS liquidado (18%)
-    const itbisAmount = (inv.taxAmount || 0).toFixed(2);
+    const rate = inv.currency === 'USD' ? (inv.exchangeRate || 60.50) : 1;
+    // Monto facturado neto convertido a DOP si corresponde (sin ITBIS)
+    const taxableAmount = ((inv.subtotal || 0) * rate).toFixed(2);
+    // ITBIS liquidado (18%) convertido a DOP si corresponde
+    const itbisAmount = ((inv.taxAmount || 0) * rate).toFixed(2);
+    const totalAmount = ((inv.total || 0) * rate).toFixed(2);
     // Retenciones
     const itbisRetained = '0.00';
     const itbisPerceived = '0.00';
@@ -255,12 +258,12 @@ export function generate607Txt(
     const otherTaxes = '0.00';
     const legalTip = '0.00';
 
-    // Medios de pago
-    const cash = inv.paymentMethod === 'efectivo' ? (inv.total || 0).toFixed(2) : '0.00';
+    // Medios de pago en DOP
+    const cash = inv.paymentMethod === 'efectivo' ? totalAmount : '0.00';
     const wireOrCheck = (inv.paymentMethod === 'transferencia' || inv.paymentMethod === 'cheque') 
-      ? (inv.total || 0).toFixed(2) : '0.00';
-    const card = inv.paymentMethod === 'tarjeta' ? (inv.total || 0).toFixed(2) : '0.00';
-    const credit = (inv.paymentStatus === 'pending') ? (inv.total || 0).toFixed(2) : '0.00';
+      ? totalAmount : '0.00';
+    const card = inv.paymentMethod === 'tarjeta' ? totalAmount : '0.00';
+    const credit = (inv.paymentStatus === 'pending') ? totalAmount : '0.00';
     const giftCertificates = '0.00';
     const swap = '0.00';
     const otherPaymentForms = '0.00';
@@ -312,26 +315,33 @@ export function generate607Csv(
     'Tipo Comprobante',
     'Fecha Emisión',
     'Cliente / Razón Social',
-    'Monto Facturado (Neto)',
-    'ITBIS Facturado (18%)',
+    'Moneda Original',
+    'Tasa Cambio',
+    'Monto Facturado (Neto DOP)',
+    'ITBIS Facturado (18% DOP)',
     'Total Facturado (DOP)',
     'Forma de Pago',
     'Estado de Pago'
   ];
 
-  const rows = filtered.map(inv => [
-    cleanDocNumber(inv.clientRnc),
-    getDgiiIdType(inv.clientRnc) === '1' ? '1 (RNC)' : '2 (Cédula)',
-    inv.ncf,
-    inv.ncfType,
-    inv.date,
-    inv.clientName,
-    (inv.subtotal || 0).toFixed(2),
-    (inv.taxAmount || 0).toFixed(2),
-    (inv.total || 0).toFixed(2),
-    inv.paymentMethod,
-    inv.paymentStatus === 'paid' ? 'Pagada' : 'Pendiente'
-  ]);
+  const rows = filtered.map(inv => {
+    const rate = inv.currency === 'USD' ? (inv.exchangeRate || 60.50) : 1;
+    return [
+      cleanDocNumber(inv.clientRnc),
+      getDgiiIdType(inv.clientRnc) === '1' ? '1 (RNC)' : '2 (Cédula)',
+      inv.ncf,
+      inv.ncfType,
+      inv.date,
+      inv.clientName,
+      inv.currency || 'DOP',
+      rate.toFixed(2),
+      ((inv.subtotal || 0) * rate).toFixed(2),
+      ((inv.taxAmount || 0) * rate).toFixed(2),
+      ((inv.total || 0) * rate).toFixed(2),
+      inv.paymentMethod,
+      inv.paymentStatus === 'paid' ? 'Pagada' : 'Pendiente'
+    ];
+  });
 
   const escapeCell = (c: any) => `"${(c || '').toString().replace(/"/g, '""')}"`;
 

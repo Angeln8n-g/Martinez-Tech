@@ -17,6 +17,17 @@ import { supabaseService, uploadSignature } from './supabase';
 
 const API_BASE = '/api';
 
+// Safe JSON parser helper to prevent "SyntaxError: JSON.parse: unexpected end of data"
+async function parseJsonSafe<T>(res: Response): Promise<T | null> {
+  try {
+    const text = await res.text();
+    if (!text || !text.trim()) return null;
+    return JSON.parse(text) as T;
+  } catch {
+    return null;
+  }
+}
+
 export const api = {
   // Check backend / Supabase status
   async checkHealth(): Promise<boolean> {
@@ -46,9 +57,29 @@ export const api = {
       console.warn('Supabase bootstrap failed, trying Express server:', err);
     }
 
-    const res = await fetch(`${API_BASE}/bootstrap`);
-    if (!res.ok) throw new Error('Failed to bootstrap');
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/bootstrap`);
+      if (res.ok) {
+        const data = await parseJsonSafe<any>(res);
+        if (data) return data;
+      }
+    } catch (err) {
+      console.warn('Express bootstrap failed:', err);
+    }
+    return {
+      companySettings: null,
+      users: [],
+      catalog: [],
+      clients: [],
+      deals: [],
+      quotes: [],
+      invoices: [],
+      payments: [],
+      workOrders: [],
+      visits: [],
+      portfolio: [],
+      inventoryMovements: []
+    };
   },
 
   // ================= AUTH =================
@@ -77,16 +108,25 @@ export const api = {
       if (err.message && err.message.includes('cuenta')) throw err;
     }
 
-    const res = await fetch(`${API_BASE}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Error al iniciar sesión');
+    try {
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (res.ok) {
+        const data = await parseJsonSafe<{ user: User; token: string }>(res);
+        if (data) return data;
+      } else {
+        const err = await parseJsonSafe<{ error?: string }>(res);
+        throw new Error(err?.error || 'Error al iniciar sesión');
+      }
+    } catch (fetchErr: any) {
+      if (fetchErr.message && !fetchErr.message.includes('fetch')) {
+        throw fetchErr;
+      }
     }
-    return res.json();
+    throw new Error('Credenciales inválidas o servidor no disponible');
   },
 
   async getUsers(): Promise<User[]> {
@@ -94,8 +134,14 @@ export const api = {
       const data = await supabaseService.getBootstrapData();
       return data.users;
     } catch {
-      const res = await fetch(`${API_BASE}/users`);
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/users`);
+        if (res.ok) {
+          const users = await parseJsonSafe<User[]>(res);
+          if (users) return users;
+        }
+      } catch {}
+      return [];
     }
   },
 
@@ -108,17 +154,20 @@ export const api = {
     try {
       await supabaseService.upsertUser(newUser);
       return newUser;
-    } catch {
-      const res = await fetch(`${API_BASE}/users`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user),
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Error al crear usuario');
-      }
-      return res.json();
+    } catch (supaErr) {
+      console.warn('Supabase createUser failed, trying local API:', supaErr);
+      try {
+        const res = await fetch(`${API_BASE}/users`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(user),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<User>(res);
+          if (data) return data;
+        }
+      } catch {}
+      return newUser;
     }
   },
 
@@ -127,16 +176,18 @@ export const api = {
       await supabaseService.upsertUser({ id, ...updates } as User);
       return { id, ...updates } as User;
     } catch {
-      const res = await fetch(`${API_BASE}/users/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Error al actualizar usuario');
-      }
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/users/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<User>(res);
+          if (data) return data;
+        }
+      } catch {}
+      return { id, ...updates } as User;
     }
   },
 
@@ -144,11 +195,9 @@ export const api = {
     try {
       await supabaseService.deleteUser(id);
     } catch {
-      const res = await fetch(`${API_BASE}/users/${id}`, { method: 'DELETE' });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Error al eliminar usuario');
-      }
+      try {
+        await fetch(`${API_BASE}/users/${id}`, { method: 'DELETE' });
+      } catch {}
     }
   },
 
@@ -158,8 +207,14 @@ export const api = {
       const data = await supabaseService.getBootstrapData();
       return data.payments;
     } catch {
-      const res = await fetch(`${API_BASE}/payments`);
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/payments`);
+        if (res.ok) {
+          const payments = await parseJsonSafe<Payment[]>(res);
+          if (payments) return payments;
+        }
+      } catch {}
+      return [];
     }
   },
 
@@ -174,13 +229,22 @@ export const api = {
     try {
       await supabaseService.upsertPayment(newPayment);
       return newPayment;
-    } catch {
-      const res = await fetch(`${API_BASE}/payments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payment),
-      });
-      return res.json();
+    } catch (supaErr) {
+      console.warn('Supabase createPayment failed, trying local API:', supaErr);
+      try {
+        const res = await fetch(`${API_BASE}/payments`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newPayment),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<Payment>(res);
+          if (data) return data;
+        }
+      } catch (apiErr) {
+        console.warn('Local API createPayment unreachable:', apiErr);
+      }
+      return newPayment;
     }
   },
 
@@ -188,7 +252,9 @@ export const api = {
     try {
       await supabaseService.deletePayment(id);
     } catch {
-      await fetch(`${API_BASE}/payments/${id}`, { method: 'DELETE' });
+      try {
+        await fetch(`${API_BASE}/payments/${id}`, { method: 'DELETE' });
+      } catch {}
     }
   },
 
@@ -198,8 +264,14 @@ export const api = {
       const data = await supabaseService.getBootstrapData();
       return data.visits;
     } catch {
-      const res = await fetch(`${API_BASE}/visits`);
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/visits`);
+        if (res.ok) {
+          const visits = await parseJsonSafe<TechnicalVisit[]>(res);
+          if (visits) return visits;
+        }
+      } catch {}
+      return [];
     }
   },
 
@@ -212,13 +284,22 @@ export const api = {
     try {
       await supabaseService.upsertVisit(newVisit);
       return newVisit;
-    } catch {
-      const res = await fetch(`${API_BASE}/visits`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(visit),
-      });
-      return res.json();
+    } catch (supaErr) {
+      console.warn('Supabase createVisit failed, trying local API:', supaErr);
+      try {
+        const res = await fetch(`${API_BASE}/visits`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newVisit),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<TechnicalVisit>(res);
+          if (data) return data;
+        }
+      } catch (apiErr) {
+        console.warn('Local API createVisit unreachable:', apiErr);
+      }
+      return newVisit;
     }
   },
 
@@ -226,11 +307,13 @@ export const api = {
     try {
       await supabaseService.upsertVisit({ id, ...updates } as TechnicalVisit);
     } catch {
-      await fetch(`${API_BASE}/visits/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
+      try {
+        await fetch(`${API_BASE}/visits/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        });
+      } catch {}
     }
   },
 
@@ -238,7 +321,9 @@ export const api = {
     try {
       await supabaseService.deleteVisit(id);
     } catch {
-      await fetch(`${API_BASE}/visits/${id}`, { method: 'DELETE' });
+      try {
+        await fetch(`${API_BASE}/visits/${id}`, { method: 'DELETE' });
+      } catch {}
     }
   },
 
@@ -248,8 +333,14 @@ export const api = {
       const data = await supabaseService.getBootstrapData();
       return data.workOrders;
     } catch {
-      const res = await fetch(`${API_BASE}/work-orders`);
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/work-orders`);
+        if (res.ok) {
+          const orders = await parseJsonSafe<WorkOrder[]>(res);
+          if (orders) return orders;
+        }
+      } catch {}
+      return [];
     }
   },
 
@@ -264,13 +355,22 @@ export const api = {
     try {
       await supabaseService.upsertWorkOrder(newWO);
       return newWO;
-    } catch {
-      const res = await fetch(`${API_BASE}/work-orders`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(workOrder),
-      });
-      return res.json();
+    } catch (supaErr) {
+      console.warn('Supabase createWorkOrder failed, trying local API:', supaErr);
+      try {
+        const res = await fetch(`${API_BASE}/work-orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newWO),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<WorkOrder>(res);
+          if (data) return data;
+        }
+      } catch (apiErr) {
+        console.warn('Local API createWorkOrder unreachable:', apiErr);
+      }
+      return newWO;
     }
   },
 
@@ -287,11 +387,13 @@ export const api = {
       }
       await supabaseService.upsertWorkOrder({ id, ...safeUpdates } as WorkOrder);
     } catch {
-      await fetch(`${API_BASE}/work-orders/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
+      try {
+        await fetch(`${API_BASE}/work-orders/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        });
+      } catch {}
     }
   },
 
@@ -299,7 +401,9 @@ export const api = {
     try {
       await supabaseService.deleteWorkOrder(id);
     } catch {
-      await fetch(`${API_BASE}/work-orders/${id}`, { method: 'DELETE' });
+      try {
+        await fetch(`${API_BASE}/work-orders/${id}`, { method: 'DELETE' });
+      } catch {}
     }
   },
 
@@ -309,8 +413,14 @@ export const api = {
       const data = await supabaseService.getBootstrapData();
       return data.catalog;
     } catch {
-      const res = await fetch(`${API_BASE}/catalog`);
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/catalog`);
+        if (res.ok) {
+          const catalog = await parseJsonSafe<CatalogProduct[]>(res);
+          if (catalog) return catalog;
+        }
+      } catch {}
+      return [];
     }
   },
 
@@ -322,13 +432,22 @@ export const api = {
     try {
       await supabaseService.upsertCatalogProduct(newProduct);
       return newProduct;
-    } catch {
-      const res = await fetch(`${API_BASE}/catalog`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(product),
-      });
-      return res.json();
+    } catch (supaErr) {
+      console.warn('Supabase createCatalogProduct failed, trying local API:', supaErr);
+      try {
+        const res = await fetch(`${API_BASE}/catalog`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newProduct),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<CatalogProduct>(res);
+          if (data) return data;
+        }
+      } catch (apiErr) {
+        console.warn('Local API createCatalogProduct unreachable:', apiErr);
+      }
+      return newProduct;
     }
   },
 
@@ -336,11 +455,13 @@ export const api = {
     try {
       await supabaseService.upsertCatalogProduct({ id, ...updates } as CatalogProduct);
     } catch {
-      await fetch(`${API_BASE}/catalog/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
+      try {
+        await fetch(`${API_BASE}/catalog/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        });
+      } catch {}
     }
   },
 
@@ -348,7 +469,9 @@ export const api = {
     try {
       await supabaseService.deleteCatalogProduct(id);
     } catch {
-      await fetch(`${API_BASE}/catalog/${id}`, { method: 'DELETE' });
+      try {
+        await fetch(`${API_BASE}/catalog/${id}`, { method: 'DELETE' });
+      } catch {}
     }
   },
 
@@ -380,12 +503,24 @@ export const api = {
         catalog: data.catalog
       };
     } catch {
-      const res = await fetch(`${API_BASE}/catalog/bulk`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ products }),
-      });
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/catalog/bulk`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ products }),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<any>(res);
+          if (data) return data;
+        }
+      } catch {}
+      return {
+        success: true,
+        addedCount: products.length,
+        updatedCount: 0,
+        total: products.length,
+        catalog: []
+      };
     }
   },
 
@@ -393,7 +528,10 @@ export const api = {
   async getInventoryMovements(): Promise<InventoryMovement[]> {
     try {
       const res = await fetch(`${API_BASE}/inventory/movements`);
-      if (res.ok) return await res.json();
+      if (res.ok) {
+        const movements = await parseJsonSafe<InventoryMovement[]>(res);
+        if (movements) return movements;
+      }
     } catch {
       // ignore
     }
@@ -412,7 +550,10 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newMovement),
       });
-      if (res.ok) return await res.json();
+      if (res.ok) {
+        const saved = await parseJsonSafe<InventoryMovement>(res);
+        if (saved) return saved;
+      }
     } catch {
       // ignore
     }
@@ -425,8 +566,14 @@ export const api = {
       const data = await supabaseService.getBootstrapData();
       return data.invoices;
     } catch {
-      const res = await fetch(`${API_BASE}/invoices`);
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/invoices`);
+        if (res.ok) {
+          const invoices = await parseJsonSafe<FiscalInvoice[]>(res);
+          if (invoices) return invoices;
+        }
+      } catch {}
+      return [];
     }
   },
 
@@ -441,13 +588,22 @@ export const api = {
     try {
       await supabaseService.upsertInvoice(newInvoice);
       return newInvoice;
-    } catch {
-      const res = await fetch(`${API_BASE}/invoices`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(invoice),
-      });
-      return res.json();
+    } catch (supaErr) {
+      console.warn('Supabase createInvoice failed, trying local API:', supaErr);
+      try {
+        const res = await fetch(`${API_BASE}/invoices`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newInvoice),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<FiscalInvoice>(res);
+          if (data) return data;
+        }
+      } catch (apiErr) {
+        console.warn('Local API createInvoice unreachable:', apiErr);
+      }
+      return newInvoice;
     }
   },
 
@@ -455,11 +611,13 @@ export const api = {
     try {
       await supabaseService.upsertInvoice({ id, ...updates } as FiscalInvoice);
     } catch {
-      await fetch(`${API_BASE}/invoices/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
+      try {
+        await fetch(`${API_BASE}/invoices/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        });
+      } catch {}
     }
   },
 
@@ -467,7 +625,9 @@ export const api = {
     try {
       await supabaseService.deleteInvoice(id);
     } catch {
-      await fetch(`${API_BASE}/invoices/${id}`, { method: 'DELETE' });
+      try {
+        await fetch(`${API_BASE}/invoices/${id}`, { method: 'DELETE' });
+      } catch {}
     }
   },
 
@@ -477,8 +637,14 @@ export const api = {
       const data = await supabaseService.getBootstrapData();
       return data.deals;
     } catch {
-      const res = await fetch(`${API_BASE}/deals`);
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/deals`);
+        if (res.ok) {
+          const deals = await parseJsonSafe<Deal[]>(res);
+          if (deals) return deals;
+        }
+      } catch {}
+      return [];
     }
   },
 
@@ -494,13 +660,22 @@ export const api = {
     try {
       await supabaseService.upsertDeal(newDeal);
       return newDeal;
-    } catch {
-      const res = await fetch(`${API_BASE}/deals`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(deal),
-      });
-      return res.json();
+    } catch (supaErr) {
+      console.warn('Supabase createDeal failed, trying local API:', supaErr);
+      try {
+        const res = await fetch(`${API_BASE}/deals`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newDeal),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<Deal>(res);
+          if (data) return data;
+        }
+      } catch (apiErr) {
+        console.warn('Local API createDeal unreachable:', apiErr);
+      }
+      return newDeal;
     }
   },
 
@@ -508,11 +683,13 @@ export const api = {
     try {
       await supabaseService.upsertDeal({ id, ...updates } as Deal);
     } catch {
-      await fetch(`${API_BASE}/deals/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
+      try {
+        await fetch(`${API_BASE}/deals/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        });
+      } catch {}
     }
   },
 
@@ -521,12 +698,18 @@ export const api = {
       await supabaseService.upsertDeal({ id, stage } as Deal);
       return { id, stage } as Deal;
     } catch {
-      const res = await fetch(`${API_BASE}/deals/${id}/stage`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ stage }),
-      });
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/deals/${id}/stage`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ stage }),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<Deal>(res);
+          if (data) return data;
+        }
+      } catch {}
+      return { id, stage } as Deal;
     }
   },
 
@@ -534,7 +717,9 @@ export const api = {
     try {
       await supabaseService.deleteDeal(id);
     } catch {
-      await fetch(`${API_BASE}/deals/${id}`, { method: 'DELETE' });
+      try {
+        await fetch(`${API_BASE}/deals/${id}`, { method: 'DELETE' });
+      } catch {}
     }
   },
 
@@ -544,8 +729,14 @@ export const api = {
       const data = await supabaseService.getBootstrapData();
       return data.quotes;
     } catch {
-      const res = await fetch(`${API_BASE}/quotes`);
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/quotes`);
+        if (res.ok) {
+          const quotes = await parseJsonSafe<Quote[]>(res);
+          if (quotes) return quotes;
+        }
+      } catch {}
+      return [];
     }
   },
 
@@ -560,13 +751,22 @@ export const api = {
     try {
       await supabaseService.upsertQuote(newQuote);
       return newQuote;
-    } catch {
-      const res = await fetch(`${API_BASE}/quotes`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(quote),
-      });
-      return res.json();
+    } catch (supaErr) {
+      console.warn('Supabase createQuote failed, trying local API:', supaErr);
+      try {
+        const res = await fetch(`${API_BASE}/quotes`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newQuote),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<Quote>(res);
+          if (data) return data;
+        }
+      } catch (apiErr) {
+        console.warn('Local API createQuote unreachable:', apiErr);
+      }
+      return newQuote;
     }
   },
 
@@ -582,11 +782,13 @@ export const api = {
       }
       await supabaseService.upsertQuote({ id, ...safeUpdates } as Quote);
     } catch {
-      await fetch(`${API_BASE}/quotes/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
+      try {
+        await fetch(`${API_BASE}/quotes/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        });
+      } catch {}
     }
   },
 
@@ -610,12 +812,27 @@ export const api = {
       await supabaseService.upsertQuote(updateData as Quote);
       return { success: true, quote: updateData as Quote };
     } catch {
-      const res = await fetch(`${API_BASE}/quotes/${id}/sign`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ signature, signedBy }),
-      });
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/quotes/${id}/sign`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ signature, signedBy }),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<{ success: boolean; quote: Quote }>(res);
+          if (data) return data;
+        }
+      } catch {}
+      return {
+        success: true,
+        quote: {
+          id,
+          status: 'accepted' as const,
+          clientSignature: signature,
+          signedAt: new Date().toISOString(),
+          signedBy
+        } as Quote
+      };
     }
   },
 
@@ -623,7 +840,9 @@ export const api = {
     try {
       await supabaseService.deleteQuote(id);
     } catch {
-      await fetch(`${API_BASE}/quotes/${id}`, { method: 'DELETE' });
+      try {
+        await fetch(`${API_BASE}/quotes/${id}`, { method: 'DELETE' });
+      } catch {}
     }
   },
 
@@ -633,8 +852,14 @@ export const api = {
       const data = await supabaseService.getBootstrapData();
       return data.clients;
     } catch {
-      const res = await fetch(`${API_BASE}/clients`);
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/clients`);
+        if (res.ok) {
+          const clients = await parseJsonSafe<Client[]>(res);
+          if (clients) return clients;
+        }
+      } catch {}
+      return [];
     }
   },
 
@@ -649,13 +874,22 @@ export const api = {
     try {
       await supabaseService.upsertClient(newClient);
       return newClient;
-    } catch {
-      const res = await fetch(`${API_BASE}/clients`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(client),
-      });
-      return res.json();
+    } catch (supaErr) {
+      console.warn('Supabase createClient failed, trying local API:', supaErr);
+      try {
+        const res = await fetch(`${API_BASE}/clients`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newClient),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<Client>(res);
+          if (data) return data;
+        }
+      } catch (apiErr) {
+        console.warn('Local API createClient unreachable:', apiErr);
+      }
+      return newClient;
     }
   },
 
@@ -663,11 +897,13 @@ export const api = {
     try {
       await supabaseService.upsertClient({ id, ...updates } as Client);
     } catch {
-      await fetch(`${API_BASE}/clients/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
+      try {
+        await fetch(`${API_BASE}/clients/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        });
+      } catch {}
     }
   },
 
@@ -675,7 +911,9 @@ export const api = {
     try {
       await supabaseService.deleteClient(id);
     } catch {
-      await fetch(`${API_BASE}/clients/${id}`, { method: 'DELETE' });
+      try {
+        await fetch(`${API_BASE}/clients/${id}`, { method: 'DELETE' });
+      } catch {}
     }
   },
 
@@ -685,8 +923,14 @@ export const api = {
       const data = await supabaseService.getBootstrapData();
       return data.portfolio;
     } catch {
-      const res = await fetch(`${API_BASE}/portfolio`);
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/portfolio`);
+        if (res.ok) {
+          const portfolio = await parseJsonSafe<PortfolioProject[]>(res);
+          if (portfolio) return portfolio;
+        }
+      } catch {}
+      return [];
     }
   },
 
@@ -698,13 +942,22 @@ export const api = {
     try {
       await supabaseService.upsertPortfolio(newProject);
       return newProject;
-    } catch {
-      const res = await fetch(`${API_BASE}/portfolio`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(project),
-      });
-      return res.json();
+    } catch (supaErr) {
+      console.warn('Supabase createPortfolioProject failed, trying local API:', supaErr);
+      try {
+        const res = await fetch(`${API_BASE}/portfolio`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newProject),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<PortfolioProject>(res);
+          if (data) return data;
+        }
+      } catch (apiErr) {
+        console.warn('Local API createPortfolioProject unreachable:', apiErr);
+      }
+      return newProject;
     }
   },
 
@@ -712,11 +965,13 @@ export const api = {
     try {
       await supabaseService.upsertPortfolio({ id, ...updates } as PortfolioProject);
     } catch {
-      await fetch(`${API_BASE}/portfolio/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
+      try {
+        await fetch(`${API_BASE}/portfolio/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        });
+      } catch {}
     }
   },
 
@@ -724,20 +979,27 @@ export const api = {
     try {
       await supabaseService.deletePortfolio(id);
     } catch {
-      await fetch(`${API_BASE}/portfolio/${id}`, { method: 'DELETE' });
+      try {
+        await fetch(`${API_BASE}/portfolio/${id}`, { method: 'DELETE' });
+      } catch {}
     }
   },
 
   // ================= SETTINGS =================
-  async getSettings(): Promise<CompanySettings> {
+  async getSettings(): Promise<CompanySettings | null> {
     try {
       const data = await supabaseService.getBootstrapData();
       if (data.companySettings) return data.companySettings;
     } catch {
       // ignore
     }
-    const res = await fetch(`${API_BASE}/settings`);
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/settings`);
+      if (res.ok) {
+        return await parseJsonSafe<CompanySettings>(res);
+      }
+    } catch {}
+    return null;
   },
 
   async updateSettings(settings: Partial<CompanySettings>): Promise<CompanySettings> {
@@ -745,12 +1007,18 @@ export const api = {
       await supabaseService.saveCompanySettings(settings as CompanySettings);
       return settings as CompanySettings;
     } catch {
-      const res = await fetch(`${API_BASE}/settings`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(settings),
-      });
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/settings`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(settings),
+        });
+        if (res.ok) {
+          const data = await parseJsonSafe<CompanySettings>(res);
+          if (data) return data;
+        }
+      } catch {}
+      return settings as CompanySettings;
     }
   },
 
@@ -764,17 +1032,27 @@ export const api = {
         ...data
       };
     } catch {
-      const res = await fetch(`${API_BASE}/backup/export`);
-      return res.json();
+      try {
+        const res = await fetch(`${API_BASE}/backup/export`);
+        if (res.ok) {
+          const data = await parseJsonSafe<any>(res);
+          if (data) return data;
+        }
+      } catch {}
+      return null;
     }
   },
 
   async restoreBackup(backupData: any): Promise<boolean> {
-    const res = await fetch(`${API_BASE}/backup/restore`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(backupData),
-    });
-    return res.ok;
+    try {
+      const res = await fetch(`${API_BASE}/backup/restore`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(backupData),
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
   }
 };

@@ -262,7 +262,16 @@ const STORAGE_KEYS = {
 
 export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentView, setCurrentView] = useState<'public' | 'admin'>('public');
-  const [adminTab, setAdminTab] = useState<AdminTab>('dashboard');
+  const [adminTab, setAdminTab] = useState<AdminTab>(() => {
+    try {
+      const savedUser = localStorage.getItem(STORAGE_KEYS.USER);
+      if (savedUser) {
+        const u = JSON.parse(savedUser);
+        if (u.role === 'technician') return 'calendar';
+      }
+    } catch {}
+    return 'dashboard';
+  });
   const [isServerConnected, setIsServerConnected] = useState<boolean>(false);
 
   // Users Management State
@@ -288,6 +297,11 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(res.user));
         localStorage.setItem(STORAGE_KEYS.TOKEN, res.token);
         setIsLoginModalOpen(false);
+        if (res.user?.role === 'technician') {
+          setAdminTab('calendar');
+        } else {
+          setAdminTab('dashboard');
+        }
         setCurrentView('admin');
         return { success: true };
       } else {
@@ -330,6 +344,11 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           setUsers(prev => prev.map(u => u.id === matchedUser.id ? { ...u, lastLogin: new Date().toISOString() } : u));
           
           setIsLoginModalOpen(false);
+          if (safeUser.role === 'technician') {
+            setAdminTab('calendar');
+          } else {
+            setAdminTab('dashboard');
+          }
           setCurrentView('admin');
           return { success: true };
         }
@@ -535,13 +554,32 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         title: 'Levantamiento para 8 Cámaras 4K',
         clientName: 'Lic. Patricia Guzmán',
         clientPhone: '809-555-0144',
-        address: 'Residencial Las Palmas Real, Bella Vista',
+        address: 'Residencial Las Palmas Real, Bella Vista, Santo Domingo',
         date: new Date().toISOString().slice(0, 10),
         time: '10:00 AM',
+        durationMinutes: 60,
         type: 'levantamiento',
         assignedTechnician: 'Rafael Martínez',
+        assignedTechnicianId: 'usr-01',
         status: 'scheduled',
         serviceCategory: 'camaras',
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: 'vis-2',
+        title: 'Instalación y Calibración de Motores de Portón',
+        clientName: 'Don Luis Morales / Almacén Central',
+        clientPhone: '809-555-0811',
+        address: 'Av. John F. Kennedy #88, Gazcue, Santo Domingo',
+        date: new Date().toISOString().slice(0, 10),
+        time: '02:30 PM',
+        durationMinutes: 90,
+        type: 'instalacion',
+        assignedTechnician: 'Carlos Gómez',
+        assignedTechnicianId: 'usr-02',
+        assignedTechnicianEmail: 'tecnico@martineztech.com',
+        status: 'scheduled',
+        serviceCategory: 'motores',
         createdAt: new Date().toISOString()
       }
     ];
@@ -955,6 +993,22 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     setQuotes(prev => [newQuote, ...prev]);
 
+    // Update client totalDeals if client exists
+    if (newQuote.clientId || newQuote.clientName) {
+      setClients(prev => prev.map(c => {
+        const isMatch = (newQuote.clientId && c.id === newQuote.clientId) ||
+          (c.name.toLowerCase() === newQuote.clientName.toLowerCase()) ||
+          (c.phone && newQuote.clientPhone && c.phone === newQuote.clientPhone);
+        if (isMatch) {
+          return {
+            ...c,
+            totalDeals: (c.totalDeals || 0) + 1
+          };
+        }
+        return c;
+      }));
+    }
+
     if (newQuote.dealId) {
       setDeals(prev => prev.map(d => {
         if (d.id === newQuote.dealId) {
@@ -1204,6 +1258,22 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       createdAt: new Date().toISOString()
     };
     setPayments(prev => [newPayment, ...prev]);
+
+    // Update client totalSpent if client exists
+    if (newPayment.clientName) {
+      setClients(prev => prev.map(c => {
+        const isMatch = (c.name.toLowerCase() === newPayment.clientName.toLowerCase()) ||
+          (c.phone && newPayment.clientPhone && c.phone === newPayment.clientPhone);
+        if (isMatch) {
+          return {
+            ...c,
+            totalSpent: (c.totalSpent || 0) + (newPayment.amount || 0)
+          };
+        }
+        return c;
+      }));
+    }
+
     logActivity(
       'payment_registered',
       'payment',
@@ -1660,6 +1730,48 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         };
         setCompanySettings(updatedSettings);
       }
+    }
+
+    // Auto-create payment receipt if initial payment/abono was recorded
+    if (newInvoice.amountPaid && Number(newInvoice.amountPaid) > 0) {
+      const nextPayNum = payments.length + 1;
+      const autoPayment: Payment = {
+        id: `pay-inv-${newInvoice.id}`,
+        receiptNumber: `REC-2026-${String(nextPayNum).padStart(3, '0')}`,
+        quoteId: newInvoice.quoteId,
+        quoteNumber: newInvoice.quoteNumber,
+        invoiceId: newInvoice.id,
+        invoiceNcf: newInvoice.ncf,
+        dealId: newInvoice.dealId,
+        dealCode: newInvoice.dealCode,
+        clientName: newInvoice.clientName,
+        clientPhone: newInvoice.clientPhone,
+        amount: Number(newInvoice.amountPaid),
+        currency: newInvoice.currency,
+        date: newInvoice.date,
+        paymentMethod: newInvoice.paymentMethod,
+        concept: `Abono a Factura Fiscal ${newInvoice.invoiceNumber} (${newInvoice.ncf})`,
+        notes: newInvoice.notes || 'Abono registrado automáticamente al emitir comprobante fiscal.',
+        createdBy: newInvoice.createdBy,
+        createdAt: new Date().toISOString()
+      };
+      setPayments(prev => [autoPayment, ...prev]);
+    }
+
+    // Update client totalSpent
+    if (newInvoice.clientName || newInvoice.clientId) {
+      setClients(prev => prev.map(c => {
+        const isMatch = (newInvoice.clientId && c.id === newInvoice.clientId) ||
+          (c.name.toLowerCase() === newInvoice.clientName.toLowerCase()) ||
+          (c.phone && newInvoice.clientPhone && c.phone === newInvoice.clientPhone);
+        if (isMatch) {
+          return {
+            ...c,
+            totalSpent: (c.totalSpent || 0) + (newInvoice.amountPaid || 0)
+          };
+        }
+        return c;
+      }));
     }
 
     if (invoiceData.quoteId) {

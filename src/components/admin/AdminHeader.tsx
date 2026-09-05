@@ -156,13 +156,29 @@ export const AdminHeader: React.FC = () => {
     });
   }
 
+  // Filter counts for technician vs admin
+  const calendarBadgeCount = isTechnician && currentUser
+    ? visits.filter(v => 
+        ((v.assignedTechnicianId && v.assignedTechnicianId === currentUser.id) ||
+        (v.assignedTechnician && v.assignedTechnician.toLowerCase() === currentUser.name.toLowerCase())) &&
+        v.status !== 'completed' && v.status !== 'cancelled'
+      ).length
+    : visits.length;
+
+  const workOrdersBadgeCount = isTechnician && currentUser
+    ? workOrders.filter(w => 
+        w.assignedTechnician && w.assignedTechnician.toLowerCase().includes(currentUser.name.toLowerCase()) &&
+        w.status !== 'completed'
+      ).length
+    : workOrders.length;
+
   // 2. Operaciones (Visible to All Roles)
   navGroups.push({
     id: 'operations',
     name: 'Operaciones',
     tabs: [
-      { id: 'work_orders', label: 'Órdenes de Trabajo', icon: Wrench, badge: workOrders.length },
-      { id: 'calendar', label: 'Agenda Técnica', icon: Calendar, badge: visits.length },
+      { id: 'work_orders', label: 'Órdenes de Trabajo', icon: Wrench, badge: workOrdersBadgeCount },
+      { id: 'calendar', label: 'Agenda Técnica', icon: Calendar, badge: calendarBadgeCount },
       { id: 'catalog', label: 'Catálogo & Precios', icon: Package },
     ]
   });

@@ -17,7 +17,18 @@ import {
   AlertTriangle,
   RotateCcw,
   CheckCircle2,
-  ShieldAlert
+  ShieldAlert,
+  Users,
+  ChevronUp,
+  ChevronDown,
+  Copy,
+  Sparkles,
+  Layers,
+  Search,
+  Boxes,
+  Wrench,
+  ShieldCheck,
+  AlertCircle
 } from 'lucide-react';
 import { 
   formatCurrency, 
@@ -26,8 +37,11 @@ import {
   saveDraft, 
   loadDraft, 
   clearDraft, 
-  RNCValidationResult 
+  RNCValidationResult,
+  roundToTwoDecimals
 } from '../../utils/formatters';
+import { CatalogPickerModal } from './quote-builder/CatalogPickerModal';
+import { QuoteTemplatesModal } from './quote-builder/QuoteTemplatesModal';
 
 export const QuoteBuilderModal: React.FC = () => {
   const { 
@@ -40,12 +54,16 @@ export const QuoteBuilderModal: React.FC = () => {
     setActiveQuoteForView, 
     catalog, 
     currentUser,
-    companySettings 
+    companySettings,
+    clients,
+    addClient
   } = useAppState();
 
   const canViewCosts = currentUser?.role === 'admin' || !currentUser?.role;
   const { showToast } = useToast();
 
+  const [clientId, setClientId] = useState<string>('');
+  const [saveToDirectory, setSaveToDirectory] = useState<boolean>(false);
   const [clientName, setClientName] = useState('');
   const [clientCompany, setClientCompany] = useState('');
   const [clientPhone, setClientPhone] = useState('');
@@ -73,9 +91,25 @@ export const QuoteBuilderModal: React.FC = () => {
   const [showCostMargin, setShowCostMargin] = useState(canViewCosts);
 
   const [selectedCatalogId, setSelectedCatalogId] = useState('');
+  const [isCatalogPickerOpen, setIsCatalogPickerOpen] = useState(false);
+  const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [draftRestoredAt, setDraftRestoredAt] = useState<string | null>(null);
   const [rncValidation, setRncValidation] = useState<RNCValidationResult>({ isValid: false, type: 'Inválido', formatted: '', message: '' });
+
+  const handleSelectClient = (cId: string) => {
+    setClientId(cId);
+    if (!cId) return;
+    const cl = clients.find(c => c.id === cId);
+    if (cl) {
+      setClientName(cl.name);
+      setClientCompany(cl.company || '');
+      setClientPhone(cl.phone);
+      setClientEmail(cl.email || '');
+      setClientRnc(cl.rnc || '');
+      setClientAddress(cl.address || '');
+    }
+  };
 
   // Dirty state tracking
   const isDirty = Boolean(
@@ -96,6 +130,7 @@ export const QuoteBuilderModal: React.FC = () => {
 
     const timer = setTimeout(() => {
       saveDraft('quote_builder', {
+        clientId,
         clientName,
         clientCompany,
         clientPhone,
@@ -122,6 +157,7 @@ export const QuoteBuilderModal: React.FC = () => {
     isQuoteModalOpen,
     activeQuoteForEdit,
     isDirty,
+    clientId,
     clientName,
     clientCompany,
     clientPhone,
@@ -148,6 +184,7 @@ export const QuoteBuilderModal: React.FC = () => {
       const draft = loadDraft<any>('quote_builder');
       if (draft && draft.data && (draft.data.clientName || draft.data.items?.length > 1)) {
         const d = draft.data;
+        setClientId(d.clientId || '');
         setClientName(d.clientName || '');
         setClientCompany(d.clientCompany || '');
         setClientPhone(d.clientPhone || '');
@@ -201,6 +238,7 @@ export const QuoteBuilderModal: React.FC = () => {
 
   useEffect(() => {
     if (activeQuoteForEdit) {
+      setClientId(activeQuoteForEdit.clientId || '');
       setClientName(activeQuoteForEdit.clientName);
       setClientCompany(activeQuoteForEdit.clientCompany || '');
       setClientPhone(activeQuoteForEdit.clientPhone);
@@ -219,7 +257,9 @@ export const QuoteBuilderModal: React.FC = () => {
       setWarrantyNotes(activeQuoteForEdit.warrantyNotes || companySettings.defaultWarranty);
       setPaymentTerms(activeQuoteForEdit.paymentTerms || companySettings.defaultTerms);
       setNotes(activeQuoteForEdit.notes || '');
+      setSaveToDirectory(false);
     } else if (quoteDealPreload) {
+      setClientId(quoteDealPreload.clientId || '');
       setClientName(quoteDealPreload.clientName);
       setClientCompany(quoteDealPreload.clientType !== 'residential' ? quoteDealPreload.clientName : '');
       setClientPhone(quoteDealPreload.clientPhone);
@@ -253,7 +293,9 @@ export const QuoteBuilderModal: React.FC = () => {
       setWarrantyNotes(companySettings.defaultWarranty);
       setPaymentTerms(companySettings.defaultTerms);
       setNotes('');
+      setSaveToDirectory(false);
     } else if (!draftRestoredAt) {
+      setClientId('');
       setClientName('');
       setClientCompany('');
       setClientPhone('');
@@ -287,37 +329,74 @@ export const QuoteBuilderModal: React.FC = () => {
       setWarrantyNotes(companySettings.defaultWarranty);
       setPaymentTerms(companySettings.defaultTerms);
       setNotes('');
+      setSaveToDirectory(false);
     }
   }, [activeQuoteForEdit, quoteDealPreload, isQuoteModalOpen]);
 
-  if (!isQuoteModalOpen) return null;
+  // Keyboard shortcut Ctrl+Enter or Cmd+Enter to submit
+  useEffect(() => {
+    if (!isQuoteModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        const form = document.getElementById('quote-builder-form') as HTMLFormElement | null;
+        if (form) {
+          e.preventDefault();
+          form.requestSubmit();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isQuoteModalOpen]);
 
-  // Add Item from Catalog
+  // Add Item from Catalog Picker Modal
+  const handleAddItemFromPicker = (itemData: Omit<QuoteItem, 'id' | 'total'>, qty: number) => {
+    const newItem: QuoteItem = {
+      id: `item-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+      ...itemData,
+      quantity: qty,
+      total: roundToTwoDecimals(qty * itemData.unitPrice)
+    };
+    setItems(prev => [...prev, newItem]);
+    showToast(`"${itemData.name}" agregado al presupuesto`, 'success');
+  };
+
+  // Add Item from quick select
   const handleAddFromCatalog = () => {
     if (!selectedCatalogId) return;
     const catItem = catalog.find(c => c.id === selectedCatalogId);
     if (!catItem) return;
 
+    let effectivePrice = catItem.unitPrice;
+    let effectiveCost = catItem.costPrice || roundToTwoDecimals(catItem.unitPrice * 0.65);
+
+    if (currency === 'USD') {
+      const rate = companySettings.defaultExchangeRate || 60.50;
+      effectivePrice = roundToTwoDecimals(catItem.unitPrice / rate);
+      effectiveCost = roundToTwoDecimals(effectiveCost / rate);
+    }
+
     const newItem: QuoteItem = {
-      id: `item-${Date.now()}`,
+      id: `item-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
       productId: catItem.id,
       name: catItem.name,
       description: catItem.description,
       quantity: 1,
-      unitPrice: catItem.unitPrice,
-      costPrice: catItem.costPrice || Math.round(catItem.unitPrice * 0.65),
-      total: catItem.unitPrice,
+      unitPrice: effectivePrice,
+      costPrice: effectiveCost,
+      total: effectivePrice,
       type: catItem.type
     };
 
     setItems(prev => [...prev, newItem]);
     setSelectedCatalogId('');
+    showToast(`"${catItem.name}" agregado`, 'success');
   };
 
   // Add Empty Custom Item
   const handleAddItem = (type: QuoteItem['type'] = 'product') => {
     const newItem: QuoteItem = {
-      id: `item-${Date.now()}`,
+      id: `item-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
       name: '',
       description: '',
       quantity: 1,
@@ -329,12 +408,64 @@ export const QuoteBuilderModal: React.FC = () => {
     setItems(prev => [...prev, newItem]);
   };
 
+  // Move line item up or down
+  const handleMoveItem = (index: number, direction: 'up' | 'down') => {
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= items.length) return;
+    setItems(prev => {
+      const copy = [...prev];
+      const temp = copy[index];
+      copy[index] = copy[targetIndex];
+      copy[targetIndex] = temp;
+      return copy;
+    });
+  };
+
+  // Duplicate line item
+  const handleDuplicateItem = (id: string) => {
+    const index = items.findIndex(it => it.id === id);
+    if (index === -1) return;
+    const target = items[index];
+    const cloned: QuoteItem = {
+      ...target,
+      id: `item-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+      name: target.name ? `${target.name} (Copia)` : '',
+      total: roundToTwoDecimals((target.quantity || 1) * (target.unitPrice || 0))
+    };
+    setItems(prev => {
+      const copy = [...prev];
+      copy.splice(index + 1, 0, cloned);
+      return copy;
+    });
+    showToast('Partida duplicada exitosamente', 'info');
+  };
+
+  // Clear all items with confirmation
+  const handleClearAllItems = () => {
+    if (items.length === 0) return;
+    if (window.confirm('¿Seguro que deseas eliminar todas las partidas del presupuesto actual?')) {
+      setItems([]);
+      showToast('Todas las partidas han sido eliminadas', 'info');
+    }
+  };
+
+  // Apply bundle template
+  const handleApplyTemplate = (newItems: QuoteItem[], mode: 'append' | 'replace') => {
+    if (mode === 'replace') {
+      setItems(newItems);
+      showToast(`Plantilla aplicada (${newItems.length} partidas)`, 'success');
+    } else {
+      setItems(prev => [...prev, ...newItems]);
+      showToast(`${newItems.length} partidas agregadas desde la plantilla`, 'success');
+    }
+  };
+
   // Update Item
   const handleUpdateItem = (id: string, updates: Partial<QuoteItem>) => {
     setItems(prev => prev.map(item => {
       if (item.id === id) {
         const updated = { ...item, ...updates };
-        updated.total = (updated.quantity || 0) * (updated.unitPrice || 0);
+        updated.total = roundToTwoDecimals((updated.quantity || 0) * (updated.unitPrice || 0));
         return updated;
       }
       return item;
@@ -347,15 +478,15 @@ export const QuoteBuilderModal: React.FC = () => {
   };
 
   // Financial & Profit Margin Calculations
-  const subtotal = items.reduce((sum, item) => sum + (item.total || 0), 0);
-  const totalCost = items.reduce((sum, item) => sum + ((item.costPrice || 0) * (item.quantity || 1)), 0);
-  const discountAmount = Math.round((subtotal * (discountPercent || 0)) / 100);
-  const taxableAmount = Math.max(0, subtotal - discountAmount);
-  const taxAmount = applyTax ? Math.round((taxableAmount * (taxPercent || 18)) / 100) : 0;
-  const total = taxableAmount + taxAmount;
+  const subtotal = roundToTwoDecimals(items.reduce((sum, item) => sum + (item.total || 0), 0));
+  const totalCost = roundToTwoDecimals(items.reduce((sum, item) => sum + ((item.costPrice || 0) * (item.quantity || 1)), 0));
+  const discountAmount = roundToTwoDecimals((subtotal * (discountPercent || 0)) / 100);
+  const taxableAmount = roundToTwoDecimals(Math.max(0, subtotal - discountAmount));
+  const taxAmount = applyTax ? roundToTwoDecimals((taxableAmount * (taxPercent || 18)) / 100) : 0;
+  const total = roundToTwoDecimals(taxableAmount + taxAmount);
 
   // Margin Calculations (confidential for Admin)
-  const grossProfit = Math.max(0, taxableAmount - totalCost);
+  const grossProfit = roundToTwoDecimals(Math.max(0, taxableAmount - totalCost));
   const profitMarginPercent = taxableAmount > 0 ? Math.round((grossProfit / taxableAmount) * 100) : 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -365,11 +496,41 @@ export const QuoteBuilderModal: React.FC = () => {
       return;
     }
 
+    // Auto-save client to directory if checked and not already in directory
+    let effectiveClientId = clientId;
+    if (saveToDirectory && !clientId && clientName.trim() && clientPhone.trim()) {
+      const existingClient = clients.find(c => 
+        c.phone === clientPhone.trim() || c.name.toLowerCase() === clientName.trim().toLowerCase()
+      );
+      if (!existingClient) {
+        try {
+          const createdClient = await addClient({
+            name: clientName.trim(),
+            company: clientCompany.trim() || undefined,
+            phone: clientPhone.trim(),
+            email: clientEmail.trim() || undefined,
+            rnc: clientRnc.trim() || undefined,
+            address: clientAddress.trim() || 'Santo Domingo',
+            city: 'Santo Domingo',
+            type: clientCompany ? 'commercial' : 'residential'
+          });
+          if (createdClient?.id) {
+            effectiveClientId = createdClient.id;
+          }
+        } catch (err) {
+          console.warn('No se pudo guardar automáticamente el cliente:', err);
+        }
+      } else {
+        effectiveClientId = existingClient.id;
+      }
+    }
+
     let savedQuote: Quote;
 
     if (activeQuoteForEdit) {
       await updateQuote(activeQuoteForEdit.id, {
         dealId: selectedDealId || undefined,
+        clientId: effectiveClientId || undefined,
         clientName,
         clientCompany,
         clientPhone,
@@ -395,6 +556,7 @@ export const QuoteBuilderModal: React.FC = () => {
       });
       savedQuote = {
         ...activeQuoteForEdit,
+        clientId: effectiveClientId || undefined,
         clientName,
         total,
         items
@@ -402,6 +564,7 @@ export const QuoteBuilderModal: React.FC = () => {
     } else {
       savedQuote = await addQuote({
         dealId: selectedDealId || undefined,
+        clientId: effectiveClientId || undefined,
         clientName,
         clientCompany,
         clientPhone,
@@ -425,7 +588,7 @@ export const QuoteBuilderModal: React.FC = () => {
         deliveryTime,
         notes,
         status: 'sent',
-        createdBy: 'Rafael Martínez'
+        createdBy: currentUser?.name || 'Rafael Martínez'
       });
     }
 
@@ -435,6 +598,8 @@ export const QuoteBuilderModal: React.FC = () => {
     setIsQuoteModalOpen(false);
     setActiveQuoteForView(savedQuote);
   };
+
+  if (!isQuoteModalOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
@@ -532,12 +697,31 @@ export const QuoteBuilderModal: React.FC = () => {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form id="quote-builder-form" onSubmit={handleSubmit} className="space-y-6">
           
           {/* Client & Metadata Grid */}
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-300 dark:border-slate-800 space-y-4 shadow-sm">
-            <div className="text-xs font-bold text-brand-teal-800 dark:text-brand-teal-400 uppercase tracking-wider">
-              1. Datos del Cliente & Presupuesto
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="text-xs font-bold text-brand-teal-800 dark:text-brand-teal-400 uppercase tracking-wider">
+                1. Datos del Cliente & Presupuesto
+              </div>
+              {clients.length > 0 && (
+                <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-300 dark:border-slate-700 shadow-xs">
+                  <Users className="w-3.5 h-3.5 text-brand-teal-600 dark:text-brand-teal-400 flex-shrink-0" />
+                  <select
+                    value={clientId}
+                    onChange={(e) => handleSelectClient(e.target.value)}
+                    className="bg-transparent text-[11px] text-slate-800 dark:text-slate-200 font-semibold focus:outline-none cursor-pointer max-w-[240px] truncate"
+                  >
+                    <option value="">-- Cargar de Directorio de Clientes --</option>
+                    {clients.map(c => (
+                      <option key={c.id} value={c.id}>
+                        {c.name} {c.company ? `(${c.company})` : ''} - {c.phone}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -638,152 +822,298 @@ export const QuoteBuilderModal: React.FC = () => {
                 </select>
               </div>
             </div>
+
+            {!clientId && clientName.trim().length > 2 && (
+              <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={saveToDirectory}
+                    onChange={(e) => setSaveToDirectory(e.target.checked)}
+                    className="rounded border-slate-300 dark:border-slate-700 text-brand-teal-600"
+                  />
+                  <span>Guardar este contacto en el Directorio de Clientes al guardar cotización</span>
+                </label>
+                <span className="text-[10px] text-slate-500 italic hidden sm:inline">Se creará automáticamente en el directorio</span>
+              </div>
+            )}
           </div>
 
-          {/* Quick Catalog Adder */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-brand-teal-50 dark:bg-brand-teal-950/30 p-3.5 rounded-xl border-2 border-brand-teal-300 dark:border-brand-teal-500/30 shadow-sm">
-            <div className="flex items-center gap-2 flex-1">
-              <Package className="w-4 h-4 text-brand-teal-700 dark:text-brand-teal-400 flex-shrink-0" />
-              <select
-                value={selectedCatalogId}
-                onChange={(e) => setSelectedCatalogId(e.target.value)}
-                className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-medium focus:outline-none focus:border-brand-teal-500"
-              >
-                <option value="">-- Agregar ítem rápido desde el Catálogo Martínez Tech --</option>
-                {catalog.map(c => {
-                  const isPhysical = c.type === 'product' || c.type === 'material';
-                  const stockText = isPhysical ? ` [Stock: ${c.stock ?? 0}${c.stock === 0 ? ' - AGOTADO' : ''}]` : '';
-                  return (
+          {/* Modern Catalog & Templates Action Bar */}
+          <div className="p-3.5 rounded-2xl bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-2xs space-y-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-2.5">
+              <div className="flex items-center gap-2 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setIsCatalogPickerOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-black text-xs shadow-xs transition-all"
+                >
+                  <Package className="w-4 h-4" />
+                  <span>Explorar Catálogo</span>
+                  <span className="px-1.5 py-0.5 rounded-full bg-white/20 text-[10px] font-mono">
+                    {catalog.length}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsTemplatesModalOpen(true)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs shadow-xs transition-all"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>Paquetes & Plantillas</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleAddItem('product')}
+                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs border border-slate-200 dark:border-slate-700 shadow-2xs transition-colors"
+                >
+                  <Plus className="w-4 h-4 text-brand-teal-600 dark:text-brand-teal-400" />
+                  <span>+ Fila Manual</span>
+                </button>
+              </div>
+
+              {/* In-line Quick Selector Dropdown for power users */}
+              <div className="flex items-center gap-1.5 flex-1 min-w-[240px] max-w-md">
+                <select
+                  value={selectedCatalogId}
+                  onChange={(e) => {
+                    setSelectedCatalogId(e.target.value);
+                  }}
+                  className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-brand-teal-500 truncate"
+                >
+                  <option value="">-- Inserción rápida desde catálogo --</option>
+                  {catalog.map(c => (
                     <option key={c.id} value={c.id}>
-                      [{c.type.toUpperCase()}]{stockText} {c.name} - Venta: {formatCurrency(c.unitPrice, currency)} {canViewCosts && c.costPrice ? `(Costo: ${formatCurrency(c.costPrice, currency)})` : ''}
+                      [{c.type.toUpperCase()}] {c.name} - {formatCurrency(c.unitPrice, currency)}
                     </option>
-                  );
-                })}
-              </select>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={handleAddFromCatalog}
+                  disabled={!selectedCatalogId}
+                  className="px-2.5 py-1.5 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-bold text-xs disabled:opacity-40 shrink-0"
+                  title="Insertar ítem seleccionado"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
-            <button
-              type="button"
-              onClick={handleAddFromCatalog}
-              disabled={!selectedCatalogId}
-              className="px-4 py-2 rounded-lg bg-brand-teal-600 hover:bg-brand-teal-500 disabled:opacity-50 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-sm border border-brand-teal-700/20"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Agregar al Presupuesto</span>
-            </button>
           </div>
 
           {/* Itemized Table */}
           <div className="space-y-3">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
                 <FileText className="w-4 h-4 text-brand-green-600 dark:text-brand-green-400" />
-                2. Detalle de Equipos, Materiales y Mano de Obra ({items.length})
+                <span>2. Detalle de Equipos, Materiales y Mano de Obra</span>
+                <span className="px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono text-[11px] font-bold">
+                  {items.length} {items.length === 1 ? 'partida' : 'partidas'}
+                </span>
               </div>
               
               <div className="flex items-center gap-3">
+                {items.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={handleClearAllItems}
+                    className="text-[11px] text-slate-400 hover:text-rose-500 font-bold flex items-center gap-1 transition-colors"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                    <span>Vaciar lista</span>
+                  </button>
+                )}
+
                 {canViewCosts && (
                   <button
                     type="button"
                     onClick={() => setShowCostMargin(!showCostMargin)}
-                    className="text-[11px] text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-bold"
+                    className="text-[11px] text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 font-bold flex items-center gap-1"
                   >
-                    {showCostMargin ? 'Ocultar Costos' : 'Mostrar Costos'}
+                    {showCostMargin ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                    <span>{showCostMargin ? 'Ocultar Costos' : 'Mostrar Costos'}</span>
                   </button>
                 )}
-                <button
-                  type="button"
-                  onClick={() => handleAddItem()}
-                  className="text-xs text-brand-teal-700 dark:text-brand-teal-400 hover:underline font-bold flex items-center gap-1"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>+ Fila Personalizada</span>
-                </button>
               </div>
             </div>
 
-            <div className="space-y-2.5">
-              {items.map((item, idx) => (
-                <div 
-                  key={item.id}
-                  className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700/80 grid grid-cols-12 gap-2.5 items-center shadow-sm"
-                >
-                  <div className="col-span-1 text-center font-mono text-xs text-slate-500 font-bold">
-                    #{idx + 1}
-                  </div>
-
-                  <div className={`space-y-1 ${(showCostMargin && canViewCosts) ? 'col-span-11 sm:col-span-4' : 'col-span-11 sm:col-span-6'}`}>
-                    <input
-                      type="text"
-                      placeholder="Nombre del equipo o servicio"
-                      value={item.name}
-                      onChange={(e) => handleUpdateItem(item.id, { name: e.target.value })}
-                      className="w-full px-2.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-brand-teal-500"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Descripción técnica o detalles (opcional)"
-                      value={item.description || ''}
-                      onChange={(e) => handleUpdateItem(item.id, { description: e.target.value })}
-                      className="w-full px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-900/60 border border-slate-300 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 focus:outline-none focus:border-brand-teal-500"
-                    />
-                  </div>
-
-                  <div className="col-span-4 sm:col-span-1 space-y-0.5">
-                    <span className="text-[10px] font-bold text-slate-600 block sm:hidden">Cant.</span>
-                    <input
-                      type="number"
-                      min="1"
-                      placeholder="Cant"
-                      value={item.quantity}
-                      onChange={(e) => handleUpdateItem(item.id, { quantity: Number(e.target.value) })}
-                      className="w-full px-2 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-center text-slate-900 dark:text-white font-bold focus:outline-none focus:border-brand-teal-500"
-                    />
-                  </div>
-
-                  {(showCostMargin && canViewCosts) && (
-                    <div className="col-span-4 sm:col-span-2 space-y-0.5">
-                      <span className="text-[10px] font-bold text-slate-500 block sm:hidden">Costo Unit.</span>
-                      <input
-                        type="number"
-                        min="0"
-                        placeholder="Costo"
-                        value={item.costPrice ?? 0}
-                        onChange={(e) => handleUpdateItem(item.id, { costPrice: Number(e.target.value) })}
-                        className="w-full px-2 py-1.5 rounded bg-amber-50/70 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/60 text-xs text-right text-amber-900 dark:text-amber-300 font-mono font-bold focus:outline-none focus:border-amber-500"
-                        title="Costo de compra interno"
-                      />
-                    </div>
-                  )}
-
-                  <div className={`space-y-0.5 ${showCostMargin ? 'col-span-4 sm:col-span-2' : 'col-span-4 sm:col-span-2'}`}>
-                    <span className="text-[10px] font-bold text-slate-600 block sm:hidden">Precio Venta</span>
-                    <input
-                      type="number"
-                      min="0"
-                      step="10"
-                      placeholder="Precio"
-                      value={item.unitPrice}
-                      onChange={(e) => handleUpdateItem(item.id, { unitPrice: Number(e.target.value) })}
-                      className="w-full px-2.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-right text-slate-900 dark:text-white font-mono font-bold focus:outline-none focus:border-brand-teal-500"
-                    />
-                  </div>
-
-                  <div className={`flex items-center justify-between gap-1 ${showCostMargin ? 'col-span-12 sm:col-span-2' : 'col-span-4 sm:col-span-2'}`}>
-                    <div className="text-right font-black text-brand-teal-800 dark:text-brand-teal-300 text-xs font-mono truncate">
-                      {formatCurrency(item.total, currency)}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteItem(item.id)}
-                      className="p-1 rounded text-slate-400 hover:text-rose-500"
-                      title="Eliminar fila"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+            {items.length === 0 ? (
+              <div className="p-8 text-center rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30 space-y-3">
+                <Package className="w-8 h-8 text-slate-400 mx-auto" />
+                <div>
+                  <p className="text-sm font-bold text-slate-700 dark:text-slate-300">
+                    No hay partidas en este presupuesto
+                  </p>
+                  <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1">
+                    Usa <strong>Explorar Catálogo</strong> para agregar productos o <strong>Paquetes & Plantillas</strong> para insertar soluciones completas.
+                  </p>
                 </div>
-              ))}
-            </div>
+                <div className="flex items-center justify-center gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => setIsCatalogPickerOpen(true)}
+                    className="px-3.5 py-1.5 rounded-lg bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-xs"
+                  >
+                    Abrir Catálogo
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleAddItem('product')}
+                    className="px-3.5 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs"
+                  >
+                    + Fila Manual
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                {items.map((item, idx) => {
+                  const typeColors = {
+                    product: 'text-cyan-700 bg-cyan-50 dark:text-cyan-300 dark:bg-cyan-950/50 border-cyan-300 dark:border-cyan-800',
+                    material: 'text-amber-700 bg-amber-50 dark:text-amber-300 dark:bg-amber-950/50 border-amber-300 dark:border-amber-800',
+                    labor: 'text-emerald-700 bg-emerald-50 dark:text-emerald-300 dark:bg-emerald-950/50 border-emerald-300 dark:border-emerald-800',
+                    service: 'text-purple-700 bg-purple-50 dark:text-purple-300 dark:bg-purple-950/50 border-purple-300 dark:border-purple-800'
+                  };
+
+                  return (
+                    <div 
+                      key={item.id}
+                      className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700/80 grid grid-cols-12 gap-2.5 items-center shadow-2xs hover:border-slate-400 dark:hover:border-slate-600 transition-colors"
+                    >
+                      {/* Reorder and Index Column */}
+                      <div className="col-span-1 flex items-center gap-1 justify-center">
+                        <div className="flex flex-col items-center">
+                          <button
+                            type="button"
+                            disabled={idx === 0}
+                            onClick={() => handleMoveItem(idx, 'up')}
+                            className="p-0.5 rounded text-slate-400 hover:text-slate-700 dark:hover:text-white disabled:opacity-20 disabled:hover:text-slate-400"
+                            title="Subir orden"
+                          >
+                            <ChevronUp className="w-3.5 h-3.5" />
+                          </button>
+                          <span className="font-mono text-[11px] text-slate-500 font-black leading-none">
+                            #{idx + 1}
+                          </span>
+                          <button
+                            type="button"
+                            disabled={idx === items.length - 1}
+                            onClick={() => handleMoveItem(idx, 'down')}
+                            className="p-0.5 rounded text-slate-400 hover:text-slate-700 dark:hover:text-white disabled:opacity-20 disabled:hover:text-slate-400"
+                            title="Bajar orden"
+                          >
+                            <ChevronDown className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Name, Description & Type */}
+                      <div className={`space-y-1 ${(showCostMargin && canViewCosts) ? 'col-span-11 sm:col-span-4' : 'col-span-11 sm:col-span-5'}`}>
+                        <div className="flex items-center gap-1.5">
+                          <select
+                            value={item.type || 'product'}
+                            onChange={(e) => handleUpdateItem(item.id, { type: e.target.value as QuoteItem['type'] })}
+                            className={`text-[10px] font-bold px-1.5 py-0.5 rounded border focus:outline-none cursor-pointer ${typeColors[item.type || 'product']}`}
+                          >
+                            <option value="product">Equipo</option>
+                            <option value="material">Material</option>
+                            <option value="labor">Mano de Obra</option>
+                            <option value="service">Servicio</option>
+                          </select>
+                          <input
+                            type="text"
+                            placeholder="Nombre del equipo o partida"
+                            value={item.name}
+                            onChange={(e) => handleUpdateItem(item.id, { name: e.target.value })}
+                            className="flex-1 px-2.5 py-1 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-brand-teal-500"
+                          />
+                        </div>
+                        <input
+                          type="text"
+                          placeholder="Descripción técnica, marca o especificaciones (opcional)"
+                          value={item.description || ''}
+                          onChange={(e) => handleUpdateItem(item.id, { description: e.target.value })}
+                          className="w-full px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-900/60 border border-slate-300 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 focus:outline-none focus:border-brand-teal-500"
+                        />
+                      </div>
+
+                      {/* Quantity */}
+                      <div className="col-span-4 sm:col-span-1 space-y-0.5">
+                        <span className="text-[10px] font-bold text-slate-500 block sm:hidden">Cant.</span>
+                        <input
+                          type="number"
+                          min="1"
+                          placeholder="Cant"
+                          value={item.quantity}
+                          onChange={(e) => handleUpdateItem(item.id, { quantity: Math.max(1, Number(e.target.value)) })}
+                          className="w-full px-1.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-center text-slate-900 dark:text-white font-bold focus:outline-none focus:border-brand-teal-500 font-mono"
+                        />
+                      </div>
+
+                      {/* Unit Cost (Admin Only) */}
+                      {(showCostMargin && canViewCosts) && (
+                        <div className="col-span-4 sm:col-span-2 space-y-0.5">
+                          <span className="text-[10px] font-bold text-slate-500 block sm:hidden">Costo Unit.</span>
+                          <input
+                            type="number"
+                            min="0"
+                            step="any"
+                            placeholder="Costo"
+                            value={item.costPrice ?? 0}
+                            onChange={(e) => handleUpdateItem(item.id, { costPrice: Number(e.target.value) })}
+                            className="w-full px-2 py-1.5 rounded bg-amber-50/70 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/60 text-xs text-right text-amber-900 dark:text-amber-300 font-mono font-bold focus:outline-none focus:border-amber-500"
+                            title="Costo de compra interno"
+                          />
+                        </div>
+                      )}
+
+                      {/* Sale Price */}
+                      <div className={`space-y-0.5 ${showCostMargin ? 'col-span-4 sm:col-span-2' : 'col-span-4 sm:col-span-2'}`}>
+                        <span className="text-[10px] font-bold text-slate-500 block sm:hidden">Precio Venta</span>
+                        <input
+                          type="number"
+                          min="0"
+                          step="any"
+                          placeholder="Precio"
+                          value={item.unitPrice}
+                          onChange={(e) => handleUpdateItem(item.id, { unitPrice: Number(e.target.value) })}
+                          className="w-full px-2.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-right text-slate-900 dark:text-white font-mono font-bold focus:outline-none focus:border-brand-teal-500"
+                        />
+                      </div>
+
+                      {/* Total & Action Buttons */}
+                      <div className={`flex items-center justify-between gap-1.5 ${showCostMargin ? 'col-span-12 sm:col-span-2' : 'col-span-4 sm:col-span-3'}`}>
+                        <div className="text-right font-black text-brand-teal-800 dark:text-brand-teal-300 text-xs font-mono truncate flex-1">
+                          {formatCurrency(item.total, currency)}
+                        </div>
+                        
+                        <div className="flex items-center gap-0.5 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => handleDuplicateItem(item.id)}
+                            className="p-1 rounded text-slate-400 hover:text-brand-teal-600 dark:hover:text-brand-teal-400 transition-colors"
+                            title="Duplicar esta partida"
+                          >
+                            <Copy className="w-3.5 h-3.5" />
+                          </button>
+                          
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteItem(item.id)}
+                            className="p-1 rounded text-slate-400 hover:text-rose-500 transition-colors"
+                            title="Eliminar partida"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Terms & Financials Grid */}
@@ -896,21 +1226,48 @@ export const QuoteBuilderModal: React.FC = () => {
 
               {/* Cost & Profit Margin Analysis (Confidential for Admin) */}
               {(showCostMargin && canViewCosts) && (
-                <div className="border border-amber-300/80 dark:border-amber-700/60 bg-amber-50/60 dark:bg-amber-950/30 p-3 rounded-lg space-y-2 text-xs">
+                <div className="border border-amber-300/80 dark:border-amber-700/60 bg-amber-50/60 dark:bg-amber-950/30 p-3.5 rounded-xl space-y-2.5 text-xs">
                   <div className="flex items-center justify-between text-[11px] font-bold text-amber-900 dark:text-amber-300 uppercase">
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center gap-1.5">
                       <TrendingUp className="w-3.5 h-3.5" />
                       <span>Rentabilidad Interna (Admin)</span>
                     </span>
                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                       profitMarginPercent >= 35 
-                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                        ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700'
                         : profitMarginPercent >= 20
-                        ? 'bg-amber-100 text-amber-800 border border-amber-300'
-                        : 'bg-rose-100 text-rose-800 border border-rose-300'
+                        ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-700'
+                        : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700'
                     }`}>
                       {profitMarginPercent}% Margen
                     </span>
+                  </div>
+
+                  {/* Health Meter Bar */}
+                  <div className="space-y-1">
+                    <div className="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                      <div 
+                        className={`h-full rounded-full transition-all duration-300 ${
+                          profitMarginPercent >= 35 
+                            ? 'bg-emerald-500' 
+                            : profitMarginPercent >= 20 
+                            ? 'bg-amber-500' 
+                            : 'bg-rose-500'
+                        }`}
+                        style={{ width: `${Math.min(100, Math.max(0, profitMarginPercent))}%` }}
+                      />
+                    </div>
+                    <div className="flex justify-between text-[10px] text-slate-500">
+                      <span>0%</span>
+                      <span className="font-semibold">
+                        {profitMarginPercent >= 35 
+                          ? 'Margen Óptimo' 
+                          : profitMarginPercent >= 20 
+                          ? 'Margen Estándar' 
+                          : 'Margen Ajustado / Riesgoso'}
+                      </span>
+                      <span>100%</span>
+                    </div>
                   </div>
 
                   <div className="flex justify-between text-[11px] text-slate-600 dark:text-slate-400">
@@ -922,8 +1279,15 @@ export const QuoteBuilderModal: React.FC = () => {
 
                   <div className="flex justify-between text-xs font-black text-emerald-800 dark:text-emerald-400 pt-1 border-t border-amber-200 dark:border-amber-800/60">
                     <span>Ganancia Bruta Estimada:</span>
-                    <span className="font-mono">+{formatCurrency(grossProfit, currency)}</span>
+                    <span className="font-mono font-black">+{formatCurrency(grossProfit, currency)}</span>
                   </div>
+
+                  {profitMarginPercent < 20 && taxableAmount > 0 && (
+                    <div className="p-2 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 text-[10px] text-rose-700 dark:text-rose-300 flex items-start gap-1.5">
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5 text-rose-500" />
+                      <span>Margen de ganancia inferior al 20% recomendado. Evalúa reducir el descuento o verificar costos de compra.</span>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -931,26 +1295,58 @@ export const QuoteBuilderModal: React.FC = () => {
           </div>
 
           {/* Form Actions */}
-          <div className="pt-4 border-t-2 border-slate-200 dark:border-slate-800 flex items-center justify-end gap-3">
-            <button
-              type="button"
-              onClick={() => setIsQuoteModalOpen(false)}
-              className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-300 text-xs font-semibold border border-slate-300 dark:border-slate-700"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 hover:from-brand-teal-400 hover:to-brand-green-400 text-slate-950 font-black text-xs shadow-md border border-brand-teal-600/30 flex items-center gap-2"
-            >
-              <Save className="w-4 h-4" />
-              <span>Guardar y Ver Cotización Membretada</span>
-            </button>
+          <div className="pt-4 border-t-2 border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 hidden sm:flex">
+              <span>Atajo:</span>
+              <kbd className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[10px] text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-bold">
+                Ctrl + Enter
+              </kbd>
+              <span>para guardar</span>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setIsQuoteModalOpen(false)}
+                className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-300 text-xs font-semibold border border-slate-300 dark:border-slate-700"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 hover:from-brand-teal-400 hover:to-brand-green-400 text-slate-950 font-black text-xs shadow-md border border-brand-teal-600/30 flex items-center gap-2 transition-all hover:shadow-lg"
+              >
+                <Save className="w-4 h-4" />
+                <span>Guardar y Ver Cotización Membretada</span>
+              </button>
+            </div>
           </div>
 
         </form>
 
       </div>
+
+      {/* Catalog Picker Modal */}
+      <CatalogPickerModal
+        isOpen={isCatalogPickerOpen}
+        onClose={() => setIsCatalogPickerOpen(false)}
+        catalog={catalog}
+        currency={currency}
+        exchangeRate={companySettings.defaultExchangeRate || 60.50}
+        canViewCosts={canViewCosts}
+        onAddItem={handleAddItemFromPicker}
+      />
+
+      {/* Quote Templates Modal */}
+      <QuoteTemplatesModal
+        isOpen={isTemplatesModalOpen}
+        onClose={() => setIsTemplatesModalOpen(false)}
+        currency={currency}
+        exchangeRate={companySettings.defaultExchangeRate || 60.50}
+        currentItems={items}
+        onApplyTemplate={handleApplyTemplate}
+      />
+
     </div>
   );
 };

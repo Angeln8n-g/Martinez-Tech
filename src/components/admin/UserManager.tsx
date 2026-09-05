@@ -48,6 +48,12 @@ export const UserManager: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formError, setFormError] = useState('');
 
+  // Technician schedule fields
+  const [workDays, setWorkDays] = useState<number[]>([1, 2, 3, 4, 5, 6]);
+  const [startTime, setStartTime] = useState('08:00');
+  const [endTime, setEndTime] = useState('18:00');
+  const [maxVisitsPerDay, setMaxVisitsPerDay] = useState(6);
+
   // Password reset modal state
   const [newPassword, setNewPassword] = useState('');
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -64,6 +70,10 @@ export const UserManager: React.FC = () => {
     setActive(true);
     setFormError('');
     setShowPassword(false);
+    setWorkDays([1, 2, 3, 4, 5, 6]);
+    setStartTime('08:00');
+    setEndTime('18:00');
+    setMaxVisitsPerDay(6);
     setIsModalOpen(true);
   };
 
@@ -78,6 +88,10 @@ export const UserManager: React.FC = () => {
     setActive(u.active !== false);
     setFormError('');
     setShowPassword(false);
+    setWorkDays(u.schedule?.workDays || [1, 2, 3, 4, 5, 6]);
+    setStartTime(u.schedule?.startTime || '08:00');
+    setEndTime(u.schedule?.endTime || '18:00');
+    setMaxVisitsPerDay(u.schedule?.maxVisitsPerDay || 6);
     setIsModalOpen(true);
   };
 
@@ -111,6 +125,15 @@ export const UserManager: React.FC = () => {
       return;
     }
 
+    const scheduleData = (role === 'technician' || role === 'admin') ? {
+      workDays,
+      startTime,
+      endTime,
+      lunchStart: '12:00',
+      lunchEnd: '13:00',
+      maxVisitsPerDay
+    } : undefined;
+
     try {
       if (editingUser) {
         await updateUser(editingUser.id, {
@@ -120,7 +143,8 @@ export const UserManager: React.FC = () => {
           phone: phone.trim(),
           password: password.trim() || editingUser.password,
           active,
-          avatar: name.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+          avatar: name.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2),
+          schedule: scheduleData
         });
       } else {
         await addUser({
@@ -130,7 +154,8 @@ export const UserManager: React.FC = () => {
           phone: phone.trim(),
           password: password.trim() || '123456',
           active,
-          avatar: name.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+          avatar: name.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2),
+          schedule: scheduleData
         });
       }
       setIsModalOpen(false);
@@ -613,6 +638,92 @@ export const UserManager: React.FC = () => {
                   </button>
                 </div>
               </div>
+
+              {/* Technician Schedule Settings */}
+              {(role === 'technician' || role === 'admin') && (
+                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <Calendar className="w-4 h-4 text-brand-teal-600 dark:text-brand-teal-400" />
+                      <span>Horario Laboral & Disponibilidad Técnica</span>
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-mono">Agenda CRM</span>
+                  </div>
+
+                  {/* Work Days selector */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                      Días Laborables Habituales
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        { id: 1, label: 'Lun' },
+                        { id: 2, label: 'Mar' },
+                        { id: 3, label: 'Mié' },
+                        { id: 4, label: 'Jue' },
+                        { id: 5, label: 'Vie' },
+                        { id: 6, label: 'Sáb' },
+                        { id: 0, label: 'Dom' },
+                      ].map(d => {
+                        const isSelected = workDays.includes(d.id);
+                        return (
+                          <button
+                            key={d.id}
+                            type="button"
+                            onClick={() => {
+                              if (isSelected) {
+                                setWorkDays(workDays.filter(x => x !== d.id));
+                              } else {
+                                setWorkDays([...workDays, d.id]);
+                              }
+                            }}
+                            className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors ${
+                              isSelected
+                                ? 'bg-brand-teal-600 text-white shadow-2xs'
+                                : 'bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-600'
+                            }`}
+                          >
+                            {d.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Shift Hours */}
+                  <div className="grid grid-cols-3 gap-2.5">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400">Hora Entrada</label>
+                      <input
+                        type="time"
+                        value={startTime}
+                        onChange={(e) => setStartTime(e.target.value)}
+                        className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-xs font-mono font-bold text-slate-900 dark:text-white"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400">Hora Salida</label>
+                      <input
+                        type="time"
+                        value={endTime}
+                        onChange={(e) => setEndTime(e.target.value)}
+                        className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-xs font-mono font-bold text-slate-900 dark:text-white"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-slate-600 dark:text-slate-400">Máx. Citas/Día</label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={15}
+                        value={maxVisitsPerDay}
+                        onChange={(e) => setMaxVisitsPerDay(parseInt(e.target.value, 10) || 6)}
+                        className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-xs font-mono font-bold text-slate-900 dark:text-white text-center"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Active Toggle */}
               <div className="flex items-center gap-2 pt-1">

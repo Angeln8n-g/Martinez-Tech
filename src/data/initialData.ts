@@ -41,6 +41,7 @@ export const initialCompanySettings: CompanySettings = {
   ],
   defaultTaxPercent: 18,
   defaultCurrency: 'DOP',
+  defaultExchangeRate: 60.50,
   defaultWarranty: '1 año de garantía en equipos nuevos y 6 meses en mano de obra e instalación.',
   defaultTerms: 'Forma de pago: 60% de anticipo para inicio de trabajos y pedido de equipos, 40% contra entrega y conformidad de funcionamiento. Validez de la cotización: 15 días.',
   logoUrl: '/logo.png',
@@ -767,18 +768,34 @@ export const initialUsers: User[] = [
     avatar: 'RM',
     password: 'admin',
     active: true,
-    createdAt: '2025-01-10'
+    createdAt: '2025-01-10',
+    schedule: {
+      workDays: [1, 2, 3, 4, 5, 6],
+      startTime: '08:00',
+      endTime: '18:00',
+      lunchStart: '12:00',
+      lunchEnd: '13:00',
+      maxVisitsPerDay: 6
+    }
   },
   {
     id: 'usr-02',
-    name: 'Manuel Gómez',
+    name: 'Carlos Gómez',
     email: 'tecnico@martineztech.com',
     role: 'technician',
     phone: '(809) 555-0188',
-    avatar: 'MG',
+    avatar: 'CG',
     password: 'tecnico',
     active: true,
-    createdAt: '2025-02-01'
+    createdAt: '2025-02-01',
+    schedule: {
+      workDays: [1, 2, 3, 4, 5, 6],
+      startTime: '08:00',
+      endTime: '18:00',
+      lunchStart: '12:00',
+      lunchEnd: '13:00',
+      maxVisitsPerDay: 6
+    }
   }
 ];
 

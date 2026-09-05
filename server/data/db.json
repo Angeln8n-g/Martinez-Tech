@@ -7,7 +7,15 @@
       "password": "admin123",
       "role": "admin",
       "phone": "(809) 555-0199",
-      "avatar": "RM"
+      "avatar": "RM",
+      "schedule": {
+        "workDays": [1, 2, 3, 4, 5, 6],
+        "startTime": "08:00",
+        "endTime": "18:00",
+        "lunchStart": "12:00",
+        "lunchEnd": "13:00",
+        "maxVisitsPerDay": 6
+      }
     },
     {
       "id": "usr-02",
@@ -16,11 +24,53 @@
       "password": "tecnico123",
       "role": "technician",
       "phone": "(829) 555-4422",
-      "avatar": "CG"
+      "avatar": "CG",
+      "schedule": {
+        "workDays": [1, 2, 3, 4, 5, 6],
+        "startTime": "08:00",
+        "endTime": "18:00",
+        "lunchStart": "12:00",
+        "lunchEnd": "13:00",
+        "maxVisitsPerDay": 6
+      }
     }
   ],
   "payments": [],
-  "visits": [],
+  "visits": [
+    {
+      "id": "vis-1",
+      "title": "Levantamiento para 8 Cámaras 4K",
+      "clientName": "Lic. Patricia Guzmán",
+      "clientPhone": "809-555-0144",
+      "address": "Residencial Las Palmas Real, Bella Vista, Santo Domingo",
+      "date": "2026-03-01",
+      "time": "10:00 AM",
+      "durationMinutes": 60,
+      "type": "levantamiento",
+      "assignedTechnician": "Rafael Martínez",
+      "assignedTechnicianId": "usr-01",
+      "status": "scheduled",
+      "serviceCategory": "camaras",
+      "createdAt": "2026-03-01T09:00:00Z"
+    },
+    {
+      "id": "vis-2",
+      "title": "Instalación y Calibración de Motores de Portón",
+      "clientName": "Don Luis Morales / Almacén Central",
+      "clientPhone": "809-555-0811",
+      "address": "Av. John F. Kennedy #88, Gazcue, Santo Domingo",
+      "date": "2026-03-01",
+      "time": "02:30 PM",
+      "durationMinutes": 90,
+      "type": "instalacion",
+      "assignedTechnician": "Carlos Gómez",
+      "assignedTechnicianId": "usr-02",
+      "assignedTechnicianEmail": "tecnico@martineztech.com",
+      "status": "scheduled",
+      "serviceCategory": "motores",
+      "createdAt": "2026-03-01T10:00:00Z"
+    }
+  ],
   "workOrders": [],
   "deals": [],
   "quotes": [],

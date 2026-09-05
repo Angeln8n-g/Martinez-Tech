@@ -102,6 +102,8 @@ export const FiscalInvoicesList: React.FC = () => {
       else if (inv.paymentMethod === 'tarjeta') formaPagoDGII = '03';
       else if (inv.paymentStatus === 'pending') formaPagoDGII = '04';
 
+      const rate = inv.currency === 'USD' ? (inv.exchangeRate || 60.50) : 1;
+
       return [
         rncClean || '000000000',
         tipoId,
@@ -110,8 +112,8 @@ export const FiscalInvoicesList: React.FC = () => {
         '01', // Tipo ingreso: 01 = Ingresos por operaciones (no financieros)
         cleanDate,
         '', // Fecha retencion
-        (inv.subtotal - (inv.discountAmount || 0)).toFixed(2),
-        (inv.taxAmount || 0).toFixed(2),
+        ((inv.subtotal - (inv.discountAmount || 0)) * rate).toFixed(2),
+        ((inv.taxAmount || 0) * rate).toFixed(2),
         '0.00', // ITBIS Retenido
         '0.00', // ITBIS Percibido
         '0.00', // ISR Retenido

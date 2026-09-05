@@ -1,8 +1,14 @@
 import { DealStage, PriorityLevel, ServiceCategory, Quote, CompanySettings } from '../types';
 
+export const roundToTwoDecimals = (num: number): number => {
+  if (isNaN(num)) return 0;
+  return Math.round((num + Number.EPSILON) * 100) / 100;
+};
+
 export const formatCurrency = (amount: number, currency: 'DOP' | 'USD' = 'DOP'): string => {
   const prefix = currency === 'USD' ? 'USD $' : 'RD$ ';
-  return `${prefix}${amount.toLocaleString('es-DO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const cleanAmount = isNaN(amount) ? 0 : amount;
+  return `${prefix}${cleanAmount.toLocaleString('es-DO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 };
 
 export const formatDate = (dateString?: string): string => {

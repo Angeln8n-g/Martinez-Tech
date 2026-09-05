@@ -1,4 +1,4 @@
-﻿# Product
+# Product
 
 <!-- impeccable:product-schema 1 -->
 
@@ -31,9 +31,15 @@ Solución integral adaptada al flujo de trabajo real de integración tecnológic
 - **Stack**: React 18, TypeScript, Vite, Tailwind CSS, Express (Node.js backend), jsPDF / html2canvas.
 - **Módulos Clave**:
   - Web pública con estimador de presupuestos interactivo y catálogo por categorías.
+  - Portal web interactivo de propuestas para clientes con URL única y aprobación en línea.
   - Firma digital interactiva en pantalla (canvas táctil/mouse) con estampado en PDF.
-  - Gestión de Conduces y Órdenes de Trabajo con comparador fotográfico Antes/Después y visor lightbox.
-  - CRM comercial con control de etapas, cálculo automático de impuestos (ITBIS/IVA) y márgenes de ganancia.
+  - Facturación fiscal con comprobantes NCF (B01, B02, B14, B15), validador algorítmico de RNC/Cédula y generador normativo DGII 606, 607 (TXT/CSV) y 608.
+  - Control de inventario inteligente, bitácora Kardex, valuación de almacén y deducción automática de materiales.
+  - Gestión de Órdenes de Trabajo y Conduces con comparador fotográfico Antes/Después, visor lightbox y geolocalización GPS.
+  - CRM comercial con pipeline Kanban de 8 etapas, calculadora de rentabilidad confidencial y autoguardado de borradores.
+  - Búsqueda global instantánea con Command Palette tipo Spotlight (Ctrl + K).
+  - Bitácora inmutable de auditoría y trazabilidad (Audit Trail).
+  - Arquitectura PWA instalable con soporte offline-first (sw.js) y sincronización con Supabase Cloud.
   - Integración de mensajería WhatsApp contextualizada a 1 clic.
 
 ## Brand Commitments
@@ -45,9 +51,9 @@ Solución integral adaptada al flujo de trabajo real de integración tecnológic
 
 ## Evidence on Hand
 
-- Catálogo completo de servicios estructurado en src/data/ y componentes visuales en src/components/.
-- Presentación corporativa en presentacion_martinez_tech.html.
-- Formatos membretados de presupuestos y conduces con firma digital en src/components/quotes/ y src/components/delivery/.
+- Catálogo completo de servicios y componentes en src/components/ y src/context/.
+- Presentación corporativa ejecutiva interactiva en presentacion_martinez_tech.html (15 diapositivas).
+- Formatos membretados de presupuestos, conduces y facturas fiscales con firma digital en src/components/admin/ y src/components/public/.
 
 ## Product Principles
 

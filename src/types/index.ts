@@ -180,6 +180,7 @@ export interface CompanySettings {
   }[];
   defaultTaxPercent: number;
   defaultCurrency: 'DOP' | 'USD';
+  defaultExchangeRate?: number;
   defaultWarranty: string;
   defaultTerms: string;
   logoUrl: string;
@@ -227,6 +228,7 @@ export interface FiscalInvoice {
   taxAmount: number;
   total: number;
   currency: 'DOP' | 'USD';
+  exchangeRate?: number;
   paymentStatus: InvoicePaymentStatus;
   paymentMethod: PaymentMethod;
   amountPaid: number;
@@ -283,6 +285,15 @@ export interface InventoryMovement {
 
 export type UserRole = 'admin' | 'technician' | 'seller';
 
+export interface TechnicianSchedule {
+  workDays: number[]; // 0=Dom, 1=Lun, 2=Mar, 3=Mié, 4=Jue, 5=Vie, 6=Sáb
+  startTime: string; // "08:00"
+  endTime: string;   // "18:00"
+  lunchStart?: string; // "12:00"
+  lunchEnd?: string;   // "13:00"
+  maxVisitsPerDay?: number; // default: 6
+}
+
 export interface User {
   id: string;
   name: string;
@@ -294,6 +305,7 @@ export interface User {
   active?: boolean;
   createdAt?: string;
   lastLogin?: string;
+  schedule?: TechnicianSchedule;
 }
 
 export interface AuditLog {
@@ -315,6 +327,8 @@ export interface Payment {
   receiptNumber: string;
   quoteId?: string;
   quoteNumber?: string;
+  invoiceId?: string;
+  invoiceNcf?: string;
   dealId?: string;
   dealCode?: string;
   clientName: string;
@@ -344,8 +358,11 @@ export interface TechnicalVisit {
   address: string;
   date: string;
   time: string;
+  durationMinutes?: number;
   type: VisitType;
   assignedTechnician: string;
+  assignedTechnicianId?: string;
+  assignedTechnicianEmail?: string;
   status: VisitStatus;
   notes?: string;
   serviceCategory?: ServiceCategory;

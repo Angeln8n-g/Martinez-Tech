@@ -18,9 +18,10 @@ import {
   User, 
   DollarSign, 
   ShieldCheck,
-  AlertCircle
+  AlertCircle,
+  CheckCircle2
 } from 'lucide-react';
-import { formatCurrency, validateDominicanRNC, formatDominicanPhone } from '../../utils/formatters';
+import { formatCurrency, validateDominicanRNC, formatDominicanPhone, roundToTwoDecimals } from '../../utils/formatters';
 
 export const FiscalInvoiceModal: React.FC = () => {
   const { 
@@ -67,6 +68,7 @@ export const FiscalInvoiceModal: React.FC = () => {
   ]);
 
   const [currency, setCurrency] = useState<'DOP' | 'USD'>('DOP');
+  const [exchangeRate, setExchangeRate] = useState<number>(companySettings.defaultExchangeRate || 60.50);
   const [discountPercent, setDiscountPercent] = useState<number>(0);
   const [paymentStatus, setPaymentStatus] = useState<InvoicePaymentStatus>('pending');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('transferencia');
@@ -97,6 +99,7 @@ export const FiscalInvoiceModal: React.FC = () => {
       setDueDate(activeInvoiceForEdit.dueDate);
       setItems(activeInvoiceForEdit.items);
       setCurrency(activeInvoiceForEdit.currency);
+      setExchangeRate(activeInvoiceForEdit.exchangeRate || companySettings.defaultExchangeRate || 60.50);
       setDiscountPercent(activeInvoiceForEdit.discountPercent);
       setPaymentStatus(activeInvoiceForEdit.paymentStatus);
       setPaymentMethod(activeInvoiceForEdit.paymentMethod);
@@ -120,6 +123,7 @@ export const FiscalInvoiceModal: React.FC = () => {
       setDate(new Date().toISOString().slice(0, 10));
       setDueDate(new Date(Date.now() + 15 * 86400000).toISOString().slice(0, 10));
       setCurrency(invoiceQuotePreload.currency);
+      setExchangeRate(companySettings.defaultExchangeRate || 60.50);
       setDiscountPercent(invoiceQuotePreload.discountPercent || 0);
       setPaymentStatus('pending');
       setPaymentMethod('transferencia');
@@ -129,18 +133,20 @@ export const FiscalInvoiceModal: React.FC = () => {
       setQuoteNumber(invoiceQuotePreload.quoteNumber);
       setDealId(invoiceQuotePreload.dealId || '');
 
-      // Convert quote items
+      // Convert quote items respecting quote's tax configuration
+      const hasTax = invoiceQuotePreload.applyTax !== false;
+      const quoteTaxPercent = hasTax ? (invoiceQuotePreload.taxPercent || 18) : 0;
       const invoiceItems: InvoiceItem[] = invoiceQuotePreload.items.map((qi, idx) => {
         const itemSubtotal = qi.quantity * qi.unitPrice;
-        const itbis = itemSubtotal * 0.18;
+        const itbis = roundToTwoDecimals(itemSubtotal * (quoteTaxPercent / 100));
         return {
           id: `item-${idx + 1}`,
           description: `${qi.name}${qi.description ? ` - ${qi.description}` : ''}`,
           quantity: qi.quantity,
           unitPrice: qi.unitPrice,
-          taxPercent: 18,
+          taxPercent: quoteTaxPercent,
           taxAmount: itbis,
-          total: itemSubtotal + itbis
+          total: roundToTwoDecimals(itemSubtotal + itbis)
         };
       });
       setItems(invoiceItems.length ? invoiceItems : items);
@@ -169,6 +175,7 @@ export const FiscalInvoiceModal: React.FC = () => {
         }
       ]);
       setCurrency('DOP');
+      setExchangeRate(companySettings.defaultExchangeRate || 60.50);
       setDiscountPercent(0);
       setPaymentStatus('pending');
       setPaymentMethod('transferencia');
@@ -223,11 +230,11 @@ export const FiscalInvoiceModal: React.FC = () => {
     
     const qty = Number(item.quantity) || 0;
     const price = Number(item.unitPrice) || 0;
-    const itemSub = qty * price;
-    const itbis = itemSub * ((Number(item.taxPercent) || 18) / 100);
+    const itemSub = roundToTwoDecimals(qty * price);
+    const itbis = roundToTwoDecimals(itemSub * ((Number(item.taxPercent !== undefined ? item.taxPercent : 18)) / 100));
     
     item.taxAmount = itbis;
-    item.total = itemSub + itbis;
+    item.total = roundToTwoDecimals(itemSub + itbis);
     updated[index] = item;
     setItems(updated);
   };
@@ -237,13 +244,14 @@ export const FiscalInvoiceModal: React.FC = () => {
     setItems(items.filter((_, i) => i !== index));
   };
 
-  // Calculations
-  const subtotal = items.reduce((sum, item) => sum + (Number(item.quantity) * Number(item.unitPrice)), 0);
-  const discountAmount = subtotal * (discountPercent / 100);
-  const taxableAmount = Math.max(0, subtotal - discountAmount);
-  const taxAmount = taxableAmount * 0.18; // ITBIS 18%
-  const total = taxableAmount + taxAmount;
-  const balanceDue = Math.max(0, total - Number(amountPaid));
+  // Calculations with strict decimal precision
+  const subtotal = roundToTwoDecimals(items.reduce((sum, item) => sum + (Number(item.quantity || 0) * Number(item.unitPrice || 0)), 0));
+  const discountAmount = roundToTwoDecimals(subtotal * ((discountPercent || 0) / 100));
+  const taxableAmount = roundToTwoDecimals(Math.max(0, subtotal - discountAmount));
+  const discountFactor = (1 - (discountPercent || 0) / 100);
+  const taxAmount = roundToTwoDecimals(items.reduce((sum, item) => sum + (Number(item.taxAmount) || 0), 0) * discountFactor);
+  const total = roundToTwoDecimals(taxableAmount + taxAmount);
+  const balanceDue = roundToTwoDecimals(Math.max(0, total - Number(amountPaid || 0)));
 
   const getNcfTypeName = (type: NCFType) => {
     switch (type) {
@@ -305,6 +313,7 @@ export const FiscalInvoiceModal: React.FC = () => {
       taxAmount,
       total,
       currency,
+      exchangeRate: currency === 'USD' ? Number(exchangeRate || 60.50) : undefined,
       paymentStatus: balanceDue <= 0 ? 'paid' : (amountPaid > 0 ? 'partial' : paymentStatus),
       paymentMethod,
       amountPaid: Number(amountPaid),
@@ -506,7 +515,7 @@ export const FiscalInvoiceModal: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-1">
               <div className="space-y-1">
                 <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Fecha de Emisión</label>
                 <input
@@ -525,6 +534,36 @@ export const FiscalInvoiceModal: React.FC = () => {
                   className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono"
                 />
               </div>
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Moneda</label>
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value as 'DOP' | 'USD')}
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-semibold"
+                >
+                  <option value="DOP">DOP (RD$)</option>
+                  <option value="USD">USD (US$)</option>
+                </select>
+              </div>
+              {currency === 'USD' ? (
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+                    <span>Tasa Cambio (RD$)</span>
+                    <span className="text-[10px] text-amber-600 dark:text-amber-400 font-normal">DGII 607</span>
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="1"
+                    value={exchangeRate}
+                    onChange={(e) => setExchangeRate(parseFloat(e.target.value) || 60.50)}
+                    placeholder="60.50"
+                    className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-amber-300 dark:border-amber-700 text-xs text-slate-900 dark:text-white font-mono font-bold"
+                  />
+                </div>
+              ) : (
+                <div className="hidden md:block" />
+              )}
             </div>
           </div>
 
@@ -638,7 +677,9 @@ export const FiscalInvoiceModal: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Monto Abonado (RD$)</label>
+                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                    Monto Abonado ({currency === 'USD' ? 'US$' : 'RD$'})
+                  </label>
                   <input
                     type="number"
                     min="0"
@@ -649,6 +690,15 @@ export const FiscalInvoiceModal: React.FC = () => {
                   />
                 </div>
               </div>
+
+              {amountPaid > 0 && (
+                <div className="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 text-[11px] text-emerald-800 dark:text-emerald-300 flex items-start gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 mt-0.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <div>
+                    <span>Se registrará automáticamente un recibo oficial en <strong>Cobros y Pagos</strong> por <strong>{formatCurrency(amountPaid, currency)}</strong>.</span>
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-1">
                 <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Observaciones / Términos</label>
@@ -685,6 +735,13 @@ export const FiscalInvoiceModal: React.FC = () => {
                 <span>TOTAL GENERAL:</span>
                 <span className="font-mono text-emerald-600 dark:text-emerald-400">{formatCurrency(total, currency)}</span>
               </div>
+
+              {currency === 'USD' && (
+                <div className="flex justify-between items-center text-[11px] font-semibold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 p-2 rounded-lg border border-amber-200 dark:border-amber-800/60">
+                  <span>Equivalente Fiscal DGII (RD$ @ {exchangeRate.toFixed(2)}):</span>
+                  <span className="font-mono font-bold text-xs">{formatCurrency(roundToTwoDecimals(total * exchangeRate), 'DOP')}</span>
+                </div>
+              )}
 
               <div className="flex justify-between text-xs font-bold border-t border-dashed border-slate-200 dark:border-slate-700 pt-2">
                 <span className="text-slate-500">Balance Pendiente:</span>

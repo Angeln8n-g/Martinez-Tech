@@ -15,9 +15,13 @@ import {
   Phone,
   Eye,
   AlertTriangle,
-  LayoutGrid
+  LayoutGrid,
+  Calendar,
+  CheckCircle2,
+  Navigation,
+  MapPin
 } from 'lucide-react';
-import { formatCurrency, formatDate, getStageInfo, getPriorityBadge, getCategoryInfo } from '../../utils/formatters';
+import { formatCurrency, formatDate, getStageInfo, getPriorityBadge, getCategoryInfo, createWhatsAppUrl } from '../../utils/formatters';
 import { ModuleCardsGrid } from './ModuleCardsGrid';
 
 export const DashboardOverview: React.FC = () => {
@@ -26,12 +30,232 @@ export const DashboardOverview: React.FC = () => {
     quotes, 
     clients, 
     catalog,
+    visits,
+    workOrders,
+    currentUser,
     setAdminTab, 
     setIsDealModalOpen, 
     setActiveDealForEdit,
     setActiveQuoteForView,
     openNewQuoteForDeal 
   } = useAppState();
+
+  // If logged-in user is a Technician, render Operational Technician Dashboard
+  if (currentUser?.role === 'technician') {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const myVisits = visits.filter(v => 
+      (v.assignedTechnicianId && v.assignedTechnicianId === currentUser.id) ||
+      (v.assignedTechnician && v.assignedTechnician.toLowerCase() === currentUser.name.toLowerCase())
+    );
+    const todayVisits = myVisits.filter(v => v.date === todayStr);
+    const pendingVisits = myVisits.filter(v => v.status !== 'completed' && v.status !== 'cancelled');
+    const completedVisits = myVisits.filter(v => v.status === 'completed');
+    const myWorkOrders = workOrders.filter(w => 
+      w.assignedTechnician && w.assignedTechnician.toLowerCase().includes(currentUser.name.toLowerCase())
+    );
+
+    return (
+      <div className="space-y-8 animate-fadeIn">
+        {/* Technician Welcome Card */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-brand-teal-500/10 via-brand-green-500/10 to-white dark:to-slate-900 p-6 rounded-3xl border border-brand-teal-400/30 dark:border-slate-800 shadow-md">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-brand-teal-600 text-white font-black flex items-center justify-center text-xl shadow-lg">
+              {currentUser.avatar || currentUser.name.slice(0, 2).toUpperCase()}
+            </div>
+            <div>
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-brand-teal-100 dark:bg-brand-teal-900 text-brand-teal-800 dark:text-brand-teal-300">
+                Panel de Operaciones de Campo
+              </span>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+                ¡Bienvenido, {currentUser.name}!
+              </h2>
+              <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
+                Aquí tienes el control de tus visitas técnicas y órdenes de trabajo asignadas.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setAdminTab('calendar')}
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-md transition-all"
+            >
+              <Calendar className="w-4 h-4" />
+              <span>Ver mi Agenda Técnica</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Technician Operational KPI Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 space-y-2 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Citas para Hoy</span>
+              <div className="p-2 rounded-xl bg-brand-teal-50 dark:bg-brand-teal-950/80 text-brand-teal-600 dark:text-brand-teal-400">
+                <Calendar className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="text-3xl font-black text-slate-900 dark:text-white font-mono">{todayVisits.length}</div>
+            <div className="text-[11px] text-slate-500">Programadas para hoy</div>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 space-y-2 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Visitas Pendientes</span>
+              <div className="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/80 text-amber-600 dark:text-amber-400">
+                <Clock className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="text-3xl font-black text-amber-600 dark:text-amber-400 font-mono">{pendingVisits.length}</div>
+            <div className="text-[11px] text-slate-500">Por realizar o en camino</div>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 space-y-2 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Visitas Realizadas</span>
+              <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400">
+                <CheckCircle2 className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono">{completedVisits.length}</div>
+            <div className="text-[11px] text-slate-500">Completadas con éxito</div>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 space-y-2 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Órdenes de Trabajo</span>
+              <div className="p-2 rounded-xl bg-cyan-50 dark:bg-cyan-950/80 text-cyan-600 dark:text-cyan-400">
+                <Wrench className="w-4 h-4" />
+              </div>
+            </div>
+            <div className="text-3xl font-black text-cyan-600 dark:text-cyan-400 font-mono">{myWorkOrders.length}</div>
+            <div className="text-[11px] text-slate-500">Instalaciones asignadas</div>
+          </div>
+        </div>
+
+        {/* Next Assigned Visits List */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-8 bg-white dark:bg-slate-900 rounded-3xl border border-slate-300 dark:border-slate-800 p-6 shadow-md space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+              <div>
+                <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                  Mis Próximas Visitas Asignadas
+                </h3>
+                <p className="text-[11px] text-slate-500">Ordenadas cronológicamente para tu atención en campo</p>
+              </div>
+              <button
+                onClick={() => setAdminTab('calendar')}
+                className="text-xs text-brand-teal-700 dark:text-brand-teal-400 hover:underline font-bold"
+              >
+                Abrir Calendario &rarr;
+              </button>
+            </div>
+
+            {myVisits.length === 0 ? (
+              <div className="py-12 text-center text-xs text-slate-500 space-y-2">
+                <Calendar className="w-8 h-8 text-slate-400 mx-auto" />
+                <p>No tienes visitas técnicas asignadas en este momento.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {myVisits.slice(0, 5).map(visit => (
+                  <div
+                    key={visit.id}
+                    className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs"
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                          visit.status === 'completed'
+                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                            : visit.status === 'in_progress'
+                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300'
+                            : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                        }`}>
+                          {visit.status === 'completed' ? 'Realizada' : visit.status === 'in_progress' ? 'En Sitio' : 'Programada'}
+                        </span>
+                        <span className="text-xs font-mono font-bold text-brand-teal-800 dark:text-brand-teal-300">
+                          {formatDate(visit.date)} - {visit.time}
+                        </span>
+                      </div>
+                      <h4 className="text-xs font-black text-slate-900 dark:text-white">{visit.title}</h4>
+                      <div className="flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-400">
+                        <span>👤 {visit.clientName}</span>
+                        {visit.address && <span>📍 {visit.address}</span>}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0">
+                      {visit.address && (
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(visit.address)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-1 hover:bg-slate-200"
+                        >
+                          <Navigation className="w-3.5 h-3.5" />
+                          <span>GPS</span>
+                        </a>
+                      )}
+                      <button
+                        onClick={() => {
+                          const text = `¡Hola ${visit.clientName}! Le escribe ${currentUser.name} de Martínez Tech sobre su visita técnica pautada para el ${formatDate(visit.date)} a las ${visit.time}.`;
+                          window.open(createWhatsAppUrl(visit.clientPhone, text), '_blank');
+                        }}
+                        className="px-2.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-bold flex items-center gap-1"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" />
+                        <span>WhatsApp</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Work Orders Column */}
+          <div className="lg:col-span-4 bg-white dark:bg-slate-900 rounded-3xl border border-slate-300 dark:border-slate-800 p-6 shadow-md space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+              <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                Órdenes de Trabajo
+              </h3>
+              <button
+                onClick={() => setAdminTab('work_orders')}
+                className="text-xs text-cyan-600 hover:underline font-bold"
+              >
+                Ver todas ({myWorkOrders.length})
+              </button>
+            </div>
+
+            {myWorkOrders.length === 0 ? (
+              <div className="py-12 text-center text-xs text-slate-500 space-y-2">
+                <Wrench className="w-8 h-8 text-slate-400 mx-auto" />
+                <p>No tienes órdenes de trabajo activas asignadas.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {myWorkOrders.slice(0, 4).map(wo => (
+                  <div
+                    key={wo.id}
+                    onClick={() => setAdminTab('work_orders')}
+                    className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 cursor-pointer hover:border-cyan-500 transition-colors space-y-1"
+                  >
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-mono font-bold text-cyan-600">{wo.orderNumber}</span>
+                      <span className="text-[10px] text-slate-500">{formatDate(wo.scheduledDate)}</span>
+                    </div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white truncate">{wo.clientName}</div>
+                    <div className="text-[11px] text-slate-500 truncate">{wo.scopeOfWork}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const activeDeals = deals.filter(d => d.stage !== 'completed' && d.stage !== 'lost');
   const totalPipelineValue = activeDeals.reduce((sum, d) => sum + (d.estimatedValue || 0), 0);
