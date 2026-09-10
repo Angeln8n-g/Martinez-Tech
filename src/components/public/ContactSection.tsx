@@ -55,19 +55,20 @@ export const ContactSection: React.FC = () => {
   };
 
   return (
-    <section id="contacto" className="py-24 relative overflow-hidden bg-slate-100/60 dark:bg-slate-950 transition-colors duration-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="contacto" className="py-24 relative overflow-hidden bg-[#06080e] transition-colors border-t border-slate-900">
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/2 left-0 w-96 h-96 bg-nexablue-600/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Section Header */}
+        {/* Section Header - No eyebrow per craft rules */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-green-100 dark:bg-brand-green-500/10 border border-brand-green-300 dark:border-brand-green-500/20 text-brand-green-800 dark:text-brand-green-400 text-xs font-bold uppercase tracking-wider shadow-sm">
-            Estamos Listos Para Atenderte
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-            Contáctanos o Solicita una Visita Técnica
+          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+            Despliegue Técnico y Solicitud de Cotizaciones
           </h2>
-          <p className="text-slate-700 dark:text-slate-400 text-sm sm:text-base font-medium">
-            Envíanos un mensaje y te responderemos en menos de 30 minutos hábiles con asesoría personalizada.
+          <p className="text-slate-400 text-sm sm:text-base leading-relaxed font-normal">
+            Canal directo con nuestro centro de ingeniería y operaciones. Asesoría especializada y respuesta garantizada en menos de 30 minutos hábiles.
           </p>
         </div>
 
@@ -76,88 +77,89 @@ export const ContactSection: React.FC = () => {
           {/* Contact Info Cards (5 cols) */}
           <div className="lg:col-span-5 space-y-6">
             
-            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 space-y-6 shadow-md">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white border-b-2 border-slate-200 dark:border-slate-800 pb-3">
-                Información de Contacto
+            <div className="p-6 sm:p-7 rounded-2xl bg-[#0a0e18] border border-slate-800/90 space-y-6 shadow-xl">
+              <h3 className="text-lg font-black text-white border-b border-slate-800 pb-3 flex items-center justify-between">
+                <span>Información Técnica de Enlace</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               </h3>
 
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-brand-teal-50 dark:bg-brand-teal-500/10 border border-brand-teal-300 dark:border-brand-teal-500/20 flex items-center justify-center text-brand-teal-600 dark:text-brand-teal-400 flex-shrink-0 shadow-sm">
+                  <div className="w-10 h-10 rounded-xl bg-nexablue-500/10 border border-nexablue-500/20 flex items-center justify-center text-nexablue-400 flex-shrink-0 shadow-sm">
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-600 dark:text-slate-400 font-bold">Llámanos directamente</div>
-                    <a href={`tel:${companySettings.phone}`} className="text-sm font-bold text-slate-900 dark:text-white hover:text-brand-teal-600 dark:hover:text-brand-teal-300">
+                    <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Línea Directa</div>
+                    <a href={`tel:${companySettings.phone}`} className="text-sm font-bold text-white hover:text-nexablue-400 transition-colors">
                       {companySettings.phone}
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-300 dark:border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 flex-shrink-0 shadow-sm">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0 shadow-sm">
                     <MessageCircle className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-600 dark:text-slate-400 font-bold">WhatsApp Oficial</div>
+                    <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">WhatsApp Central</div>
                     <button 
                       onClick={handleWhatsApp}
-                      className="text-sm font-bold text-emerald-700 dark:text-emerald-400 hover:underline text-left block"
+                      className="text-sm font-bold text-emerald-400 hover:text-emerald-300 hover:underline text-left block"
                     >
-                      {companySettings.phone} (Chatear ahora)
+                      {companySettings.phone} (Chatear de inmediato)
                     </button>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-300 dark:border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 flex-shrink-0 shadow-sm">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 flex-shrink-0 shadow-sm">
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-600 dark:text-slate-400 font-bold">Correo Electrónico</div>
-                    <a href={`mailto:${companySettings.email}`} className="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-300">
+                    <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Correo Institucional</div>
+                    <a href={`mailto:${companySettings.email}`} className="text-sm font-bold text-white hover:text-nexablue-300 transition-colors">
                       {companySettings.email}
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400 flex-shrink-0 shadow-sm">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 flex-shrink-0 shadow-sm">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-600 dark:text-slate-400 font-bold">Ubicación y Cobertura</div>
-                    <div className="text-sm font-bold text-slate-900 dark:text-slate-200">
+                    <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Sede Operativa & Cobertura</div>
+                    <div className="text-sm font-bold text-slate-200">
                       {companySettings.address}
                     </div>
-                    <div className="text-xs text-brand-green-700 dark:text-brand-green-400 font-bold mt-0.5">
-                      {companySettings.city} (Servicio a nivel nacional)
+                    <div className="text-xs text-emerald-400 font-medium mt-0.5">
+                      {companySettings.city} · Cobertura y Despliegue Nacional
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-400 flex-shrink-0 shadow-sm">
+                  <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 flex-shrink-0 shadow-sm">
                     <Clock className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-600 dark:text-slate-400 font-bold">Horario de Operación</div>
-                    <div className="text-xs text-slate-800 dark:text-slate-300 font-medium">Lunes a Viernes: 8:00 AM - 6:00 PM</div>
-                    <div className="text-xs text-slate-800 dark:text-slate-300 font-medium">Sábados: 8:30 AM - 2:00 PM</div>
+                    <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Horario de Guardia Técnica</div>
+                    <div className="text-xs text-slate-300 font-medium">Lunes a Viernes: 8:00 AM - 6:00 PM</div>
+                    <div className="text-xs text-slate-300 font-medium">Sábados: 8:30 AM - 2:00 PM (Emergencias 24/7)</div>
                   </div>
                 </div>
 
                 {/* Social media connections */}
-                <div className="pt-3 border-t border-slate-200 dark:border-slate-800">
-                  <div className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">Canales Oficiales:</div>
+                <div className="pt-4 border-t border-slate-800">
+                  <div className="text-xs font-bold text-slate-300 mb-2.5 uppercase tracking-wider">Canales de Verificación:</div>
                   <div className="flex items-center gap-2 flex-wrap">
                     {companySettings.socialLinks?.instagram && (
                       <a
                         href={companySettings.socialLinks.instagram}
                         target="_blank"
                         rel="@martinez_.tech"
-                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-pink-600 hover:bg-pink-50 hover:border-pink-300 transition-all shadow-sm"
-                        title="Instagram"
+                        className="p-2.5 rounded-xl bg-[#06080e] border border-slate-800 text-pink-400 hover:text-pink-300 hover:border-pink-500/40 transition-all shadow-sm"
+                        title="Instagram @martinez_.tech"
                       >
                         <Instagram className="w-4 h-4" />
                       </a>
@@ -167,8 +169,8 @@ export const ContactSection: React.FC = () => {
                         href={companySettings.socialLinks.facebook}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-blue-600 hover:bg-blue-50 hover:border-blue-300 transition-all shadow-sm"
-                        title="Facebook"
+                        className="p-2.5 rounded-xl bg-[#06080e] border border-slate-800 text-blue-400 hover:text-blue-300 hover:border-blue-500/40 transition-all shadow-sm"
+                        title="Facebook NexaGate Security"
                       >
                         <Facebook className="w-4 h-4" />
                       </a>
@@ -178,8 +180,8 @@ export const ContactSection: React.FC = () => {
                         href={companySettings.socialLinks.tiktok}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white hover:bg-slate-200 transition-all shadow-sm flex items-center justify-center font-bold text-xs"
-                        title="TikTok"
+                        className="p-2.5 rounded-xl bg-[#06080e] border border-slate-800 text-white hover:border-slate-500 transition-all shadow-sm flex items-center justify-center font-bold text-xs"
+                        title="TikTok @martineztech"
                       >
                         <span className="font-mono text-[10px]">TT</span>
                       </a>
@@ -189,7 +191,7 @@ export const ContactSection: React.FC = () => {
                         href={companySettings.socialLinks.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sky-600 hover:bg-sky-50 hover:border-sky-300 transition-all shadow-sm"
+                        className="p-2.5 rounded-xl bg-[#06080e] border border-slate-800 text-sky-400 hover:text-sky-300 hover:border-sky-500/40 transition-all shadow-sm"
                         title="LinkedIn"
                       >
                         <Linkedin className="w-4 h-4" />
@@ -200,7 +202,7 @@ export const ContactSection: React.FC = () => {
                         href={companySettings.socialLinks.youtube}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-red-600 hover:bg-red-50 hover:border-red-300 transition-all shadow-sm"
+                        className="p-2.5 rounded-xl bg-[#06080e] border border-slate-800 text-red-400 hover:text-red-300 hover:border-red-500/40 transition-all shadow-sm"
                         title="YouTube"
                       >
                         <Youtube className="w-4 h-4" />
@@ -213,22 +215,22 @@ export const ContactSection: React.FC = () => {
             </div>
 
             {/* Direct WhatsApp Callout */}
-            <div className="p-6 rounded-2xl bg-emerald-50 dark:bg-gradient-to-r dark:from-emerald-950/80 dark:to-slate-900 border border-emerald-300 dark:border-emerald-500/30 space-y-3 shadow-md">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-emerald-950/60 to-[#0a0e18] border border-emerald-500/30 space-y-3 shadow-xl">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-emerald-100 dark:bg-emerald-500/20 border border-emerald-300 dark:border-emerald-500/30 flex items-center justify-center text-emerald-800 dark:text-emerald-400 shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-sm">
                   <MessageCircle className="w-5 h-5" />
                 </div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white">¿Tienes una urgencia o consulta rápida?</h4>
+                <h4 className="text-sm font-bold text-white">¿Requieres asistencia o cotización inmediata?</h4>
               </div>
-              <p className="text-xs text-slate-700 dark:text-slate-300 font-medium">
-                Escríbenos directamente a WhatsApp y te atenderemos al instante.
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Contacta directamente a nuestra guardia técnica por WhatsApp con despacho prioritario.
               </p>
               <button
                 onClick={handleWhatsApp}
-                className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-md border border-emerald-700/20"
+                className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-emerald-600/30 border border-emerald-400/30"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>Abrir Chat en WhatsApp</span>
+                <span>Iniciar Enlace Vía WhatsApp</span>
               </button>
             </div>
 
@@ -236,14 +238,14 @@ export const ContactSection: React.FC = () => {
 
           {/* Form (7 cols) */}
           <div className="lg:col-span-7">
-            <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-md dark:shadow-xl space-y-6">
+            <div className="p-6 sm:p-8 rounded-2xl bg-[#0a0e18] border border-slate-800/90 shadow-2xl space-y-6">
               
-              <div>
-                <h3 className="text-xl font-black text-slate-900 dark:text-white">
+              <div className="border-b border-slate-800 pb-4">
+                <h3 className="text-xl font-black text-white">
                   Formulario de Solicitud de Presupuesto
                 </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-medium">
-                  Completa los campos a continuación para agendar una visita técnica o recibir una cotización.
+                <p className="text-xs text-slate-400 mt-1">
+                  Completa los datos técnicos a continuación para agendar una evaluación en sitio o recibir tu cotización formal.
                 </p>
               </div>
 
@@ -252,8 +254,8 @@ export const ContactSection: React.FC = () => {
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-slate-800 dark:text-slate-300">
-                        Nombre completo o Empresa <span className="text-rose-500">*</span>
+                      <label className="text-xs font-bold text-slate-300">
+                        Nombre completo o Razón Social <span className="text-nexablue-400">*</span>
                       </label>
                       <input
                         type="text"
@@ -261,13 +263,13 @@ export const ContactSection: React.FC = () => {
                         placeholder="Ej. Ing. Juan Pérez / Empresa SRL"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                        className="w-full px-4 py-2.5 rounded-xl bg-[#06080e] border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-nexablue-500 focus:ring-1 focus:ring-nexablue-500/30 shadow-inner"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-slate-800 dark:text-slate-300">
-                        Teléfono / WhatsApp <span className="text-rose-500">*</span>
+                      <label className="text-xs font-bold text-slate-300">
+                        Teléfono / WhatsApp <span className="text-nexablue-400">*</span>
                       </label>
                       <input
                         type="tel"
@@ -275,14 +277,14 @@ export const ContactSection: React.FC = () => {
                         placeholder="Ej. (809) 555-1234"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                        className="w-full px-4 py-2.5 rounded-xl bg-[#06080e] border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-nexablue-500 focus:ring-1 focus:ring-nexablue-500/30 shadow-inner"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-slate-800 dark:text-slate-300">
+                      <label className="text-xs font-bold text-slate-300">
                         Correo Electrónico (Opcional)
                       </label>
                       <input
@@ -290,61 +292,61 @@ export const ContactSection: React.FC = () => {
                         placeholder="ejemplo@correo.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                        className="w-full px-4 py-2.5 rounded-xl bg-[#06080e] border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-nexablue-500 focus:ring-1 focus:ring-nexablue-500/30 shadow-inner"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-slate-800 dark:text-slate-300">
-                        Servicio Principal de Interés
+                      <label className="text-xs font-bold text-slate-300">
+                        Sistema o Especialidad de Interés
                       </label>
                       <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value as ServiceCategory)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white font-medium focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                        className="w-full px-4 py-2.5 rounded-xl bg-[#06080e] border border-slate-800 text-sm text-white font-medium focus:outline-none focus:border-nexablue-500 focus:ring-1 focus:ring-nexablue-500/30 shadow-inner"
                       >
-                        <option value="camaras">Cámaras de Vigilancia (CCTV/IP)</option>
-                        <option value="redes">Redes Informáticas & Wi-Fi</option>
-                        <option value="motores">Motores para Portón</option>
-                        <option value="cerraduras">Cerraduras Magnéticas</option>
-                        <option value="acceso">Control de Acceso Biométrico</option>
-                        <option value="ponchadores">Ponchadores de Asistencia</option>
-                        <option value="alarmas">Alarmas de Seguridad</option>
-                        <option value="intercom">Intercom & Video Porteros</option>
-                        <option value="otros">Múltiples / Otros Servicios</option>
+                        <option value="camaras" className="bg-[#0a0e18]">Cámaras de Seguridad CCTV & Analítica IP</option>
+                        <option value="redes" className="bg-[#0a0e18]">Cableado Estructurado & Wi-Fi Corporativo</option>
+                        <option value="motores" className="bg-[#0a0e18]">Automatización de Portones Eléctricos</option>
+                        <option value="cerraduras" className="bg-[#0a0e18]">Cerraduras Magnéticas & Control de Puertas</option>
+                        <option value="acceso" className="bg-[#0a0e18]">Control de Acceso Biométrico & RFID</option>
+                        <option value="ponchadores" className="bg-[#0a0e18]">Terminales de Asistencia Laboral</option>
+                        <option value="alarmas" className="bg-[#0a0e18]">Sistemas de Alarma & Intrusión Perimetral</option>
+                        <option value="intercom" className="bg-[#0a0e18]">Video Porteros & Intercom IP Multi-departamento</option>
+                        <option value="otros" className="bg-[#0a0e18]">Solución Integral / Múltiples Especialidades</option>
                       </select>
                     </div>
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-800 dark:text-slate-300">
-                      Dirección o Sector del Inmueble
+                    <label className="text-xs font-bold text-slate-300">
+                      Ubicación de Instalación o Sector
                     </label>
                     <input
                       type="text"
                       placeholder="Ej. Calle 5ta #18, Urb. Real, Santo Domingo"
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#06080e] border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-nexablue-500 focus:ring-1 focus:ring-nexablue-500/30 shadow-inner"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-800 dark:text-slate-300">
-                      Detalles o Comentarios Adicionales
+                    <label className="text-xs font-bold text-slate-300">
+                      Especificaciones o Requerimientos Técnicos
                     </label>
                     <textarea
                       rows={3}
-                      placeholder="Cuéntanos brevemente qué necesitas (ej. cuántas puertas, tipo de portón, metros de cableado, etc.)."
+                      placeholder="Describe tu requerimiento (ej. número de accesos, tipo de portón, metraje de cableado, almacenamiento requerido, etc.)."
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 resize-none shadow-sm"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#06080e] border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-nexablue-500 focus:ring-1 focus:ring-nexablue-500/30 resize-none shadow-inner"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 hover:from-brand-teal-400 hover:to-brand-green-400 text-slate-950 font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
+                    className="w-full py-3.5 px-6 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-glow-nexablue transition-all"
                   >
                     <Send className="w-4 h-4" />
                     <span>Enviar Solicitud de Presupuesto</span>
@@ -352,18 +354,18 @@ export const ContactSection: React.FC = () => {
 
                 </form>
               ) : (
-                <div className="p-6 rounded-xl bg-brand-green-50 dark:bg-brand-green-950/40 border border-brand-green-300 dark:border-brand-green-500/40 text-center space-y-4 animate-fadeIn shadow-sm">
-                  <div className="w-12 h-12 rounded-full bg-brand-green-100 dark:bg-brand-green-500/20 text-brand-green-700 dark:text-brand-green-400 flex items-center justify-center mx-auto">
+                <div className="p-8 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-center space-y-4 animate-fadeIn shadow-inner">
+                  <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/30">
                     <CheckCircle2 className="w-7 h-7" />
                   </div>
-                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">¡Gracias por contactar a Martínez Tech!</h4>
-                  <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 max-w-md mx-auto font-medium">
-                    Tu solicitud ha sido asignada a nuestro equipo técnico. Nos comunicaremos al número <strong className="text-brand-green-800 dark:text-brand-green-300">{phone}</strong> a la mayor brevedad.
+                  <h4 className="text-lg font-bold text-white">¡Solicitud Registrada Exitosamente!</h4>
+                  <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
+                    Tu requerimiento ha sido registrado en el sistema operativo de NexaGate Security. Nuestro equipo de soporte técnico te contactará al <strong className="text-emerald-400">{phone}</strong> a la mayor brevedad.
                   </p>
                   <button
                     type="button"
                     onClick={() => setSent(false)}
-                    className="px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 shadow-sm"
+                    className="px-4 py-2 rounded-lg bg-slate-900 text-slate-300 text-xs font-bold hover:bg-slate-800 border border-slate-700 shadow-sm"
                   >
                     Enviar otra consulta
                   </button>

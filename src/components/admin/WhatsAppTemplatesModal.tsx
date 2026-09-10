@@ -175,12 +175,12 @@ En *${cName}* trabajamos con altos estándares de calidad y su opinión es funda
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-3xl max-w-2xl w-full p-6 sm:p-7 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-5">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full p-6 sm:p-7 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-5">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-4">
+        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-300 dark:border-emerald-500/30 flex items-center justify-center text-emerald-700 dark:text-emerald-400 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 flex items-center justify-center text-emerald-700 dark:text-emerald-400 shadow-sm">
               <MessageCircle className="w-5 h-5" />
             </div>
             <div>
@@ -195,7 +195,7 @@ En *${cName}* trabajamos con altos estándares de calidad y su opinión es funda
 
           <button
             onClick={() => setIsWhatsAppModalOpen(false)}
-            className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-300 dark:border-slate-700"
+            className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-200 dark:border-slate-700 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -265,7 +265,7 @@ En *${cName}* trabajamos con altos estándares de calidad y su opinión es funda
         </div>
 
         {/* Recipient Details */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700 shadow-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 shadow-xs">
           <div className="space-y-1">
             <label className="text-xs font-bold text-slate-800 dark:text-slate-300">Destinatario / Cliente</label>
             <input
@@ -273,7 +273,7 @@ En *${cName}* trabajamos con altos estándares de calidad y su opinión es funda
               value={clientName}
               onChange={(e) => setClientName(e.target.value)}
               placeholder="Ej. Ing. Carlos Mendoza"
-              className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-semibold"
+              className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-semibold focus:border-emerald-500 focus:outline-none"
             />
           </div>
 
@@ -285,7 +285,7 @@ En *${cName}* trabajamos con altos estándares de calidad y su opinión es funda
               value={recipientPhone}
               onChange={(e) => setRecipientPhone(e.target.value)}
               placeholder="Ej. 809-555-1234"
-              className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono font-bold"
+              className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono font-bold focus:border-emerald-500 focus:outline-none"
             />
           </div>
         </div>
@@ -303,16 +303,16 @@ En *${cName}* trabajamos con altos estándares de calidad y su opinión es funda
             rows={10}
             value={messageText}
             onChange={(e) => setMessageText(e.target.value)}
-            className="w-full p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono leading-relaxed resize-none focus:outline-none focus:border-emerald-500 shadow-inner"
+            className="w-full p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono leading-relaxed resize-none focus:outline-none focus:border-emerald-500 shadow-inner"
           />
         </div>
 
         {/* Action Buttons */}
-        <div className="pt-2 border-t-2 border-slate-200 dark:border-slate-800 flex items-center justify-between flex-wrap gap-2">
+        <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between flex-wrap gap-2">
           <button
             type="button"
             onClick={handleCopyText}
-            className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-300 text-xs font-bold border border-slate-300 dark:border-slate-700 flex items-center gap-1.5 shadow-sm"
+            className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-300 text-xs font-bold border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 shadow-xs transition-colors"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
             <span>{copied ? '¡Texto Copiado!' : 'Copiar Mensaje'}</span>

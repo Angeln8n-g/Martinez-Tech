@@ -228,12 +228,12 @@ export const CommandPaletteModal: React.FC<{ isOpen: boolean; onClose: () => voi
       onClick={onClose}
     >
       <div 
-        className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh] animate-slideUp"
+        className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh] animate-slideUp"
         onClick={e => e.stopPropagation()}
       >
         {/* Search Header */}
         <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-200 dark:border-slate-800">
-          <Search className="w-5 h-5 text-brand-teal-600 dark:text-brand-teal-400 shrink-0" />
+          <Search className="w-5 h-5 text-nexablue-600 dark:text-nexablue-400 shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -254,7 +254,7 @@ export const CommandPaletteModal: React.FC<{ isOpen: boolean; onClose: () => voi
               <X className="w-4 h-4" />
             </button>
           )}
-          <span className="hidden sm:inline-block text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-300 dark:border-slate-700">
+          <span className="hidden sm:inline-block text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">
             ESC
           </span>
         </div>
@@ -279,15 +279,15 @@ export const CommandPaletteModal: React.FC<{ isOpen: boolean; onClose: () => voi
                   onMouseEnter={() => setSelectedIndex(idx)}
                   className={`flex items-center justify-between p-3 rounded-2xl cursor-pointer transition-all ${
                     isSelected
-                      ? 'bg-brand-teal-50 dark:bg-brand-teal-950/50 text-slate-900 dark:text-white'
+                      ? 'bg-nexablue-50 dark:bg-nexablue-950/40 text-slate-900 dark:text-white'
                       : 'hover:bg-slate-50 dark:hover:bg-slate-800/40 text-slate-700 dark:text-slate-300'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className={`p-2 rounded-xl border ${
                       isSelected 
-                        ? 'bg-brand-teal-500 text-slate-950 border-brand-teal-600' 
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-300 dark:border-slate-700'
+                        ? 'bg-nexablue-600 text-white border-nexablue-600 shadow-xs' 
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700'
                     }`}>
                       <Icon className="w-4 h-4 shrink-0" />
                     </div>
@@ -308,7 +308,7 @@ export const CommandPaletteModal: React.FC<{ isOpen: boolean; onClose: () => voi
                     <span className="text-[10px] uppercase font-bold text-slate-400 font-mono hidden sm:inline">
                       {item.group}
                     </span>
-                    <ArrowRight className={`w-3.5 h-3.5 ${isSelected ? 'text-brand-teal-600 dark:text-brand-teal-400 translate-x-0.5' : 'text-slate-300 dark:text-slate-700'} transition-transform`} />
+                    <ArrowRight className={`w-3.5 h-3.5 ${isSelected ? 'text-nexablue-600 dark:text-nexablue-400 translate-x-0.5' : 'text-slate-300 dark:text-slate-700'} transition-transform`} />
                   </div>
                 </div>
               );
@@ -320,11 +320,11 @@ export const CommandPaletteModal: React.FC<{ isOpen: boolean; onClose: () => voi
         <div className="px-5 py-2.5 bg-slate-50 dark:bg-slate-950/60 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-500 font-medium">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-[10px] font-mono font-bold">↑↓</kbd>
+              <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[10px] font-mono font-bold">↑↓</kbd>
               <span>Navegar</span>
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-[10px] font-mono font-bold">↵</kbd>
+              <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[10px] font-mono font-bold">↵</kbd>
               <span>Seleccionar</span>
             </span>
           </div>

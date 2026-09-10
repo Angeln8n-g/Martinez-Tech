@@ -117,7 +117,7 @@ export const PortfolioManager: React.FC = () => {
     <div className="space-y-6 animate-fadeIn">
       
       {/* Top Filter Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         
         <div className="flex items-center gap-3 flex-1 flex-wrap">
           <div className="relative flex-1 min-w-[240px]">
@@ -127,14 +127,14 @@ export const PortfolioManager: React.FC = () => {
               placeholder="Buscar proyectos en portafolio por título, cliente o ubicación..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-nexablue-500 shadow-xs"
             />
           </div>
 
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-brand-teal-500 shadow-sm"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-nexablue-500 shadow-xs"
           >
             <option value="all">Todas las Categorías</option>
             <option value="camaras">Cámaras de Vigilancia</option>
@@ -150,7 +150,7 @@ export const PortfolioManager: React.FC = () => {
 
         <button
           onClick={openNewModal}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-md border border-brand-teal-700/20"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm transition-all"
         >
           <Plus className="w-4 h-4" />
           <span>Publicar Nuevo Proyecto</span>
@@ -165,20 +165,20 @@ export const PortfolioManager: React.FC = () => {
           return (
             <div
               key={project.id}
-              className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all flex flex-col justify-between"
+              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
             >
-              <div className="relative h-48 bg-slate-100 dark:bg-slate-800 overflow-hidden border-b-2 border-slate-200 dark:border-slate-800">
+              <div className="relative h-48 bg-slate-100 dark:bg-slate-800 overflow-hidden border-b border-slate-200 dark:border-slate-800">
                 <img
                   src={project.images[0] || 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=800&q=80'}
                   alt={project.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute top-3 left-3 flex gap-2">
-                  <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold border shadow-sm ${catInfo.color}`}>
+                  <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold border shadow-xs ${catInfo.color}`}>
                     {catInfo.label}
                   </span>
                   {project.featured && (
-                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-400 text-amber-950 shadow-sm">
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-400 text-amber-950 shadow-xs">
                       Destacado
                     </span>
                   )}
@@ -198,7 +198,7 @@ export const PortfolioManager: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="pt-3 border-t-2 border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
                   <div className="text-[11px] text-slate-600 dark:text-slate-400 font-medium">
                     {project.equipmentInstalled?.length || 0} equipos instalados
                   </div>
@@ -206,7 +206,7 @@ export const PortfolioManager: React.FC = () => {
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => openEditModal(project)}
-                      className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
+                      className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors"
                       title="Editar"
                     >
                       <Edit className="w-4 h-4" />
@@ -217,7 +217,7 @@ export const PortfolioManager: React.FC = () => {
                           deletePortfolioProject(project.id);
                         }
                       }}
-                      className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-rose-100 text-rose-600 dark:text-rose-400 border border-slate-300 dark:border-slate-700"
+                      className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-rose-100 text-rose-600 dark:text-rose-400 border border-slate-200 dark:border-slate-700 transition-colors"
                       title="Eliminar"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -233,13 +233,13 @@ export const PortfolioManager: React.FC = () => {
       {/* Add / Edit Project Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-5">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-5">
             
             <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-3">
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                 {editingProject ? 'Editar Proyecto' : 'Publicar Nuevo Trabajo en Portafolio'}
               </h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-black dark:hover:text-white">
+              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-black dark:hover:text-white transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -254,7 +254,7 @@ export const PortfolioManager: React.FC = () => {
                   placeholder="Ej. Sistema CCTV 16 Cámaras 4K en Nave Industrial"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-xs focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -264,7 +264,7 @@ export const PortfolioManager: React.FC = () => {
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value as ServiceCategory)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-medium"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-medium focus:border-nexablue-500 focus:outline-none"
                   >
                     <option value="camaras">Cámaras de Vigilancia</option>
                     <option value="redes">Redes Informáticas</option>
@@ -285,7 +285,7 @@ export const PortfolioManager: React.FC = () => {
                     placeholder="Ej. Parque Logístico / Residencial"
                     value={client}
                     onChange={(e) => setClient(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-xs focus:border-nexablue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -299,7 +299,7 @@ export const PortfolioManager: React.FC = () => {
                     placeholder="Ej. San Isidro, Santo Domingo"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-xs focus:border-nexablue-500 focus:outline-none"
                   />
                 </div>
 
@@ -311,7 +311,7 @@ export const PortfolioManager: React.FC = () => {
                     placeholder="Ej. Febrero 2026"
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-xs focus:border-nexablue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -324,7 +324,7 @@ export const PortfolioManager: React.FC = () => {
                   placeholder="https://images.unsplash.com/..."
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono shadow-sm"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono shadow-xs focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -336,7 +336,7 @@ export const PortfolioManager: React.FC = () => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Detalles sobre los equipos instalados, alcance del proyecto y resultados..."
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none shadow-sm"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none shadow-xs focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -349,12 +349,12 @@ export const PortfolioManager: React.FC = () => {
                     value={equipInput}
                     onChange={(e) => setEquipInput(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddEquip(); } }}
-                    className="flex-1 px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                    className="flex-1 px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-xs focus:border-nexablue-500 focus:outline-none"
                   />
                   <button
                     type="button"
                     onClick={handleAddEquip}
-                    className="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
+                    className="px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 transition-colors"
                   >
                     + Agregar
                   </button>
@@ -364,7 +364,7 @@ export const PortfolioManager: React.FC = () => {
                   {equipmentInstalled.map((s, idx) => (
                     <span
                       key={idx}
-                      className="px-2.5 py-1 rounded-md text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700 flex items-center gap-1.5"
+                      className="px-2.5 py-1 rounded-md text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5"
                     >
                       <span>{s}</span>
                       <button
@@ -385,24 +385,24 @@ export const PortfolioManager: React.FC = () => {
                   id="featuredProject"
                   checked={featured}
                   onChange={(e) => setFeatured(e.target.checked)}
-                  className="rounded border-slate-300 text-brand-teal-600 focus:ring-brand-teal-500"
+                  className="rounded border-slate-300 text-nexablue-600 focus:ring-nexablue-500"
                 />
                 <label htmlFor="featuredProject" className="text-xs font-bold text-slate-800 dark:text-slate-300 cursor-pointer">
                   Destacar este proyecto en la portada del sitio web
                 </label>
               </div>
 
-              <div className="pt-3 border-t-2 border-slate-200 dark:border-slate-800 flex justify-end gap-2">
+              <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-lg bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-md border border-brand-teal-700/20"
+                  className="px-5 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm transition-all"
                 >
                   Guardar en Portafolio
                 </button>

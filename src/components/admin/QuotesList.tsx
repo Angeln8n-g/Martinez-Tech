@@ -135,23 +135,23 @@ export const QuotesList: React.FC = () => {
     <div className="space-y-6 animate-fadeIn">
       
       {/* Action Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="flex items-center gap-3 flex-1 flex-wrap">
           <div className="relative flex-1 min-w-[240px]">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Buscar por número de cotización, cliente o teléfono..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-nexablue-500 shadow-2xs"
             />
           </div>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-brand-teal-500 shadow-sm"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-nexablue-500 shadow-2xs"
           >
             <option value="all">Todos los Estados</option>
             <option value="sent">Enviadas</option>
@@ -167,7 +167,7 @@ export const QuotesList: React.FC = () => {
             setActiveQuoteForEdit(null);
             setIsQuoteModalOpen(true);
           }}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-md border border-brand-teal-700/20"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm border border-nexablue-700/30 active:scale-95 transition-all"
         >
           <Plus className="w-4 h-4" />
           <span>Elaborar Nuevo Presupuesto</span>
@@ -175,13 +175,13 @@ export const QuotesList: React.FC = () => {
       </div>
 
       {/* Quotes Table Container */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-2xl overflow-hidden shadow-md">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             
             {/* Table Header */}
             <thead>
-              <tr className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 font-bold uppercase text-[10px] tracking-wider border-b-2 border-slate-300 dark:border-slate-700">
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-800">
                 <th className="py-3.5 px-4">N° Cotización</th>
                 <th className="py-3.5 px-4">Cliente & Empresa</th>
                 <th className="py-3.5 px-4">Fecha Emisión</th>
@@ -207,10 +207,10 @@ export const QuotesList: React.FC = () => {
                   return (
                     <tr 
                       key={quote.id}
-                      className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group"
+                      className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors group"
                     >
                       {/* Quote Number */}
-                      <td className="py-3.5 px-4 font-mono font-bold text-brand-teal-800 dark:text-brand-teal-400">
+                      <td className="py-3.5 px-4 font-mono font-bold text-nexablue-600 dark:text-cyan-400">
                         {quote.quoteNumber}
                       </td>
 
@@ -286,8 +286,8 @@ export const QuotesList: React.FC = () => {
                               }}
                               className={`p-1.5 rounded-lg border transition-all ${
                                 actionMenuQuoteId === quote.id
-                                  ? 'bg-slate-200 dark:bg-slate-700 text-slate-950 dark:text-white border-slate-400'
-                                  : 'bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-slate-600 dark:text-slate-300 border-slate-300 dark:border-slate-700'
+                                  ? 'bg-slate-200 dark:bg-slate-700 text-slate-950 dark:text-white border-slate-300 dark:border-slate-600'
+                                  : 'bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700'
                               }`}
                               title="Más opciones comerciales y fiscales"
                             >
@@ -296,7 +296,7 @@ export const QuotesList: React.FC = () => {
 
                             {/* Dropdown Menu */}
                             {actionMenuQuoteId === quote.id && (
-                              <div className="absolute right-0 top-full mt-1.5 w-56 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl shadow-xl z-30 py-1.5 text-xs text-left animate-fadeIn">
+                              <div className="absolute right-0 top-full mt-1.5 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-30 py-1.5 text-xs text-left animate-fadeIn">
                                 <button
                                   type="button"
                                   onClick={() => {
@@ -317,7 +317,7 @@ export const QuotesList: React.FC = () => {
                                     setActionMenuQuoteId(null);
                                     openPaymentForQuote(quote);
                                   }}
-                                  className="w-full px-3.5 py-2 flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"
+                                  className="w-full px-3.5 py-2 flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium"
                                 >
                                   <DollarSign className="w-4 h-4 text-emerald-600" />
                                   <span>Registrar Cobro / Anticipo</span>
@@ -329,7 +329,7 @@ export const QuotesList: React.FC = () => {
                                     setActionMenuQuoteId(null);
                                     openNewInvoiceForQuote(quote);
                                   }}
-                                  className="w-full px-3.5 py-2 flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"
+                                  className="w-full px-3.5 py-2 flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium"
                                 >
                                   <Receipt className="w-4 h-4 text-amber-600" />
                                   <span>Emitir Factura Fiscal NCF</span>
@@ -342,9 +342,9 @@ export const QuotesList: React.FC = () => {
                                       setActionMenuQuoteId(null);
                                       handleCreateWorkOrder(quote);
                                     }}
-                                    className="w-full px-3.5 py-2 flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"
+                                    className="w-full px-3.5 py-2 flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium"
                                   >
-                                    <Wrench className="w-4 h-4 text-brand-green-600" />
+                                    <Wrench className="w-4 h-4 text-emerald-600" />
                                     <span>Generar Orden de Trabajo</span>
                                   </button>
                                 )}

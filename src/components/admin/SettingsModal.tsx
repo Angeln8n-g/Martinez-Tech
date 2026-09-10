@@ -135,10 +135,10 @@ export const SettingsModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl max-w-3xl w-full p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-6">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-3xl w-full p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-6">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-4">
+        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
           <div>
             <h3 className="text-xl font-black text-slate-900 dark:text-white">
               Configuración de la Empresa & Sistema
@@ -149,7 +149,7 @@ export const SettingsModal: React.FC = () => {
           </div>
           <button
             onClick={() => setIsSettingsModalOpen(false)}
-            className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-300 dark:border-slate-700"
+            className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-200 dark:border-slate-700 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -170,7 +170,7 @@ export const SettingsModal: React.FC = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-medium"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-medium focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -180,7 +180,7 @@ export const SettingsModal: React.FC = () => {
                   type="text"
                   value={legalName}
                   onChange={(e) => setLegalName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-medium"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-medium focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
             </div>
@@ -192,7 +192,7 @@ export const SettingsModal: React.FC = () => {
                   type="text"
                   value={rnc}
                   onChange={(e) => setRnc(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -202,7 +202,7 @@ export const SettingsModal: React.FC = () => {
                   type="text"
                   value={slogan}
                   onChange={(e) => setSlogan(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-medium"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-medium focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
             </div>
@@ -214,7 +214,7 @@ export const SettingsModal: React.FC = () => {
                   type="text"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -224,7 +224,7 @@ export const SettingsModal: React.FC = () => {
                   type="text"
                   value={whatsapp}
                   onChange={(e) => setWhatsapp(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -234,7 +234,7 @@ export const SettingsModal: React.FC = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
             </div>
@@ -246,7 +246,7 @@ export const SettingsModal: React.FC = () => {
                   type="text"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -256,14 +256,14 @@ export const SettingsModal: React.FC = () => {
                   type="text"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
             </div>
           </div>
 
           {/* Defaults for Quotes */}
-          <div className="space-y-3 pt-3 border-t-2 border-slate-200 dark:border-slate-800">
+          <div className="space-y-3 pt-3 border-t border-slate-200 dark:border-slate-800">
             <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
               2. Valores por Defecto para Cotizaciones
             </h4>
@@ -275,7 +275,7 @@ export const SettingsModal: React.FC = () => {
                   type="text"
                   value={defaultWarranty}
                   onChange={(e) => setDefaultWarranty(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -285,14 +285,14 @@ export const SettingsModal: React.FC = () => {
                   type="text"
                   value={defaultTerms}
                   onChange={(e) => setDefaultTerms(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
             </div>
           </div>
 
           {/* Bank Accounts for Invoices / Quotes */}
-          <div className="space-y-3 pt-3 border-t-2 border-slate-200 dark:border-slate-800">
+          <div className="space-y-3 pt-3 border-t border-slate-200 dark:border-slate-800">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                 3. Cuentas Bancarias para Transferencias
@@ -300,7 +300,7 @@ export const SettingsModal: React.FC = () => {
               <button
                 type="button"
                 onClick={handleAddBankAccount}
-                className="text-xs text-brand-teal-700 dark:text-brand-teal-400 hover:underline font-bold flex items-center gap-1"
+                className="text-xs text-nexablue-600 hover:text-nexablue-500 font-bold flex items-center gap-1"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>+ Agregar Cuenta</span>
@@ -309,14 +309,14 @@ export const SettingsModal: React.FC = () => {
 
             <div className="space-y-2">
               {bankAccounts.map((acc, idx) => (
-                <div key={idx} className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700/80 grid grid-cols-1 sm:grid-cols-12 gap-2 items-center shadow-sm">
+                <div key={idx} className="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 grid grid-cols-1 sm:grid-cols-12 gap-2 items-center shadow-xs">
                   <div className="sm:col-span-4">
                     <input
                       type="text"
                       placeholder="Banco"
                       value={acc.bank}
                       onChange={(e) => handleUpdateAccount(idx, 'bank', e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-bold"
+                      className="w-full px-2.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-bold focus:border-nexablue-500 focus:outline-none"
                     />
                   </div>
                   <div className="sm:col-span-4">
@@ -325,7 +325,7 @@ export const SettingsModal: React.FC = () => {
                       placeholder="Número de Cuenta"
                       value={acc.accountNumber}
                       onChange={(e) => handleUpdateAccount(idx, 'accountNumber', e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono font-bold"
+                      className="w-full px-2.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono font-bold focus:border-nexablue-500 focus:outline-none"
                     />
                   </div>
                   <div className="sm:col-span-3">
@@ -334,14 +334,14 @@ export const SettingsModal: React.FC = () => {
                       placeholder="Tipo de Cuenta"
                       value={acc.accountType}
                       onChange={(e) => handleUpdateAccount(idx, 'accountType', e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                      className="w-full px-2.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                     />
                   </div>
                   <div className="sm:col-span-1 text-right">
                     <button
                       type="button"
                       onClick={() => handleDeleteAccount(idx)}
-                      className="p-1 text-slate-400 hover:text-rose-500"
+                      className="p-1 text-slate-400 hover:text-rose-500 transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -352,7 +352,7 @@ export const SettingsModal: React.FC = () => {
           </div>
 
           {/* Social Media & Channels */}
-          <div className="space-y-3 pt-3 border-t-2 border-slate-200 dark:border-slate-800">
+          <div className="space-y-3 pt-3 border-t border-slate-200 dark:border-slate-800">
             <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
               4. Redes Sociales & Enlaces Digitales
             </h4>
@@ -368,7 +368,7 @@ export const SettingsModal: React.FC = () => {
                   placeholder="https://instagram.com/martineztech.do"
                   value={instagram}
                   onChange={(e) => setInstagram(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -379,7 +379,7 @@ export const SettingsModal: React.FC = () => {
                   placeholder="https://facebook.com/martineztechrd"
                   value={facebook}
                   onChange={(e) => setFacebook(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -390,7 +390,7 @@ export const SettingsModal: React.FC = () => {
                   placeholder="https://tiktok.com/@martineztech"
                   value={tiktok}
                   onChange={(e) => setTiktok(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -401,7 +401,7 @@ export const SettingsModal: React.FC = () => {
                   placeholder="https://linkedin.com/company/martinez-tech"
                   value={linkedin}
                   onChange={(e) => setLinkedin(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -412,14 +412,14 @@ export const SettingsModal: React.FC = () => {
                   placeholder="https://youtube.com/@martineztech"
                   value={youtube}
                   onChange={(e) => setYoutube(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
             </div>
           </div>
 
           {/* Fiscal DGII NCF Sequences */}
-          <div className="space-y-3 pt-3 border-t-2 border-slate-200 dark:border-slate-800">
+          <div className="space-y-3 pt-3 border-t border-slate-200 dark:border-slate-800">
             <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
               5. Secuencias de Comprobantes Fiscales (DGII - NCF)
             </h4>
@@ -435,7 +435,7 @@ export const SettingsModal: React.FC = () => {
                   min="1"
                   value={b01Next}
                   onChange={(e) => setB01Next(parseInt(e.target.value, 10) || 1)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
                 <span className="text-[10px] text-slate-400 font-mono">B01{String(b01Next).padStart(8, '0')}</span>
               </div>
@@ -447,7 +447,7 @@ export const SettingsModal: React.FC = () => {
                   min="1"
                   value={b02Next}
                   onChange={(e) => setB02Next(parseInt(e.target.value, 10) || 1)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
                 <span className="text-[10px] text-slate-400 font-mono">B02{String(b02Next).padStart(8, '0')}</span>
               </div>
@@ -459,7 +459,7 @@ export const SettingsModal: React.FC = () => {
                   min="1"
                   value={b14Next}
                   onChange={(e) => setB14Next(parseInt(e.target.value, 10) || 1)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
                 <span className="text-[10px] text-slate-400 font-mono">B14{String(b14Next).padStart(8, '0')}</span>
               </div>
@@ -471,7 +471,7 @@ export const SettingsModal: React.FC = () => {
                   min="1"
                   value={b15Next}
                   onChange={(e) => setB15Next(parseInt(e.target.value, 10) || 1)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                 />
                 <span className="text-[10px] text-slate-400 font-mono">B15{String(b15Next).padStart(8, '0')}</span>
               </div>
@@ -483,13 +483,13 @@ export const SettingsModal: React.FC = () => {
                 type="date"
                 value={ncfExpiryDate}
                 onChange={(e) => setNcfExpiryDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-mono text-slate-900 dark:text-white"
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
               />
             </div>
           </div>
 
           {/* Backup & Restore */}
-          <div className="space-y-3 pt-3 border-t-2 border-slate-200 dark:border-slate-800">
+          <div className="space-y-3 pt-3 border-t border-slate-200 dark:border-slate-800">
             <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
               6. Respaldos de Datos & Seguridad
             </h4>
@@ -498,19 +498,19 @@ export const SettingsModal: React.FC = () => {
               <button
                 type="button"
                 onClick={exportDataBackup}
-                className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 border border-slate-300 dark:border-slate-700 text-left transition-colors flex items-center justify-between shadow-sm"
+                className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 border border-slate-200 dark:border-slate-700 text-left transition-colors flex items-center justify-between shadow-xs"
               >
                 <div>
                   <div className="text-xs font-bold text-slate-900 dark:text-white">Exportar Respaldo</div>
                   <div className="text-[10px] text-slate-600 dark:text-slate-400">Descargar JSON completo</div>
                 </div>
-                <Download className="w-4 h-4 text-brand-teal-700 dark:text-brand-teal-400" />
+                <Download className="w-4 h-4 text-nexablue-600 dark:text-nexablue-400" />
               </button>
 
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 border border-slate-300 dark:border-slate-700 text-left transition-colors flex items-center justify-between shadow-sm"
+                className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 border border-slate-200 dark:border-slate-700 text-left transition-colors flex items-center justify-between shadow-xs"
               >
                 <div>
                   <div className="text-xs font-bold text-slate-900 dark:text-white">Restaurar Datos</div>
@@ -529,7 +529,7 @@ export const SettingsModal: React.FC = () => {
               <button
                 type="button"
                 onClick={clearTestDataForProduction}
-                className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 border border-emerald-300 dark:border-emerald-500/30 text-left transition-colors flex items-center justify-between shadow-sm"
+                className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 border border-emerald-200 dark:border-emerald-500/30 text-left transition-colors flex items-center justify-between shadow-xs"
               >
                 <div>
                   <div className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Limpiar para Producción</div>
@@ -541,7 +541,7 @@ export const SettingsModal: React.FC = () => {
               <button
                 type="button"
                 onClick={resetToDefaultData}
-                className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 border border-rose-300 dark:border-rose-500/30 text-left transition-colors flex items-center justify-between shadow-sm"
+                className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 border border-rose-200 dark:border-rose-500/30 text-left transition-colors flex items-center justify-between shadow-xs"
               >
                 <div>
                   <div className="text-xs font-bold text-rose-800 dark:text-rose-300">Restablecer Iniciales</div>
@@ -553,17 +553,17 @@ export const SettingsModal: React.FC = () => {
           </div>
 
           {/* Form Actions */}
-          <div className="pt-4 border-t-2 border-slate-200 dark:border-slate-800 flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={() => setIsSettingsModalOpen(false)}
-              className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-300 text-xs font-semibold border border-slate-300 dark:border-slate-700"
+              className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700 transition-colors"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-black text-xs shadow-md border border-brand-teal-700/20 flex items-center gap-2"
+              className="px-6 py-2.5 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm flex items-center gap-2 transition-all"
             >
               <Save className="w-4 h-4" />
               <span>{copiedSuccess ? '¡Guardado con Éxito!' : 'Guardar Cambios'}</span>

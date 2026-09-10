@@ -7,75 +7,100 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200 antialiased;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    caret-color: #00a896;
+    @apply bg-[#06080e] text-slate-100 dark:bg-[#06080e] dark:text-slate-100 transition-colors duration-200 antialiased;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    caret-color: #0072ff;
   }
   ::selection {
-    background-color: #00a896;
+    background-color: #0072ff;
     color: #ffffff;
   }
   *:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 168, 150, 0.45);
+    box-shadow: 0 0 0 2px rgba(0, 114, 255, 0.6);
   }
 }
 
-/* Custom Scrollbar */
+/* Custom Tactical Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #06080e;
 }
 .dark ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #06080e;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #1e293b;
   border-radius: 4px;
+  border: 1px solid #334155;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #1e293b;
   border-radius: 4px;
+  border: 1px solid #334155;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00a896;
+  background: #0072ff;
+}
+
+/* High-tech NexaGate Tactical Panels */
+.nexagate-panel {
+  background: #0a0e18;
+  border: 1px solid #1a243b;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.nexagate-panel-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nexagate-panel-hover:hover {
+  border-color: rgba(0, 114, 255, 0.5);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 24px rgba(0, 114, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Dual-Tone Shield Border */
+.border-shield-dualtone {
+  border-image: linear-gradient(to right, #0072ff, #cbd5e1) 1;
 }
 
 /* High contrast cards and borders for Light Mode */
 .light-card {
   background-color: #ffffff;
   border: 1px solid #cbd5e1;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
 }
 .dark .light-card {
-  background-color: #0f172a;
-  border: 1px solid #1e293b;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  background-color: #0a0e18;
+  border: 1px solid #1a243b;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
 /* Glassmorphism classes */
 .glass-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid #cbd5e1;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  background: rgba(10, 14, 24, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 .dark .glass-card {
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  background: rgba(10, 14, 24, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
-.tech-glow-green {
-  box-shadow: 0 0 25px -5px rgba(106, 179, 41, 0.2);
+.tech-glow-blue {
+  box-shadow: 0 0 30px -5px rgba(0, 114, 255, 0.35);
 }
 
-.tech-glow-teal {
-  box-shadow: 0 0 25px -5px rgba(0, 168, 150, 0.2);
+.tech-glow-silver {
+  box-shadow: 0 0 25px -5px rgba(203, 213, 225, 0.25);
 }
 
 /* Form input crisp borders */

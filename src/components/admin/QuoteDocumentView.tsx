@@ -152,7 +152,7 @@ export const QuoteDocumentView: React.FC = () => {
             {!quote.clientSignature && (
               <button
                 onClick={() => setIsSigningOpen(true)}
-                className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 hover:from-brand-teal-400 hover:to-brand-green-400 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow-md border border-brand-teal-600/30"
+                className="px-3.5 py-1.5 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md transition-all"
               >
                 <PenTool className="w-4 h-4" />
                 <span>Firmar y Aprobar</span>

@@ -149,7 +149,7 @@ export const CatalogPickerModal: React.FC<CatalogPickerModalProps> = ({
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-teal-500/10 border border-brand-teal-500/20 flex items-center justify-center text-brand-teal-600 dark:text-brand-teal-400">
+            <div className="w-10 h-10 rounded-xl bg-nexablue-50 dark:bg-nexablue-950/40 border border-nexablue-200 dark:border-nexablue-800 flex items-center justify-center text-nexablue-600 dark:text-nexablue-400">
               <Package className="w-5 h-5" />
             </div>
             <div>
@@ -168,7 +168,7 @@ export const CatalogPickerModal: React.FC<CatalogPickerModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -184,7 +184,7 @@ export const CatalogPickerModal: React.FC<CatalogPickerModalProps> = ({
               placeholder="Buscar por nombre, código SKU, marca, especificación técnica..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-brand-teal-500 transition-colors"
+              className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-nexablue-500 transition-colors"
             />
             {searchQuery && (
               <button
@@ -198,9 +198,9 @@ export const CatalogPickerModal: React.FC<CatalogPickerModalProps> = ({
           </div>
 
           {/* Filter Chips: Categories & Types */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
             {/* Category horizontal scroll */}
-            <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-thin">
+            <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
               {CATEGORIES.map(cat => (
                 <button
                   key={cat.id}
@@ -208,7 +208,7 @@ export const CatalogPickerModal: React.FC<CatalogPickerModalProps> = ({
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                     selectedCategory === cat.id
-                      ? 'bg-brand-teal-600 text-white shadow-sm'
+                      ? 'bg-nexablue-600 text-white shadow-xs'
                       : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
                   }`}
                 >
@@ -259,7 +259,7 @@ export const CatalogPickerModal: React.FC<CatalogPickerModalProps> = ({
               <button
                 type="button"
                 onClick={() => { setSearchQuery(''); setSelectedCategory('all'); setSelectedType('all'); }}
-                className="text-xs font-bold text-brand-teal-600 dark:text-brand-teal-400 hover:underline"
+                className="text-xs font-bold text-nexablue-600 dark:text-nexablue-400 hover:underline"
               >
                 Limpiar filtros
               </button>
@@ -293,7 +293,7 @@ export const CatalogPickerModal: React.FC<CatalogPickerModalProps> = ({
                   className={`p-3.5 rounded-xl border transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 ${
                     isOutOfStock 
                       ? 'bg-slate-50/60 dark:bg-slate-900/30 border-slate-200 dark:border-slate-800/80 opacity-75'
-                      : 'bg-white dark:bg-slate-800/70 border-slate-200 dark:border-slate-700/80 hover:border-brand-teal-400 dark:hover:border-brand-teal-500 shadow-xs'
+                      : 'bg-white dark:bg-slate-800/70 border-slate-200 dark:border-slate-700/80 hover:border-nexablue-400 dark:hover:border-nexablue-500 shadow-xs'
                   }`}
                 >
                   {/* Left info */}
@@ -369,7 +369,7 @@ export const CatalogPickerModal: React.FC<CatalogPickerModalProps> = ({
 
                     {/* Quantity & Add button */}
                     <div className="flex items-center gap-2">
-                      <div className="flex items-center rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-0.5">
+                      <div className="flex items-center rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-0.5">
                         <button
                           type="button"
                           onClick={() => handleQuantityChange(prod.id, -1)}
@@ -399,7 +399,7 @@ export const CatalogPickerModal: React.FC<CatalogPickerModalProps> = ({
                         className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all shadow-xs ${
                           isAdded
                             ? 'bg-emerald-600 text-white scale-95'
-                            : 'bg-brand-teal-600 hover:bg-brand-teal-500 text-white'
+                            : 'bg-nexablue-600 hover:bg-nexablue-500 text-white'
                         }`}
                       >
                         {isAdded ? (

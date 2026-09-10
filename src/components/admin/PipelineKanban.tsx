@@ -22,14 +22,14 @@ import {
 } from '../../utils/formatters';
 
 const STAGES: { id: DealStage; label: string; headerColor: string; bgCard: string }[] = [
-  { id: 'prospect', label: '1. Prospecto Nuevo', headerColor: 'border-sky-400 text-sky-900 dark:text-sky-400 bg-sky-100/70 dark:bg-sky-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
-  { id: 'site_visit', label: '2. Levantamiento / Visita', headerColor: 'border-amber-400 text-amber-900 dark:text-amber-400 bg-amber-100/70 dark:bg-amber-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
-  { id: 'quoted', label: '3. Presupuesto Enviado', headerColor: 'border-purple-400 text-purple-900 dark:text-purple-400 bg-purple-100/70 dark:bg-purple-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
-  { id: 'negotiation', label: '4. En Negociación', headerColor: 'border-indigo-400 text-indigo-900 dark:text-indigo-400 bg-indigo-100/70 dark:bg-indigo-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
-  { id: 'won', label: '5. Aprobado / Ganado', headerColor: 'border-emerald-400 text-emerald-900 dark:text-emerald-400 bg-emerald-100/70 dark:bg-emerald-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
-  { id: 'installation', label: '6. En Instalación', headerColor: 'border-cyan-400 text-cyan-900 dark:text-cyan-400 bg-cyan-100/70 dark:bg-cyan-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
-  { id: 'completed', label: '7. Finalizado y Cobrado', headerColor: 'border-brand-green-400 text-brand-green-900 dark:text-brand-green-400 bg-brand-green-100/70 dark:bg-brand-green-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
-  { id: 'lost', label: '8. Cancelado / Perdido', headerColor: 'border-rose-400 text-rose-900 dark:text-rose-400 bg-rose-100/70 dark:bg-rose-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
+  { id: 'prospect', label: '1. Prospecto Nuevo', headerColor: 'border-sky-200 dark:border-sky-500/30 text-sky-900 dark:text-sky-300 bg-sky-50/90 dark:bg-sky-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
+  { id: 'site_visit', label: '2. Levantamiento / Visita', headerColor: 'border-amber-200 dark:border-amber-500/30 text-amber-900 dark:text-amber-300 bg-amber-50/90 dark:bg-amber-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
+  { id: 'quoted', label: '3. Presupuesto Enviado', headerColor: 'border-purple-200 dark:border-purple-500/30 text-purple-900 dark:text-purple-300 bg-purple-50/90 dark:bg-purple-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
+  { id: 'negotiation', label: '4. En Negociación', headerColor: 'border-indigo-200 dark:border-indigo-500/30 text-indigo-900 dark:text-indigo-300 bg-indigo-50/90 dark:bg-indigo-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
+  { id: 'won', label: '5. Aprobado / Ganado', headerColor: 'border-emerald-200 dark:border-emerald-500/30 text-emerald-900 dark:text-emerald-300 bg-emerald-50/90 dark:bg-emerald-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
+  { id: 'installation', label: '6. En Instalación', headerColor: 'border-cyan-200 dark:border-cyan-500/30 text-cyan-900 dark:text-cyan-300 bg-cyan-50/90 dark:bg-cyan-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
+  { id: 'completed', label: '7. Finalizado y Cobrado', headerColor: 'border-emerald-200 dark:border-emerald-500/30 text-emerald-900 dark:text-emerald-300 bg-emerald-50/90 dark:bg-emerald-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
+  { id: 'lost', label: '8. Cancelado / Perdido', headerColor: 'border-rose-200 dark:border-rose-500/30 text-rose-900 dark:text-rose-300 bg-rose-50/90 dark:bg-rose-950/30', bgCard: 'bg-white dark:bg-slate-800/90' },
 ];
 
 export const PipelineKanban: React.FC = () => {
@@ -127,25 +127,26 @@ export const PipelineKanban: React.FC = () => {
     <div className="space-y-6 animate-fadeIn">
       
       {/* Top Filter & Action Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md">
+      {/* Search & Filters Bar */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         
         {/* Search & Filters */}
         <div className="flex items-center gap-3 flex-1 flex-wrap">
           <div className="relative flex-1 min-w-[220px]">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Buscar por cliente, título, teléfono o código..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-nexablue-500 shadow-2xs"
             />
           </div>
 
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-brand-teal-500 shadow-sm"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-nexablue-500 shadow-2xs"
           >
             <option value="all">Todas las Prioridades</option>
             <option value="high">Prioridad Alta</option>
@@ -156,7 +157,7 @@ export const PipelineKanban: React.FC = () => {
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-brand-teal-500 shadow-sm"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-nexablue-500 shadow-2xs"
           >
             <option value="all">Todos los Servicios</option>
             <option value="camaras">Cámaras de Vigilancia</option>
@@ -177,7 +178,7 @@ export const PipelineKanban: React.FC = () => {
               setActiveDealForEdit(null);
               setIsDealModalOpen(true);
             }}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 hover:from-brand-teal-400 hover:to-brand-green-400 text-slate-950 font-black text-xs shadow-md border border-brand-teal-600/30"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm border border-nexablue-700/30 active:scale-95 transition-all"
           >
             <Plus className="w-4 h-4" />
             <span>Nueva Negociación</span>
@@ -197,14 +198,14 @@ export const PipelineKanban: React.FC = () => {
             return (
               <div 
                 key={stage.id}
-                className="w-72 flex-shrink-0 bg-slate-200/70 dark:bg-slate-900/70 border border-slate-300 dark:border-slate-800 rounded-2xl flex flex-col max-h-[calc(100vh-210px)] shadow-md"
+                className="w-72 flex-shrink-0 bg-slate-200/50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col max-h-[calc(100vh-210px)] shadow-2xs"
               >
                 
                 {/* Column Header */}
                 <div className={`p-3.5 rounded-t-2xl border-b ${stage.headerColor} flex flex-col gap-1`}>
                   <div className="flex items-center justify-between">
                     <h3 className="font-bold text-xs uppercase tracking-wider">{stage.label}</h3>
-                    <span className="w-5 h-5 rounded-full bg-white/80 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-[11px] font-bold flex items-center justify-center shadow-sm">
+                    <span className="w-5 h-5 rounded-full bg-white/90 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-[11px] font-bold flex items-center justify-center shadow-2xs">
                       {stageDeals.length}
                     </span>
                   </div>
@@ -216,7 +217,7 @@ export const PipelineKanban: React.FC = () => {
                 {/* Cards Container */}
                 <div className="p-2.5 space-y-2.5 overflow-y-auto flex-1 scrollbar-thin">
                   {stageDeals.length === 0 ? (
-                    <div className="p-6 text-center border-2 border-dashed border-slate-300 dark:border-slate-800 rounded-xl text-slate-500 text-[11px] italic font-medium">
+                    <div className="p-6 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl text-slate-400 text-[11px] italic font-medium">
                       Sin negociaciones
                     </div>
                   ) : (
@@ -227,14 +228,14 @@ export const PipelineKanban: React.FC = () => {
                       return (
                         <div
                           key={deal.id}
-                          className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-brand-teal-500 space-y-2.5 shadow-md hover:shadow-lg transition-all group"
+                          className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-nexablue-500/80 space-y-2.5 shadow-2xs hover:shadow-sm transition-all group"
                         >
                           {/* Top Tag & Code */}
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-700">
+                            <span className="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">
                               {deal.code}
                             </span>
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold border shadow-sm ${priority.color}`}>
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold border shadow-xs ${priority.color}`}>
                               {priority.label}
                             </span>
                           </div>
@@ -247,7 +248,7 @@ export const PipelineKanban: React.FC = () => {
                           {/* Client info */}
                           <div className="space-y-1 text-[11px] text-slate-600 dark:text-slate-300">
                             <div className="flex items-center gap-1.5 truncate">
-                              <User className="w-3.5 h-3.5 text-brand-teal-600 dark:text-brand-teal-400 flex-shrink-0" />
+                              <User className="w-3.5 h-3.5 text-nexablue-600 dark:text-nexablue-400 flex-shrink-0" />
                               <span className="truncate font-bold text-slate-900 dark:text-white">{deal.clientName}</span>
                             </div>
                             {deal.clientAddress && (
@@ -261,7 +262,7 @@ export const PipelineKanban: React.FC = () => {
                           {/* Value & Actions Bar */}
                           <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-1.5">
                             <div>
-                              <span className="text-xs font-black text-brand-teal-800 dark:text-brand-teal-300 font-mono block">
+                              <span className="text-xs font-black text-nexablue-700 dark:text-nexablue-300 font-mono block">
                                 {formatCurrency(deal.estimatedValue)}
                               </span>
                               <span className={`inline-block px-1.5 py-0.5 rounded text-[9px] font-bold border mt-0.5 ${catInfo.color}`}>
@@ -275,7 +276,7 @@ export const PipelineKanban: React.FC = () => {
                                 type="button"
                                 onClick={() => handleOpenWhatsApp(deal)}
                                 title="Enviar Plantilla por WhatsApp"
-                                className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-600/30 shadow-2xs"
+                                className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-600/30 shadow-2xs transition-colors"
                               >
                                 <MessageCircle className="w-3.5 h-3.5" />
                               </button>
@@ -289,8 +290,8 @@ export const PipelineKanban: React.FC = () => {
                                   }}
                                   className={`p-1.5 rounded-lg border transition-all ${
                                     actionMenuDealId === deal.id
-                                      ? 'bg-slate-200 dark:bg-slate-700 text-slate-950 dark:text-white border-slate-400'
-                                      : 'bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-slate-600 dark:text-slate-300 border-slate-300 dark:border-slate-700'
+                                      ? 'bg-slate-200 dark:bg-slate-700 text-slate-950 dark:text-white border-slate-300'
+                                      : 'bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
                                   }`}
                                   title="Más opciones de la negociación"
                                 >
@@ -298,7 +299,7 @@ export const PipelineKanban: React.FC = () => {
                                 </button>
 
                                 {actionMenuDealId === deal.id && (
-                                  <div className="absolute right-0 bottom-full mb-1.5 w-48 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl shadow-xl z-30 py-1.5 text-xs text-left animate-fadeIn">
+                                  <div className="absolute right-0 bottom-full mb-1.5 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-30 py-1.5 text-xs text-left animate-fadeIn">
                                     {!deal.quoteId ? (
                                       <button
                                         type="button"
@@ -306,7 +307,7 @@ export const PipelineKanban: React.FC = () => {
                                           setActionMenuDealId(null);
                                           openNewQuoteForDeal(deal);
                                         }}
-                                        className="w-full px-3 py-1.5 flex items-center gap-2 text-brand-teal-800 dark:text-brand-teal-300 hover:bg-brand-teal-50 dark:hover:bg-brand-teal-950/40 font-bold"
+                                        className="w-full px-3 py-1.5 flex items-center gap-2 text-nexablue-700 dark:text-cyan-300 hover:bg-nexablue-50 dark:hover:bg-nexablue-950/40 font-bold"
                                       >
                                         <Calculator className="w-3.5 h-3.5" />
                                         <span>Elaborar Cotización</span>
@@ -333,7 +334,7 @@ export const PipelineKanban: React.FC = () => {
                                           setActionMenuDealId(null);
                                           handleCreateWorkOrder(deal);
                                         }}
-                                        className="w-full px-3 py-1.5 flex items-center gap-2 text-brand-green-800 dark:text-brand-green-300 hover:bg-brand-green-50 dark:hover:bg-brand-green-950/40 font-bold"
+                                        className="w-full px-3 py-1.5 flex items-center gap-2 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 font-bold"
                                       >
                                         <Wrench className="w-3.5 h-3.5" />
                                         <span>Crear Orden / Acta</span>
@@ -388,7 +389,7 @@ export const PipelineKanban: React.FC = () => {
                             <select
                               value={deal.stage}
                               onChange={(e) => moveDealStage(deal.id, e.target.value as DealStage)}
-                              className="w-full text-[10px] font-bold py-1 px-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-brand-teal-500 shadow-2xs"
+                              className="w-full text-[10px] font-bold py-1 px-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-nexablue-500 shadow-2xs"
                             >
                               {STAGES.map(s => (
                                 <option key={s.id} value={s.id}>{s.label}</option>

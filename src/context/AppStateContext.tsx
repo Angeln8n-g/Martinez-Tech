@@ -261,7 +261,16 @@ const STORAGE_KEYS = {
 };
 
 export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentView, setCurrentView] = useState<'public' | 'admin'>('public');
+  const [currentView, setCurrentView] = useState<'public' | 'admin'>(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      const params = new URLSearchParams(window.location.search);
+      if (hash === '#admin' || hash.startsWith('#admin') || params.get('view') === 'admin') {
+        return 'admin';
+      }
+    }
+    return 'public';
+  });
   const [adminTab, setAdminTab] = useState<AdminTab>(() => {
     try {
       const savedUser = localStorage.getItem(STORAGE_KEYS.USER);

@@ -193,7 +193,7 @@ export const FinancialReportsModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-3xl max-w-4xl w-full p-5 sm:p-7 relative max-h-[95vh] overflow-y-auto shadow-2xl space-y-6">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl max-w-4xl w-full p-5 sm:p-7 relative max-h-[95vh] overflow-y-auto shadow-2xl space-y-6">
         
         {/* Header */}
         <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-4">
@@ -213,7 +213,7 @@ export const FinancialReportsModal: React.FC = () => {
 
           <button
             onClick={() => setIsReportsModalOpen(false)}
-            className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-300 dark:border-slate-700"
+            className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-200 dark:border-slate-700"
           >
             <X className="w-5 h-5" />
           </button>
@@ -222,7 +222,7 @@ export const FinancialReportsModal: React.FC = () => {
         {/* Top KPI Strip */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 shadow-sm space-y-1">
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs space-y-1">
             <div className="text-[11px] font-bold uppercase text-slate-600 dark:text-slate-400 flex items-center justify-between">
               <span>Total Cotizado ({quotes.length})</span>
               <DollarSign className="w-4 h-4 text-purple-600" />
@@ -235,7 +235,7 @@ export const FinancialReportsModal: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-500/40 shadow-sm space-y-1">
+          <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-500/40 shadow-xs space-y-1">
             <div className="text-[11px] font-bold uppercase text-emerald-800 dark:text-emerald-400 flex items-center justify-between">
               <span>Total Cobrado en Caja</span>
               <TrendingUp className="w-4 h-4 text-emerald-600" />
@@ -248,7 +248,7 @@ export const FinancialReportsModal: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-500/40 shadow-sm space-y-1">
+          <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-500/40 shadow-xs space-y-1">
             <div className="text-[11px] font-bold uppercase text-amber-800 dark:text-amber-400 flex items-center justify-between">
               <span>Cuentas por Cobrar</span>
               <CreditCard className="w-4 h-4 text-amber-600" />
@@ -264,9 +264,9 @@ export const FinancialReportsModal: React.FC = () => {
         </div>
 
         {/* 1-Click Excel / CSV Export Strip */}
-        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 space-y-3 shadow-sm">
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 space-y-3 shadow-xs">
           <div className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-            <Download className="w-4 h-4 text-brand-teal-600" />
+            <Download className="w-4 h-4 text-nexablue-600" />
             <span>Descarga de Hojas de Cálculo (.CSV / Excel)</span>
           </div>
 
@@ -275,21 +275,21 @@ export const FinancialReportsModal: React.FC = () => {
             <button
               type="button"
               onClick={handleExportQuotes}
-              className="p-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-brand-teal-50 dark:hover:bg-brand-teal-950/50 border border-slate-300 dark:border-slate-700 text-left transition-all shadow-sm flex flex-col justify-between space-y-2 group"
+              className="p-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-nexablue-50 dark:hover:bg-nexablue-950/50 border border-slate-200 dark:border-slate-700 text-left transition-all shadow-xs flex flex-col justify-between space-y-2 group"
             >
-              <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-brand-teal-600">
+              <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-nexablue-600">
                 Presupuestos
               </div>
               <div className="flex items-center justify-between text-[11px] text-slate-500">
                 <span>{quotes.length} filas</span>
-                <Download className="w-3.5 h-3.5 text-brand-teal-600" />
+                <Download className="w-3.5 h-3.5 text-nexablue-600" />
               </div>
             </button>
 
             <button
               type="button"
               onClick={handleExportPayments}
-              className="p-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 border border-slate-300 dark:border-slate-700 text-left transition-all shadow-sm flex flex-col justify-between space-y-2 group"
+              className="p-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 border border-slate-200 dark:border-slate-700 text-left transition-all shadow-xs flex flex-col justify-between space-y-2 group"
             >
               <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-600">
                 Recibos de Pago
@@ -303,7 +303,7 @@ export const FinancialReportsModal: React.FC = () => {
             <button
               type="button"
               onClick={handleExportReceivables}
-              className="p-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-amber-950/50 border border-slate-300 dark:border-slate-700 text-left transition-all shadow-sm flex flex-col justify-between space-y-2 group"
+              className="p-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-amber-950/50 border border-slate-200 dark:border-slate-700 text-left transition-all shadow-xs flex flex-col justify-between space-y-2 group"
             >
               <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-amber-600">
                 Por Cobrar (Saldos)
@@ -317,7 +317,7 @@ export const FinancialReportsModal: React.FC = () => {
             <button
               type="button"
               onClick={handleExportClients}
-              className="p-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-blue-50 dark:hover:bg-blue-950/50 border border-slate-300 dark:border-slate-700 text-left transition-all shadow-sm flex flex-col justify-between space-y-2 group"
+              className="p-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-blue-50 dark:hover:bg-blue-950/50 border border-slate-200 dark:border-slate-700 text-left transition-all shadow-xs flex flex-col justify-between space-y-2 group"
             >
               <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-600">
                 Directorio Clientes
@@ -412,7 +412,7 @@ export const FinancialReportsModal: React.FC = () => {
                   type="button"
                   onClick={handleDownload607Csv}
                   disabled={periodInvoices.length === 0}
-                  className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 text-slate-800 dark:text-slate-200 text-xs font-bold border border-slate-300 dark:border-slate-700 shadow-xs flex items-center gap-1.5 disabled:opacity-40"
+                  className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 text-slate-800 dark:text-slate-200 text-xs font-bold border border-slate-200 dark:border-slate-700 shadow-xs flex items-center gap-1.5 disabled:opacity-40 transition-colors"
                 >
                   <Download className="w-3.5 h-3.5 text-slate-500" />
                   <span>Excel 607</span>
@@ -422,7 +422,7 @@ export const FinancialReportsModal: React.FC = () => {
                   type="button"
                   onClick={handleDownload607Txt}
                   disabled={periodInvoices.length === 0}
-                  className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-black shadow-md flex items-center gap-1.5 disabled:opacity-40"
+                  className="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md flex items-center gap-1.5 disabled:opacity-40 transition-all"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Descargar TXT para DGII (|)</span>
@@ -433,7 +433,7 @@ export const FinancialReportsModal: React.FC = () => {
 
             {/* DGII Period KPI Strip */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-xs">
+              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
                 <div className="text-[10px] uppercase font-bold text-slate-500">Facturas en Periodo</div>
                 <div className="text-lg font-black font-mono text-slate-900 dark:text-white mt-0.5">
                   {summary607.totalRecords}
@@ -443,7 +443,7 @@ export const FinancialReportsModal: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-xs">
+              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
                 <div className="text-[10px] uppercase font-bold text-slate-500">Monto Neto Facturado</div>
                 <div className="text-lg font-black font-mono text-purple-700 dark:text-purple-400 mt-0.5">
                   {formatCurrency(summary607.totalTaxableAmount, 'DOP')}
@@ -451,7 +451,7 @@ export const FinancialReportsModal: React.FC = () => {
                 <div className="text-[10px] text-slate-400">Base imponible</div>
               </div>
 
-              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-xs">
+              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
                 <div className="text-[10px] uppercase font-bold text-slate-500">ITBIS Facturado (18%)</div>
                 <div className="text-lg font-black font-mono text-emerald-600 dark:text-emerald-400 mt-0.5">
                   {formatCurrency(summary607.totalTaxAmount, 'DOP')}
@@ -459,9 +459,9 @@ export const FinancialReportsModal: React.FC = () => {
                 <div className="text-[10px] text-slate-400">Impuesto liquidado</div>
               </div>
 
-              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-xs">
+              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
                 <div className="text-[10px] uppercase font-bold text-slate-500">Total Facturado Bruto</div>
-                <div className="text-lg font-black font-mono text-brand-teal-600 dark:text-brand-teal-400 mt-0.5">
+                <div className="text-lg font-black font-mono text-nexablue-600 dark:text-nexablue-400 mt-0.5">
                   {formatCurrency(summary607.totalInvoicedAmount, 'DOP')}
                 </div>
                 <div className="text-[10px] text-slate-400">Ventas totales DOP</div>
@@ -493,9 +493,9 @@ export const FinancialReportsModal: React.FC = () => {
             )}
 
             {/* DGII Period Invoices Table */}
-            <div className="border border-slate-300 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm max-h-60 overflow-y-auto">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-xs max-h-60 overflow-y-auto">
               <table className="w-full text-left text-xs border-collapse">
-                <thead className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-300 dark:border-slate-700">
+                <thead className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-200 dark:border-slate-700">
                   <tr>
                     <th className="py-2.5 px-3">NCF</th>
                     <th className="py-2.5 px-3">RNC / Cédula</th>
@@ -554,9 +554,9 @@ export const FinancialReportsModal: React.FC = () => {
               <span>Detalle de Saldos y Cuentas por Cobrar ({receivables.length})</span>
             </div>
 
-            <div className="border border-slate-300 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm max-h-60 overflow-y-auto">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-xs max-h-60 overflow-y-auto">
               <table className="w-full text-left text-xs border-collapse">
-                <thead className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-300 dark:border-slate-700">
+                <thead className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold uppercase text-[10px] tracking-wider sticky top-0 border-b border-slate-200 dark:border-slate-700">
                   <tr>
                     <th className="py-2.5 px-3">Cotización</th>
                     <th className="py-2.5 px-3">Cliente</th>
@@ -603,7 +603,7 @@ export const FinancialReportsModal: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsReportsModalOpen(false)}
-            className="px-5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-xs font-bold text-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
+            className="px-5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-xs font-bold text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors"
           >
             Cerrar
           </button>

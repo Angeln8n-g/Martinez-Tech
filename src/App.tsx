@@ -95,7 +95,7 @@ const MainContent: React.FC = () => {
   }, []);
 
   const handleWhatsAppFloating = () => {
-    const text = `¡Hola! Me comunico desde el sitio web de Martínez Tech para una consulta técnica.`;
+    const text = `¡Hola NexaGate Security! Me comunico desde el sitio web para una consulta técnica.`;
     window.open(createWhatsAppUrl(companySettings.whatsapp, text), '_blank');
   };
 
@@ -119,21 +119,21 @@ const MainContent: React.FC = () => {
   // Protect Admin Access
   if (currentView === 'admin' && !isAuthenticated) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#06080e] text-slate-100 flex items-center justify-center p-4">
         <LoginModal />
         <div className="text-center space-y-4 max-w-sm">
-          <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-500/30 text-amber-900 dark:text-amber-300 text-xs font-semibold">
-            ⚠️ Se requiere autenticación para acceder al Sistema CRM.
+          <div className="p-4 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-amber-300 text-xs font-semibold">
+            ⚠️ Se requiere autenticación autorizada para acceder a la Consola CRM.
           </div>
           <button
             onClick={() => setIsLoginModalOpen(true)}
-            className="w-full py-3 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-black text-xs shadow-md"
+            className="w-full py-3 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-black text-xs shadow-glow-nexablue transition-all"
           >
             Iniciar Sesión
           </button>
           <button
             onClick={() => setCurrentView('public')}
-            className="text-xs text-slate-600 dark:text-slate-400 hover:underline font-bold"
+            className="text-xs text-slate-400 hover:text-white hover:underline font-bold"
           >
             Volver al Sitio Web Público
           </button>
@@ -143,7 +143,7 @@ const MainContent: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col justify-between selection:bg-brand-teal-500 selection:text-white transition-colors duration-200">
+    <div className={`min-h-screen ${currentView === 'public' ? 'bg-[#06080e] text-slate-100' : 'bg-slate-100/70 dark:bg-[#06080e] text-slate-900 dark:text-slate-100'} flex flex-col justify-between selection:bg-nexablue-600 selection:text-white transition-colors`}>
       
       {currentView === 'public' ? (
         /* ================= PUBLIC WEBSITE ================= */
@@ -174,7 +174,7 @@ const MainContent: React.FC = () => {
         </>
       ) : (
         /* ================= ADMIN CRM SYSTEM ================= */
-        <div className="min-h-screen flex flex-col bg-slate-100/60 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
+        <div className="min-h-screen flex flex-col bg-slate-100/70 dark:bg-[#06080e] text-slate-900 dark:text-slate-100 transition-colors">
           <AdminHeader />
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
             {adminTab === 'dashboard' && <DashboardOverview />}

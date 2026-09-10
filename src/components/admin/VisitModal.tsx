@@ -211,12 +211,12 @@ export const VisitModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-3xl max-w-xl w-full p-6 relative max-h-[92vh] overflow-y-auto shadow-2xl space-y-5">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-xl w-full p-6 relative max-h-[92vh] overflow-y-auto shadow-2xl space-y-5">
         
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3.5">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-brand-teal-50 dark:bg-brand-teal-950/80 text-brand-teal-600 dark:text-brand-teal-400 border border-brand-teal-300 dark:border-brand-teal-500/30">
+            <div className="p-2 rounded-xl bg-nexablue-50 dark:bg-nexablue-950/80 text-nexablue-600 dark:text-nexablue-400 border border-nexablue-200 dark:border-nexablue-500/30">
               <Calendar className="w-5 h-5" />
             </div>
             <div>
@@ -240,14 +240,14 @@ export const VisitModal: React.FC = () => {
           
           {/* Linked Deal */}
           {deals.length > 0 && !activeVisitForEdit && (
-            <div className="space-y-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-200 dark:border-slate-700/60">
-              <label className="text-[11px] font-bold text-brand-teal-700 dark:text-brand-teal-300">
+            <div className="space-y-1 bg-slate-50/70 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-200 dark:border-slate-700/60">
+              <label className="text-[11px] font-bold text-nexablue-700 dark:text-nexablue-300">
                 ¿Vincular a una negociación existente? (Opcional)
               </label>
               <select
                 value={selectedDealId}
                 onChange={handleSelectDeal}
-                className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-brand-teal-500"
+                className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-nexablue-500"
               >
                 <option value="">-- Cita independiente o seleccionar negociación --</option>
                 {deals.map(d => (
@@ -268,7 +268,7 @@ export const VisitModal: React.FC = () => {
               placeholder="Ej. Levantamiento técnico de 8 cámaras y cableado estructurado"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500"
+              className="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500"
             />
           </div>
 
@@ -284,7 +284,7 @@ export const VisitModal: React.FC = () => {
                   placeholder="Nombre del cliente o empresa"
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500"
                 />
               </div>
             </div>
@@ -299,7 +299,7 @@ export const VisitModal: React.FC = () => {
                   placeholder="809-555-1234"
                   value={clientPhone}
                   onChange={(e) => setClientPhone(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500"
                 />
               </div>
             </div>
@@ -315,20 +315,20 @@ export const VisitModal: React.FC = () => {
                 placeholder="Ej. Calle Manuel de Jesús Galván #45, Gazcue, Santo Domingo"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500"
+                className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500"
               />
             </div>
           </div>
 
           {/* Technician Assignment */}
-          <div className="p-3.5 rounded-2xl bg-brand-teal-50/50 dark:bg-brand-teal-950/20 border border-brand-teal-200 dark:border-brand-teal-900/40 space-y-2">
+          <div className="p-3.5 rounded-2xl bg-nexablue-50/50 dark:bg-nexablue-950/20 border border-nexablue-200 dark:border-nexablue-900/40 space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold text-brand-teal-900 dark:text-brand-teal-300 flex items-center gap-1.5">
-                <Wrench className="w-4 h-4 text-brand-teal-600" />
+              <label className="text-xs font-bold text-nexablue-900 dark:text-nexablue-300 flex items-center gap-1.5">
+                <Wrench className="w-4 h-4 text-nexablue-600" />
                 <span>Asignar Técnico Responsable *</span>
               </label>
               {selectedTechUser && (
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-brand-teal-100 dark:bg-brand-teal-900 text-brand-teal-800 dark:text-brand-teal-300 border border-brand-teal-300 dark:border-brand-teal-700">
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-nexablue-100 dark:bg-nexablue-900 text-nexablue-800 dark:text-nexablue-300 border border-nexablue-300 dark:border-nexablue-700">
                   {selectedTechUser.role === 'technician' ? 'Técnico Instalador' : 'Administrador'}
                 </span>
               )}
@@ -337,7 +337,7 @@ export const VisitModal: React.FC = () => {
             <select
               value={assignedTechnicianId || (selectedTechUser?.id || '')}
               onChange={handleSelectTechnician}
-              className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-brand-teal-500 shadow-xs"
+              className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-nexablue-500 shadow-xs"
             >
               {availableTechnicians.map(t => (
                 <option key={t.id} value={t.id}>
@@ -357,7 +357,7 @@ export const VisitModal: React.FC = () => {
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-brand-teal-500"
+                className="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-nexablue-500"
               />
             </div>
 
@@ -372,7 +372,7 @@ export const VisitModal: React.FC = () => {
                   placeholder="09:00 AM"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-mono font-bold focus:outline-none focus:border-brand-teal-500"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-mono font-bold focus:outline-none focus:border-nexablue-500"
                 />
               </div>
             </div>
@@ -385,7 +385,7 @@ export const VisitModal: React.FC = () => {
                 <select
                   value={durationMinutes}
                   onChange={(e) => setDurationMinutes(Number(e.target.value))}
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-brand-teal-500"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-nexablue-500"
                 >
                   {durationOptions.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -518,7 +518,7 @@ export const VisitModal: React.FC = () => {
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value as VisitType)}
-                className="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-brand-teal-500"
+                className="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-nexablue-500"
               >
                 <option value="levantamiento">📋 Levantamiento Técnico</option>
                 <option value="instalacion">🛠️ Instalación / Montaje</option>
@@ -532,7 +532,7 @@ export const VisitModal: React.FC = () => {
               <select
                 value={serviceCategory}
                 onChange={(e) => setServiceCategory(e.target.value as ServiceCategory)}
-                className="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-brand-teal-500"
+                className="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-nexablue-500"
               >
                 <option value="camaras">Cámaras de Vigilancia</option>
                 <option value="redes">Redes Informáticas</option>
@@ -553,7 +553,7 @@ export const VisitModal: React.FC = () => {
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as VisitStatus)}
-              className="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-brand-teal-500"
+              className="w-full px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-nexablue-500"
             >
               <option value="scheduled">🟡 Programada</option>
               <option value="in_progress">🔵 En Camino / En Sitio</option>
@@ -570,7 +570,7 @@ export const VisitModal: React.FC = () => {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Herramientas especiales necesarias (escalera alta, taladro rotomartillo, etc.)"
-              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 resize-none"
+              className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500 resize-none"
             />
           </div>
 
@@ -579,17 +579,17 @@ export const VisitModal: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsVisitModalOpen(false)}
-              className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs text-slate-700 dark:text-slate-300 font-bold"
+              className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs text-slate-700 dark:text-slate-300 font-bold border border-slate-200 dark:border-slate-700 transition-colors"
             >
               Cancelar
             </button>
 
             <button
               type="submit"
-              className={`px-6 py-2.5 rounded-xl font-black text-xs shadow-md transition-all ${
+              className={`px-6 py-2.5 rounded-xl font-bold text-xs shadow-sm transition-all ${
                 validation?.hasConflict
                   ? 'bg-rose-600 hover:bg-rose-500 text-white'
-                  : 'bg-brand-teal-600 hover:bg-brand-teal-500 text-white'
+                  : 'bg-nexablue-600 hover:bg-nexablue-500 text-white'
               }`}
             >
               {validation?.hasConflict ? 'Revisar Conflicto' : (activeVisitForEdit ? 'Guardar Cambios' : 'Agendar Cita')}

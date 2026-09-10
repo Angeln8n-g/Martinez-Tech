@@ -379,10 +379,10 @@ export const CatalogManager: React.FC = () => {
     <div className="space-y-6 animate-fadeIn">
       
       {/* Top Header & Navigation Sub-Tabs */}
-      <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-300 dark:border-slate-800 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-2.5 rounded-2xl bg-brand-teal-50 dark:bg-brand-teal-950/80 text-brand-teal-700 dark:text-brand-teal-400 border border-brand-teal-300 dark:border-brand-teal-600/40">
+            <div className="p-2.5 rounded-2xl bg-nexablue-50 dark:bg-nexablue-950/80 text-nexablue-700 dark:text-nexablue-400 border border-nexablue-200 dark:border-nexablue-800/40">
               <Boxes className="w-6 h-6" />
             </div>
             <div>
@@ -397,13 +397,13 @@ export const CatalogManager: React.FC = () => {
         </div>
 
         {/* View Switcher Buttons */}
-        <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 self-start sm:self-auto">
+        <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 self-start sm:self-auto">
           <button
             type="button"
             onClick={() => setActiveTab('catalog')}
             className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'catalog'
-                ? 'bg-white dark:bg-slate-900 text-brand-teal-700 dark:text-brand-teal-400 shadow-sm border border-slate-200 dark:border-slate-700'
+                ? 'bg-white dark:bg-slate-900 text-nexablue-600 dark:text-nexablue-400 shadow-sm border border-slate-200 dark:border-slate-700'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -416,7 +416,7 @@ export const CatalogManager: React.FC = () => {
             onClick={() => setActiveTab('kardex')}
             className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'kardex'
-                ? 'bg-white dark:bg-slate-900 text-brand-teal-700 dark:text-brand-teal-400 shadow-sm border border-slate-200 dark:border-slate-700'
+                ? 'bg-white dark:bg-slate-900 text-nexablue-600 dark:text-nexablue-400 shadow-sm border border-slate-200 dark:border-slate-700'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -429,7 +429,7 @@ export const CatalogManager: React.FC = () => {
             onClick={() => setActiveTab('valuation')}
             className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'valuation'
-                ? 'bg-white dark:bg-slate-900 text-brand-teal-700 dark:text-brand-teal-400 shadow-sm border border-slate-200 dark:border-slate-700'
+                ? 'bg-white dark:bg-slate-900 text-nexablue-600 dark:text-nexablue-400 shadow-sm border border-slate-200 dark:border-slate-700'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -450,7 +450,7 @@ export const CatalogManager: React.FC = () => {
       {activeTab === 'catalog' && (
         <div className="space-y-6">
           {/* Top Filter Bar & Actions */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
             
             <div className="flex items-center gap-3 flex-1 flex-wrap">
               <div className="relative flex-1 min-w-[240px]">
@@ -460,14 +460,14 @@ export const CatalogManager: React.FC = () => {
                   placeholder="Buscar por equipo, código, marca, ubicación o descripción..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                  className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-nexablue-500 focus:ring-1 focus:ring-nexablue-500/30 shadow-xs"
                 />
               </div>
 
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-nexablue-500 shadow-xs"
               >
                 <option value="all">Todas las Categorías</option>
                 <option value="camaras">Cámaras de Vigilancia</option>
@@ -483,7 +483,7 @@ export const CatalogManager: React.FC = () => {
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-nexablue-500 shadow-xs"
               >
                 <option value="all">Todos los Tipos</option>
                 <option value="product">Equipos / Productos</option>
@@ -499,8 +499,8 @@ export const CatalogManager: React.FC = () => {
                 onClick={() => setStockFilter(prev => prev === 'all' ? 'low_or_out' : 'all')}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition-all ${
                   stockFilter === 'low_or_out'
-                    ? 'bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border-amber-400 dark:border-amber-600 shadow-sm'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700 hover:bg-slate-200'
+                    ? 'bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border-amber-400 dark:border-amber-600 shadow-xs'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-200'
                 }`}
                 title="Filtrar productos con existencia crítica o agotados"
               >
@@ -510,7 +510,7 @@ export const CatalogManager: React.FC = () => {
 
               <button
                 onClick={handleExportCatalog}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs border border-slate-300 dark:border-slate-700 shadow-sm transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs border border-slate-200 dark:border-slate-700 shadow-xs transition-colors"
                 title="Exportar listado a archivo CSV compatible con Excel"
               >
                 <Download className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
@@ -519,15 +519,15 @@ export const CatalogManager: React.FC = () => {
 
               <button
                 onClick={() => setIsBulkImportModalOpen(true)}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-brand-teal-50 dark:hover:bg-brand-teal-950/60 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs shadow-sm transition-colors"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-nexablue-50 dark:hover:bg-nexablue-950/60 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs shadow-xs transition-colors"
               >
-                <Upload className="w-4 h-4 text-brand-teal-600 dark:text-brand-teal-400" />
+                <Upload className="w-4 h-4 text-nexablue-600 dark:text-nexablue-400" />
                 <span>Carga Masiva CSV</span>
               </button>
 
               <button
                 onClick={openNewModal}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 hover:from-brand-teal-400 hover:to-brand-green-400 text-slate-950 font-black text-xs shadow-md border border-brand-teal-600/30 transition-all"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm hover:shadow-md transition-all"
               >
                 <Plus className="w-4 h-4" />
                 <span>Nuevo Ítem</span>
@@ -544,7 +544,7 @@ export const CatalogManager: React.FC = () => {
               return (
                 <div
                   key={item.id}
-                  className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-brand-teal-500 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+                  className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-nexablue-500 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4"
                 >
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between flex-wrap gap-1.5">
@@ -560,7 +560,7 @@ export const CatalogManager: React.FC = () => {
                             </span>
                           );
                         })()}
-                        <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-300 dark:border-slate-700">
+                        <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
                           {item.code || item.type.toUpperCase()}
                         </span>
                       </div>
@@ -572,7 +572,7 @@ export const CatalogManager: React.FC = () => {
                       </h4>
                       <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                         {item.brand && (
-                          <span className="text-[11px] font-bold text-brand-teal-700 dark:text-brand-teal-400">
+                          <span className="text-[11px] font-bold text-nexablue-600 dark:text-nexablue-400">
                             Marca: {item.brand}
                           </span>
                         )}
@@ -590,7 +590,7 @@ export const CatalogManager: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t-2 border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                  <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
                     <div>
                       <div className="text-[10px] text-slate-600 dark:text-slate-400 font-bold uppercase tracking-wider">
                         Precio Venta ({item.unit})
@@ -609,17 +609,17 @@ export const CatalogManager: React.FC = () => {
                       {isPhysical && (
                         <button
                           onClick={() => openQuickAdjustModal(item)}
-                          className="px-2.5 py-1.5 rounded-xl bg-brand-teal-50 dark:bg-brand-teal-950/60 hover:bg-brand-teal-100 dark:hover:bg-brand-teal-900/80 text-brand-teal-800 dark:text-brand-teal-300 border border-brand-teal-300 dark:border-brand-teal-600/40 text-xs font-bold flex items-center gap-1 transition-colors"
+                          className="px-2.5 py-1.5 rounded-xl bg-nexablue-50 dark:bg-nexablue-950/60 hover:bg-nexablue-100 dark:hover:bg-nexablue-900/80 text-nexablue-800 dark:text-nexablue-300 border border-nexablue-200 dark:border-nexablue-800/40 text-xs font-bold flex items-center gap-1 transition-colors"
                           title="Ajustar Stock / Ver Kardex del producto"
                         >
-                          <Boxes className="w-3.5 h-3.5 text-brand-teal-600" />
+                          <Boxes className="w-3.5 h-3.5 text-nexablue-600" />
                           <span>Stock: {item.stock ?? 0}</span>
                         </button>
                       )}
 
                       <button
                         onClick={() => openEditModal(item)}
-                        className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
+                        className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
                         title="Editar Artículo"
                       >
                         <Edit className="w-4 h-4" />
@@ -631,7 +631,7 @@ export const CatalogManager: React.FC = () => {
                             deleteCatalogProduct(item.id);
                           }
                         }}
-                        className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-rose-100 text-rose-600 dark:text-rose-400 border border-slate-300 dark:border-slate-700"
+                        className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-rose-100 text-rose-600 dark:text-rose-400 border border-slate-200 dark:border-slate-700"
                         title="Eliminar"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -651,7 +651,7 @@ export const CatalogManager: React.FC = () => {
       {activeTab === 'kardex' && (
         <div className="space-y-6">
           {/* Kardex Filters & Export */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
             <div className="flex items-center gap-3 flex-1 flex-wrap">
               <div className="relative flex-1 min-w-[240px]">
                 <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -660,14 +660,14 @@ export const CatalogManager: React.FC = () => {
                   placeholder="Buscar por producto, referencia, motivo o usuario..."
                   value={kardexSearch}
                   onChange={(e) => setKardexSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                  className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-nexablue-500 shadow-xs"
                 />
               </div>
 
               <select
                 value={kardexTypeFilter}
                 onChange={(e) => setKardexTypeFilter(e.target.value)}
-                className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-nexablue-500 shadow-xs"
               >
                 <option value="all">Todos los Movimientos</option>
                 <option value="purchase_entry">Entradas por Compra (+)</option>
@@ -682,7 +682,7 @@ export const CatalogManager: React.FC = () => {
               <select
                 value={kardexProductFilter}
                 onChange={(e) => setKardexProductFilter(e.target.value)}
-                className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-brand-teal-500 shadow-sm max-w-[200px]"
+                className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-nexablue-500 shadow-xs max-w-[200px]"
               >
                 <option value="all">Todos los Productos</option>
                 {catalog.filter(p => p.type === 'product' || p.type === 'material').map(p => (
@@ -693,15 +693,15 @@ export const CatalogManager: React.FC = () => {
 
             <button
               onClick={handleExportKardex}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs border border-slate-300 dark:border-slate-700 shadow-sm transition-colors whitespace-nowrap self-start lg:self-auto"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs border border-slate-200 dark:border-slate-700 shadow-xs transition-colors whitespace-nowrap self-start lg:self-auto"
             >
-              <Download className="w-4 h-4 text-brand-teal-600 dark:text-brand-teal-400" />
+              <Download className="w-4 h-4 text-nexablue-600 dark:text-nexablue-400" />
               <span>Exportar Kardex CSV</span>
             </button>
           </div>
 
           {/* Kardex Table */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-3xl overflow-hidden shadow-md">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
             {filteredMovements.length === 0 ? (
               <div className="p-12 text-center space-y-3">
                 <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 mx-auto">
@@ -818,7 +818,7 @@ export const CatalogManager: React.FC = () => {
         <div className="space-y-6">
           {/* Executive KPI Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-4">
+            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-700/40">
                 <DollarSign className="w-6 h-6" />
               </div>
@@ -835,7 +835,7 @@ export const CatalogManager: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-4">
+            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0 border border-emerald-200 dark:border-emerald-700/40">
                 <TrendingUp className="w-6 h-6" />
               </div>
@@ -852,7 +852,7 @@ export const CatalogManager: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-4">
+            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 flex items-center justify-center shrink-0 border border-purple-200 dark:border-purple-700/40">
                 <TrendingUp className="w-6 h-6" />
               </div>
@@ -869,7 +869,7 @@ export const CatalogManager: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-4">
+            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 flex items-center justify-center shrink-0 border border-amber-200 dark:border-amber-700/40">
                 <AlertTriangle className="w-6 h-6" />
               </div>
@@ -888,7 +888,7 @@ export const CatalogManager: React.FC = () => {
           </div>
 
           {/* Urgent Reorder Table */}
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-300 dark:border-slate-800 shadow-md space-y-4">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -993,9 +993,9 @@ export const CatalogManager: React.FC = () => {
       ========================================================= */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-5">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-5">
             
-            <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-3">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
               <div>
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                   {editingProduct ? 'Editar Ítem del Catálogo' : 'Nuevo Ítem en Catálogo'}
@@ -1019,7 +1019,7 @@ export const CatalogManager: React.FC = () => {
                     placeholder="Ej. CAM-IP-4MP"
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono focus:outline-none focus:border-brand-teal-500"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono focus:outline-none focus:border-nexablue-500"
                   />
                 </div>
 
@@ -1030,7 +1030,7 @@ export const CatalogManager: React.FC = () => {
                     placeholder="Ej. Hikvision / BFT"
                     value={brand}
                     onChange={(e) => setBrand(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500"
                   />
                 </div>
               </div>
@@ -1045,7 +1045,7 @@ export const CatalogManager: React.FC = () => {
                   placeholder="Ej. Cámara IP Domo 4MP ColorVu 24/7"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500"
                 />
               </div>
 
@@ -1055,7 +1055,7 @@ export const CatalogManager: React.FC = () => {
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value as ServiceCategory)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-brand-teal-500"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-nexablue-500"
                   >
                     <option value="camaras">Cámaras de Vigilancia</option>
                     <option value="redes">Redes Informáticas</option>
@@ -1073,7 +1073,7 @@ export const CatalogManager: React.FC = () => {
                   <select
                     value={type}
                     onChange={(e) => setType(e.target.value as any)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-brand-teal-500 font-bold"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-nexablue-500 font-bold"
                   >
                     <option value="product">Equipo / Producto (Control de Stock)</option>
                     <option value="material">Material / Insumo (Control de Stock)</option>
@@ -1085,10 +1085,10 @@ export const CatalogManager: React.FC = () => {
 
               {/* Physical Inventory Controls (Stock & Location) */}
               {(type === 'product' || type === 'material') ? (
-                <div className="p-3.5 rounded-xl bg-brand-teal-50/50 dark:bg-brand-teal-950/30 border border-brand-teal-200 dark:border-brand-teal-800/40 space-y-3">
+                <div className="p-3.5 rounded-xl bg-nexablue-50/50 dark:bg-nexablue-950/30 border border-nexablue-200 dark:border-nexablue-800/40 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-brand-teal-900 dark:text-brand-teal-300 flex items-center gap-1.5">
-                      <Boxes className="w-4 h-4 text-brand-teal-600" />
+                    <span className="text-xs font-bold text-nexablue-900 dark:text-nexablue-300 flex items-center gap-1.5">
+                      <Boxes className="w-4 h-4 text-nexablue-600" />
                       Existencias Físicas & Almacén
                     </span>
                     {editingProduct && (
@@ -1119,7 +1119,7 @@ export const CatalogManager: React.FC = () => {
                         min="0"
                         value={stock}
                         onChange={(e) => setStock(Math.max(0, Number(e.target.value)))}
-                        className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-black text-brand-teal-800 dark:text-brand-teal-300 font-mono focus:outline-none focus:border-brand-teal-500"
+                        className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-black text-nexablue-800 dark:text-nexablue-300 font-mono focus:outline-none focus:border-nexablue-500"
                       />
                     </div>
 
@@ -1132,7 +1132,7 @@ export const CatalogManager: React.FC = () => {
                         min="0"
                         value={minStock}
                         onChange={(e) => setMinStock(Math.max(0, Number(e.target.value)))}
-                        className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-mono focus:outline-none focus:border-brand-teal-500"
+                        className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-mono focus:outline-none focus:border-nexablue-500"
                         title="Cuando el stock llegue a esta cantidad, el sistema marcará alerta crítica"
                       />
                     </div>
@@ -1146,15 +1146,15 @@ export const CatalogManager: React.FC = () => {
                         placeholder="Ej. Pasillo A-1"
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-brand-teal-500"
+                        className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-nexablue-500"
                       />
                     </div>
                   </div>
 
                   {/* Audit Trail Requirement if Stock Changed on existing item */}
                   {editingProduct && stock !== (editingProduct.stock ?? 0) && (
-                    <div className="pt-2 border-t border-brand-teal-200 dark:border-brand-teal-800/40 space-y-2">
-                      <div className="text-[10px] font-bold text-brand-teal-900 dark:text-brand-teal-300 uppercase tracking-wider flex items-center gap-1">
+                    <div className="pt-2 border-t border-nexablue-200 dark:border-nexablue-800/40 space-y-2">
+                      <div className="text-[10px] font-bold text-nexablue-900 dark:text-nexablue-300 uppercase tracking-wider flex items-center gap-1">
                         <History className="w-3.5 h-3.5" />
                         Registro de Auditoría Obligatorio (Kardex)
                       </div>
@@ -1165,7 +1165,7 @@ export const CatalogManager: React.FC = () => {
                           <select
                             value={adjustmentReason}
                             onChange={(e) => setAdjustmentReason(e.target.value)}
-                            className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-[11px] text-slate-900 dark:text-slate-200"
+                            className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] text-slate-900 dark:text-slate-200"
                           >
                             {COMMON_ADJUSTMENT_REASONS.map(r => (
                               <option key={r.value} value={r.value}>{r.value}</option>
@@ -1181,7 +1181,7 @@ export const CatalogManager: React.FC = () => {
                             placeholder="Ej. Factura #892, Cuadre mensual"
                             value={referenceDocument}
                             onChange={(e) => setReferenceDocument(e.target.value)}
-                            className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-[11px] text-slate-900 dark:text-slate-200"
+                            className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] text-slate-900 dark:text-slate-200"
                           />
                         </div>
                       </div>
@@ -1194,7 +1194,7 @@ export const CatalogManager: React.FC = () => {
                             value={customReason}
                             onChange={(e) => setCustomReason(e.target.value)}
                             required
-                            className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-[11px] text-slate-900 dark:text-slate-200"
+                            className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] text-slate-900 dark:text-slate-200"
                           />
                         </div>
                       )}
@@ -1219,7 +1219,7 @@ export const CatalogManager: React.FC = () => {
                     step="10"
                     value={unitPrice}
                     onChange={(e) => setUnitPrice(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-brand-green-700 dark:text-brand-green-400 font-mono focus:outline-none focus:border-brand-teal-500"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-brand-green-700 dark:text-brand-green-400 font-mono focus:outline-none focus:border-nexablue-500"
                   />
                 </div>
 
@@ -1231,7 +1231,7 @@ export const CatalogManager: React.FC = () => {
                     step="10"
                     value={costPrice}
                     onChange={(e) => setCostPrice(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-mono focus:outline-none focus:border-brand-teal-500"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-mono focus:outline-none focus:border-nexablue-500"
                   />
                 </div>
 
@@ -1242,7 +1242,7 @@ export const CatalogManager: React.FC = () => {
                     placeholder="Unidad, Metro, Kit"
                     value={unit}
                     onChange={(e) => setUnit(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-brand-teal-500"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-nexablue-500"
                   />
                 </div>
               </div>
@@ -1254,21 +1254,21 @@ export const CatalogManager: React.FC = () => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Especificaciones clave, garantía del fabricante, etc."
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none focus:outline-none focus:border-brand-teal-500"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none focus:outline-none focus:border-nexablue-500"
                 />
               </div>
 
-              <div className="pt-3 border-t-2 border-slate-200 dark:border-slate-800 flex justify-end gap-2">
+              <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700 hover:bg-slate-200"
+                  className="px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-200"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-lg bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-md border border-brand-teal-700/20"
+                  className="px-5 py-2 rounded-lg bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm hover:shadow-md transition-all"
                 >
                   Guardar en Catálogo
                 </button>
@@ -1285,12 +1285,12 @@ export const CatalogManager: React.FC = () => {
       ========================================================= */}
       {isAdjustModalOpen && selectedProductForAdjustment && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-3xl max-w-xl w-full p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-5">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-xl w-full p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-5">
             
             {/* Modal Header */}
-            <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-3">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
               <div>
-                <span className="text-[10px] font-mono font-bold text-brand-teal-700 dark:text-brand-teal-400 bg-brand-teal-50 dark:bg-brand-teal-950/60 px-2 py-0.5 rounded border border-brand-teal-300 dark:border-brand-teal-600/30">
+                <span className="text-[10px] font-mono font-bold text-nexablue-700 dark:text-nexablue-400 bg-nexablue-50 dark:bg-nexablue-950/60 px-2 py-0.5 rounded border border-nexablue-200 dark:border-nexablue-800/40">
                   {selectedProductForAdjustment.code || 'ARTÍCULO'}
                 </span>
                 <h3 className="text-base font-bold text-slate-900 dark:text-white mt-1">
@@ -1312,7 +1312,7 @@ export const CatalogManager: React.FC = () => {
                 onClick={() => setAdjustModalSubTab('adjust')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   adjustModalSubTab === 'adjust'
-                    ? 'bg-brand-teal-50 dark:bg-brand-teal-950/60 text-brand-teal-800 dark:text-brand-teal-300 border border-brand-teal-300 dark:border-brand-teal-600/40'
+                    ? 'bg-nexablue-50 dark:bg-nexablue-950/60 text-nexablue-800 dark:text-nexablue-300 border border-nexablue-200 dark:border-nexablue-800/40'
                     : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
                 }`}
               >
@@ -1323,7 +1323,7 @@ export const CatalogManager: React.FC = () => {
                 onClick={() => setAdjustModalSubTab('history')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   adjustModalSubTab === 'history'
-                    ? 'bg-brand-teal-50 dark:bg-brand-teal-950/60 text-brand-teal-800 dark:text-brand-teal-300 border border-brand-teal-300 dark:border-brand-teal-600/40'
+                    ? 'bg-nexablue-50 dark:bg-nexablue-950/60 text-nexablue-800 dark:text-nexablue-300 border border-nexablue-200 dark:border-nexablue-800/40'
                     : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
                 }`}
               >
@@ -1346,7 +1346,7 @@ export const CatalogManager: React.FC = () => {
                     className={`p-3 rounded-xl border text-center transition-all ${
                       adjustAction === 'entry'
                         ? 'bg-emerald-50 dark:bg-emerald-950/60 border-emerald-400 text-emerald-800 dark:text-emerald-300 font-black shadow-sm'
-                        : 'bg-slate-50 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
+                        : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
                     }`}
                   >
                     <ArrowUpRight className="w-5 h-5 mx-auto mb-1 text-emerald-600" />
@@ -1363,7 +1363,7 @@ export const CatalogManager: React.FC = () => {
                     className={`p-3 rounded-xl border text-center transition-all ${
                       adjustAction === 'exit'
                         ? 'bg-rose-50 dark:bg-rose-950/60 border-rose-400 text-rose-800 dark:text-rose-300 font-black shadow-sm'
-                        : 'bg-slate-50 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
+                        : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
                     }`}
                   >
                     <ArrowDownRight className="w-5 h-5 mx-auto mb-1 text-rose-600" />
@@ -1381,7 +1381,7 @@ export const CatalogManager: React.FC = () => {
                     className={`p-3 rounded-xl border text-center transition-all ${
                       adjustAction === 'set'
                         ? 'bg-blue-50 dark:bg-blue-950/60 border-blue-400 text-blue-800 dark:text-blue-300 font-black shadow-sm'
-                        : 'bg-slate-50 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
+                        : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
                     }`}
                   >
                     <RefreshCw className="w-5 h-5 mx-auto mb-1 text-blue-600" />
@@ -1391,7 +1391,7 @@ export const CatalogManager: React.FC = () => {
                 </div>
 
                 {/* Calculation preview pill */}
-                <div className="p-3.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 flex items-center justify-between">
+                <div className="p-3.5 rounded-xl bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
                   <div>
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                       Existencia Actual
@@ -1407,7 +1407,7 @@ export const CatalogManager: React.FC = () => {
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                       Stock Resultante
                     </span>
-                    <span className="text-sm font-black font-mono text-brand-teal-700 dark:text-brand-teal-300">
+                    <span className="text-sm font-black font-mono text-nexablue-700 dark:text-nexablue-300">
                       {adjustAction === 'entry' 
                         ? (selectedProductForAdjustment.stock ?? 0) + Math.max(0, Number(adjustQuantity))
                         : adjustAction === 'exit'
@@ -1429,7 +1429,7 @@ export const CatalogManager: React.FC = () => {
                     required
                     value={adjustQuantity}
                     onChange={(e) => setAdjustQuantity(Math.max(0, Number(e.target.value)))}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-mono font-black text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500"
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-mono font-black text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500"
                   />
                 </div>
 
@@ -1439,7 +1439,7 @@ export const CatalogManager: React.FC = () => {
                   <select
                     value={quickReason}
                     onChange={(e) => setQuickReason(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200"
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 focus:border-nexablue-500 focus:outline-none"
                   >
                     {COMMON_ADJUSTMENT_REASONS.map(r => (
                       <option key={r.value} value={r.value}>{r.value}</option>
@@ -1456,7 +1456,7 @@ export const CatalogManager: React.FC = () => {
                       placeholder="Explica el motivo del movimiento..."
                       value={quickCustomReason}
                       onChange={(e) => setQuickCustomReason(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                     />
                   </div>
                 )}
@@ -1470,7 +1470,7 @@ export const CatalogManager: React.FC = () => {
                       placeholder="Ej. FACT-PROV-901"
                       value={quickReference}
                       onChange={(e) => setQuickReference(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono"
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono focus:border-nexablue-500 focus:outline-none"
                     />
                   </div>
 
@@ -1481,22 +1481,22 @@ export const CatalogManager: React.FC = () => {
                       placeholder="Ej. Recibido por chofer"
                       value={quickNotes}
                       onChange={(e) => setQuickNotes(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
                     />
                   </div>
                 </div>
 
-                <div className="pt-3 border-t-2 border-slate-200 dark:border-slate-800 flex justify-end gap-2">
+                <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => setIsAdjustModalOpen(false)}
-                    className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 hover:bg-slate-200"
+                    className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-200"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-md border border-brand-teal-700/20"
+                    className="px-5 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm hover:shadow-md transition-all"
                   >
                     Confirmar y Registrar en Kardex
                   </button>

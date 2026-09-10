@@ -607,7 +607,7 @@ export const QuoteBuilderModal: React.FC = () => {
       {/* Exit Confirmation Dialog */}
       {showExitConfirm && (
         <div className="fixed inset-0 z-60 bg-black/70 flex items-center justify-center p-4 backdrop-blur-xs">
-          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn">
             <div className="flex items-center gap-3 text-amber-600 dark:text-amber-400">
               <AlertTriangle className="w-6 h-6 flex-shrink-0" />
               <h4 className="text-base font-black text-slate-900 dark:text-white">
@@ -621,7 +621,7 @@ export const QuoteBuilderModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowExitConfirm(false)}
-                className="px-4 py-2 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-sm"
+                className="px-4 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-xs"
               >
                 Continuar Editando
               </button>
@@ -637,7 +637,7 @@ export const QuoteBuilderModal: React.FC = () => {
         </div>
       )}
 
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl max-w-4xl w-full p-5 sm:p-7 relative max-h-[95vh] overflow-y-auto shadow-2xl space-y-6">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl max-w-4xl w-full p-5 sm:p-7 relative max-h-[95vh] overflow-y-auto shadow-2xl space-y-6">
         
         {/* Draft Restored Banner */}
         {draftRestoredAt && (
@@ -659,7 +659,7 @@ export const QuoteBuilderModal: React.FC = () => {
         {/* Header */}
         <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-teal-50 dark:bg-brand-teal-500/10 border border-brand-teal-300 dark:border-brand-teal-500/30 flex items-center justify-center text-brand-teal-600 dark:text-brand-teal-400 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-nexablue-50 dark:bg-nexablue-950/40 border border-nexablue-200 dark:border-nexablue-800 flex items-center justify-center text-nexablue-600 dark:text-nexablue-400 shadow-xs">
               <Calculator className="w-5 h-5" />
             </div>
             <div>
@@ -677,8 +677,8 @@ export const QuoteBuilderModal: React.FC = () => {
               onClick={() => setShowCostMargin(!showCostMargin)}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 border transition-all ${
                 showCostMargin 
-                  ? 'bg-brand-teal-50 dark:bg-brand-teal-950/60 border-brand-teal-400 text-brand-teal-800 dark:text-brand-teal-300'
-                  : 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
+                  ? 'bg-nexablue-50 dark:bg-nexablue-950/60 border-nexablue-300 dark:border-nexablue-700 text-nexablue-800 dark:text-nexablue-300'
+                  : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
               }`}
               title="Alternar vista de costos y márgenes confidenciales de rentabilidad"
             >
@@ -689,7 +689,7 @@ export const QuoteBuilderModal: React.FC = () => {
             <button
               type="button"
               onClick={handleSafeClose}
-              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-300 dark:border-slate-700"
+              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-200 dark:border-slate-700"
               aria-label="Cerrar Modal"
             >
               <X className="w-5 h-5" />
@@ -700,14 +700,14 @@ export const QuoteBuilderModal: React.FC = () => {
         <form id="quote-builder-form" onSubmit={handleSubmit} className="space-y-6">
           
           {/* Client & Metadata Grid */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-300 dark:border-slate-800 space-y-4 shadow-sm">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-4 shadow-xs">
             <div className="flex items-center justify-between flex-wrap gap-2">
-              <div className="text-xs font-bold text-brand-teal-800 dark:text-brand-teal-400 uppercase tracking-wider">
+              <div className="text-xs font-bold text-nexablue-800 dark:text-nexablue-400 uppercase tracking-wider">
                 1. Datos del Cliente & Presupuesto
               </div>
               {clients.length > 0 && (
-                <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-300 dark:border-slate-700 shadow-xs">
-                  <Users className="w-3.5 h-3.5 text-brand-teal-600 dark:text-brand-teal-400 flex-shrink-0" />
+                <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-xs">
+                  <Users className="w-3.5 h-3.5 text-nexablue-600 dark:text-nexablue-400 flex-shrink-0" />
                   <select
                     value={clientId}
                     onChange={(e) => handleSelectClient(e.target.value)}
@@ -735,7 +735,7 @@ export const QuoteBuilderModal: React.FC = () => {
                   placeholder="Ej. Ing. Carlos Mendoza"
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500 shadow-xs"
                 />
               </div>
 
@@ -748,7 +748,7 @@ export const QuoteBuilderModal: React.FC = () => {
                   placeholder="Ej. Centro Logístico del Caribe"
                   value={clientCompany}
                   onChange={(e) => setClientCompany(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500 shadow-xs"
                 />
               </div>
 
@@ -761,7 +761,7 @@ export const QuoteBuilderModal: React.FC = () => {
                   placeholder="Ej. (809) 555-4321"
                   value={clientPhone}
                   onChange={handlePhoneChange}
-                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm font-mono"
+                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500 shadow-xs font-mono"
                 />
               </div>
             </div>
@@ -787,10 +787,10 @@ export const QuoteBuilderModal: React.FC = () => {
                   placeholder="Ej. 131-99887-2"
                   value={clientRnc}
                   onChange={(e) => setClientRnc(e.target.value)}
-                  className={`w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border text-xs text-slate-900 dark:text-white focus:outline-none shadow-sm font-mono ${
+                  className={`w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border text-xs text-slate-900 dark:text-white focus:outline-none shadow-xs font-mono ${
                     clientRnc && !rncValidation.isValid
                       ? 'border-rose-400 focus:border-rose-500'
-                      : 'border-slate-300 dark:border-slate-700 focus:border-brand-teal-500'
+                      : 'border-slate-200 dark:border-slate-700 focus:border-nexablue-500'
                   }`}
                 />
               </div>
@@ -804,7 +804,7 @@ export const QuoteBuilderModal: React.FC = () => {
                   placeholder="Ej. Zona Franca San Isidro, Nave 14"
                   value={clientAddress}
                   onChange={(e) => setClientAddress(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500 shadow-xs"
                 />
               </div>
 
@@ -815,7 +815,7 @@ export const QuoteBuilderModal: React.FC = () => {
                 <select
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value as 'DOP' | 'USD')}
-                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-medium"
+                  className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-medium"
                 >
                   <option value="DOP">Pesos Dominicanos (RD$ DOP)</option>
                   <option value="USD">Dólares Americanos (USD $)</option>
@@ -830,7 +830,7 @@ export const QuoteBuilderModal: React.FC = () => {
                     type="checkbox"
                     checked={saveToDirectory}
                     onChange={(e) => setSaveToDirectory(e.target.checked)}
-                    className="rounded border-slate-300 dark:border-slate-700 text-brand-teal-600"
+                    className="rounded border-slate-200 dark:border-slate-700 text-nexablue-600"
                   />
                   <span>Guardar este contacto en el Directorio de Clientes al guardar cotización</span>
                 </label>
@@ -846,11 +846,11 @@ export const QuoteBuilderModal: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsCatalogPickerOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-black text-xs shadow-xs transition-all"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-xs transition-all"
                 >
                   <Package className="w-4 h-4" />
                   <span>Explorar Catálogo</span>
-                  <span className="px-1.5 py-0.5 rounded-full bg-white/20 text-[10px] font-mono">
+                  <span className="px-1.5 py-0.5 rounded-full bg-white/20 text-[10px] font-mono font-bold">
                     {catalog.length}
                   </span>
                 </button>
@@ -858,7 +858,7 @@ export const QuoteBuilderModal: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsTemplatesModalOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs shadow-xs transition-all"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-xs transition-all"
                 >
                   <Sparkles className="w-4 h-4" />
                   <span>Paquetes & Plantillas</span>
@@ -869,7 +869,7 @@ export const QuoteBuilderModal: React.FC = () => {
                   onClick={() => handleAddItem('product')}
                   className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs border border-slate-200 dark:border-slate-700 shadow-2xs transition-colors"
                 >
-                  <Plus className="w-4 h-4 text-brand-teal-600 dark:text-brand-teal-400" />
+                  <Plus className="w-4 h-4 text-nexablue-600 dark:text-nexablue-400" />
                   <span>+ Fila Manual</span>
                 </button>
               </div>
@@ -881,7 +881,7 @@ export const QuoteBuilderModal: React.FC = () => {
                   onChange={(e) => {
                     setSelectedCatalogId(e.target.value);
                   }}
-                  className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-brand-teal-500 truncate"
+                  className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-nexablue-500 truncate"
                 >
                   <option value="">-- Inserción rápida desde catálogo --</option>
                   {catalog.map(c => (
@@ -907,7 +907,7 @@ export const QuoteBuilderModal: React.FC = () => {
           <div className="space-y-3">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                <FileText className="w-4 h-4 text-brand-green-600 dark:text-brand-green-400" />
+                <FileText className="w-4 h-4 text-nexablue-600 dark:text-nexablue-400" />
                 <span>2. Detalle de Equipos, Materiales y Mano de Obra</span>
                 <span className="px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono text-[11px] font-bold">
                   {items.length} {items.length === 1 ? 'partida' : 'partidas'}
@@ -940,7 +940,7 @@ export const QuoteBuilderModal: React.FC = () => {
             </div>
 
             {items.length === 0 ? (
-              <div className="p-8 text-center rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30 space-y-3">
+              <div className="p-8 text-center rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30 space-y-3">
                 <Package className="w-8 h-8 text-slate-400 mx-auto" />
                 <div>
                   <p className="text-sm font-bold text-slate-700 dark:text-slate-300">
@@ -954,7 +954,7 @@ export const QuoteBuilderModal: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setIsCatalogPickerOpen(true)}
-                    className="px-3.5 py-1.5 rounded-lg bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-xs"
+                    className="px-3.5 py-1.5 rounded-lg bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-xs"
                   >
                     Abrir Catálogo
                   </button>
@@ -980,7 +980,7 @@ export const QuoteBuilderModal: React.FC = () => {
                   return (
                     <div 
                       key={item.id}
-                      className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700/80 grid grid-cols-12 gap-2.5 items-center shadow-2xs hover:border-slate-400 dark:hover:border-slate-600 transition-colors"
+                      className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 grid grid-cols-12 gap-2.5 items-center shadow-2xs hover:border-slate-300 dark:hover:border-slate-600 transition-colors"
                     >
                       {/* Reorder and Index Column */}
                       <div className="col-span-1 flex items-center gap-1 justify-center">
@@ -1027,7 +1027,7 @@ export const QuoteBuilderModal: React.FC = () => {
                             placeholder="Nombre del equipo o partida"
                             value={item.name}
                             onChange={(e) => handleUpdateItem(item.id, { name: e.target.value })}
-                            className="flex-1 px-2.5 py-1 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-brand-teal-500"
+                            className="flex-1 px-2.5 py-1 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-nexablue-500"
                           />
                         </div>
                         <input
@@ -1035,7 +1035,7 @@ export const QuoteBuilderModal: React.FC = () => {
                           placeholder="Descripción técnica, marca o especificaciones (opcional)"
                           value={item.description || ''}
                           onChange={(e) => handleUpdateItem(item.id, { description: e.target.value })}
-                          className="w-full px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-900/60 border border-slate-300 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 focus:outline-none focus:border-brand-teal-500"
+                          className="w-full px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 focus:outline-none focus:border-nexablue-500"
                         />
                       </div>
 
@@ -1048,7 +1048,7 @@ export const QuoteBuilderModal: React.FC = () => {
                           placeholder="Cant"
                           value={item.quantity}
                           onChange={(e) => handleUpdateItem(item.id, { quantity: Math.max(1, Number(e.target.value)) })}
-                          className="w-full px-1.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-center text-slate-900 dark:text-white font-bold focus:outline-none focus:border-brand-teal-500 font-mono"
+                          className="w-full px-1.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-center text-slate-900 dark:text-white font-bold focus:outline-none focus:border-nexablue-500 font-mono"
                         />
                       </div>
 
@@ -1079,13 +1079,13 @@ export const QuoteBuilderModal: React.FC = () => {
                           placeholder="Precio"
                           value={item.unitPrice}
                           onChange={(e) => handleUpdateItem(item.id, { unitPrice: Number(e.target.value) })}
-                          className="w-full px-2.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-right text-slate-900 dark:text-white font-mono font-bold focus:outline-none focus:border-brand-teal-500"
+                          className="w-full px-2.5 py-1.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-right text-slate-900 dark:text-white font-mono font-bold focus:outline-none focus:border-nexablue-500"
                         />
                       </div>
 
                       {/* Total & Action Buttons */}
                       <div className={`flex items-center justify-between gap-1.5 ${showCostMargin ? 'col-span-12 sm:col-span-2' : 'col-span-4 sm:col-span-3'}`}>
-                        <div className="text-right font-black text-brand-teal-800 dark:text-brand-teal-300 text-xs font-mono truncate flex-1">
+                        <div className="text-right font-black text-nexablue-700 dark:text-nexablue-300 text-xs font-mono truncate flex-1">
                           {formatCurrency(item.total, currency)}
                         </div>
                         
@@ -1093,7 +1093,7 @@ export const QuoteBuilderModal: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => handleDuplicateItem(item.id)}
-                            className="p-1 rounded text-slate-400 hover:text-brand-teal-600 dark:hover:text-brand-teal-400 transition-colors"
+                            className="p-1 rounded text-slate-400 hover:text-nexablue-600 dark:hover:text-nexablue-400 transition-colors"
                             title="Duplicar esta partida"
                           >
                             <Copy className="w-3.5 h-3.5" />
@@ -1132,7 +1132,7 @@ export const QuoteBuilderModal: React.FC = () => {
                     type="text"
                     value={deliveryTime}
                     onChange={(e) => setDeliveryTime(e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                    className="w-full px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
                   />
                 </div>
 
@@ -1142,7 +1142,7 @@ export const QuoteBuilderModal: React.FC = () => {
                     type="text"
                     value={warrantyNotes}
                     onChange={(e) => setWarrantyNotes(e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                    className="w-full px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
                   />
                 </div>
               </div>
@@ -1153,7 +1153,7 @@ export const QuoteBuilderModal: React.FC = () => {
                   type="text"
                   value={paymentTerms}
                   onChange={(e) => setPaymentTerms(e.target.value)}
-                  className="w-full px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
                 />
               </div>
 
@@ -1164,13 +1164,13 @@ export const QuoteBuilderModal: React.FC = () => {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Información adicional visible en el pie del documento..."
-                  className="w-full px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none"
+                  className="w-full px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none"
                 />
               </div>
             </div>
 
             {/* Calculations Box (5 cols) */}
-            <div className="sm:col-span-5 bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-300 dark:border-slate-800 space-y-3 shadow-sm">
+            <div className="sm:col-span-5 bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3 shadow-xs">
               <div className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-2">
                 Resumen Financiero
               </div>
@@ -1190,7 +1190,7 @@ export const QuoteBuilderModal: React.FC = () => {
                     max="100"
                     value={discountPercent}
                     onChange={(e) => setDiscountPercent(Number(e.target.value))}
-                    className="w-14 px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-center font-bold"
+                    className="w-14 px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-center font-bold"
                   />
                   <span className="text-amber-700 dark:text-amber-400 font-mono font-bold">
                     -{formatCurrency(discountAmount, currency)}
@@ -1205,7 +1205,7 @@ export const QuoteBuilderModal: React.FC = () => {
                     type="checkbox"
                     checked={applyTax}
                     onChange={(e) => setApplyTax(e.target.checked)}
-                    className="rounded border-slate-300 dark:border-slate-700 text-brand-teal-600"
+                    className="rounded border-slate-200 dark:border-slate-700 text-nexablue-600"
                   />
                   <span>Aplicar ITBIS (18%)</span>
                 </label>
@@ -1217,9 +1217,9 @@ export const QuoteBuilderModal: React.FC = () => {
               </div>
 
               {/* Grand Total */}
-              <div className="pt-3 border-t-2 border-slate-300 dark:border-slate-800 flex items-baseline justify-between">
+              <div className="pt-3 border-t-2 border-slate-200 dark:border-slate-800 flex items-baseline justify-between">
                 <span className="text-sm font-black text-slate-900 dark:text-white uppercase">TOTAL CLIENTE:</span>
-                <span className="text-xl font-black font-mono text-brand-teal-700 dark:text-brand-teal-400">
+                <span className="text-xl font-black font-mono text-nexablue-600 dark:text-nexablue-400">
                   {formatCurrency(total, currency)}
                 </span>
               </div>
@@ -1298,7 +1298,7 @@ export const QuoteBuilderModal: React.FC = () => {
           <div className="pt-4 border-t-2 border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 hidden sm:flex">
               <span>Atajo:</span>
-              <kbd className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[10px] text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-bold">
+              <kbd className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-mono text-[10px] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-bold">
                 Ctrl + Enter
               </kbd>
               <span>para guardar</span>
@@ -1308,13 +1308,13 @@ export const QuoteBuilderModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsQuoteModalOpen(false)}
-                className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-300 text-xs font-semibold border border-slate-300 dark:border-slate-700"
+                className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-300 text-xs font-bold border border-slate-200 dark:border-slate-700 transition-colors"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 hover:from-brand-teal-400 hover:to-brand-green-400 text-slate-950 font-black text-xs shadow-md border border-brand-teal-600/30 flex items-center gap-2 transition-all hover:shadow-lg"
+                className="px-6 py-2.5 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-md flex items-center gap-2 transition-all hover:shadow-lg"
               >
                 <Save className="w-4 h-4" />
                 <span>Guardar y Ver Cotización Membretada</span>

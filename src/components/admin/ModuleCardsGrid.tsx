@@ -83,8 +83,8 @@ export const ModuleCardsGrid: React.FC<ModuleCardsGridProps> = ({
         category: 'Comercial' as const,
         description: 'Cotizaciones con cálculo de margen, PDF y firma digital',
         icon: FileText,
-        iconBg: 'bg-brand-teal-50 dark:bg-brand-teal-950/60 border-brand-teal-200 dark:border-brand-teal-800/60',
-        iconColor: 'text-brand-teal-600 dark:text-brand-teal-400',
+        iconBg: 'bg-nexablue-50 dark:bg-nexablue-950/60 border-nexablue-200 dark:border-nexablue-800/60',
+        iconColor: 'text-nexablue-600 dark:text-cyan-400',
         badge: pendingQuotesCount > 0 ? `${pendingQuotesCount} pendientes` : `${quotes.length} total`,
         badgeType: pendingQuotesCount > 0 ? 'warning' as const : 'neutral' as const
       },
@@ -225,7 +225,7 @@ export const ModuleCardsGrid: React.FC<ModuleCardsGridProps> = ({
             {showCategoryHeaders && (
               <div className="flex items-center gap-2 px-1">
                 <span className="text-xs">{cat.icon}</span>
-                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
                   {cat.label}
                 </span>
                 <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800 ml-2" />
@@ -238,10 +238,10 @@ export const ModuleCardsGrid: React.FC<ModuleCardsGridProps> = ({
                 const isActive = adminTab === mod.id;
 
                 const badgeColors = {
-                  info: 'bg-sky-100 text-sky-800 dark:bg-sky-950/70 dark:text-sky-300 border-sky-300 dark:border-sky-700/50',
-                  warning: 'bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border-amber-300 dark:border-amber-700/50',
-                  success: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700/50',
-                  neutral: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-300 dark:border-slate-700'
+                  info: 'bg-sky-50 text-sky-800 dark:bg-sky-950/70 dark:text-sky-300 border-sky-200 dark:border-sky-700/50',
+                  warning: 'bg-amber-50 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300 border-amber-200 dark:border-amber-700/50',
+                  success: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700/50',
+                  neutral: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700'
                 }[mod.badgeType || 'neutral'];
 
                 return (
@@ -258,14 +258,14 @@ export const ModuleCardsGrid: React.FC<ModuleCardsGridProps> = ({
                     }}
                     className={`group relative p-4 rounded-2xl border transition-all duration-200 cursor-pointer flex flex-col justify-between gap-3 text-left focus:outline-none ${
                       isActive
-                        ? 'bg-brand-teal-50/90 dark:bg-brand-teal-950/40 border-brand-teal-500 ring-2 ring-brand-teal-500/20 shadow-md'
-                        : 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-800 hover:border-brand-teal-500/80 hover:shadow-md dark:hover:bg-slate-850'
+                        ? 'bg-nexablue-50/80 dark:bg-nexablue-950/40 border-nexablue-500 ring-2 ring-nexablue-500/20 shadow-sm'
+                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-nexablue-500/80 hover:shadow-sm dark:hover:bg-slate-850'
                     }`}
                   >
                     {/* Top Row: Icon, Title & Badge */}
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${mod.iconBg} ${mod.iconColor} shadow-sm group-hover:scale-105 transition-transform`}>
+                        <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${mod.iconBg} ${mod.iconColor} shadow-2xs group-hover:scale-105 transition-transform`}>
                           <Icon className="w-5 h-5" />
                         </div>
                         <div>
@@ -274,7 +274,7 @@ export const ModuleCardsGrid: React.FC<ModuleCardsGridProps> = ({
                               {mod.label}
                             </h4>
                             {isActive && (
-                              <span className="w-2 h-2 rounded-full bg-brand-teal-500 shrink-0" title="Módulo Activo" />
+                              <span className="w-2 h-2 rounded-full bg-nexablue-500 shrink-0" title="Módulo Activo" />
                             )}
                           </div>
                           {mod.badge && (
@@ -285,8 +285,8 @@ export const ModuleCardsGrid: React.FC<ModuleCardsGridProps> = ({
                         </div>
                       </div>
 
-                      <div className={`p-1 rounded-lg text-slate-400 group-hover:text-brand-teal-600 dark:group-hover:text-brand-teal-400 group-hover:translate-x-0.5 transition-all ${
-                        isActive ? 'text-brand-teal-600 dark:text-brand-teal-400' : ''
+                      <div className={`p-1 rounded-lg text-slate-400 group-hover:text-nexablue-600 dark:group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-all ${
+                        isActive ? 'text-nexablue-600 dark:text-cyan-400' : ''
                       }`}>
                         <ArrowRight className="w-4 h-4" />
                       </div>
@@ -299,7 +299,7 @@ export const ModuleCardsGrid: React.FC<ModuleCardsGridProps> = ({
 
                     {/* Bottom active pill if selected */}
                     {isActive && (
-                      <div className="pt-2 border-t border-brand-teal-200 dark:border-brand-teal-800/40 flex items-center justify-between text-[10px] font-bold text-brand-teal-800 dark:text-brand-teal-300">
+                      <div className="pt-2 border-t border-nexablue-200 dark:border-nexablue-800/40 flex items-center justify-between text-[10px] font-bold text-nexablue-700 dark:text-cyan-300">
                         <span>Módulo en pantalla</span>
                         <span>Abierto &rarr;</span>
                       </div>

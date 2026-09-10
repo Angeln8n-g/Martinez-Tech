@@ -8,6 +8,42 @@ export default {
   theme: {
     extend: {
       colors: {
+        nexablue: {
+          DEFAULT: '#0072ff',
+          50: '#f0f7ff',
+          100: '#e0effe',
+          200: '#bae0fd',
+          300: '#7cc7fb',
+          400: '#38a8f8',
+          500: '#0072ff',
+          600: '#0055eb',
+          700: '#0042c7',
+          800: '#0537a1',
+          900: '#0a307f',
+          950: '#071f54',
+        },
+        obsidian: {
+          DEFAULT: '#06080e',
+          50: '#141c2e',
+          100: '#0f1726',
+          200: '#0d131f',
+          300: '#0b0f19',
+          400: '#080c14',
+          500: '#06080e',
+          600: '#04060a',
+          card: '#0a0e18',
+          surface: '#0e1422',
+          border: '#1a243b',
+          rim: '#263554',
+        },
+        titanium: {
+          DEFAULT: '#cbd5e1',
+          light: '#f8fafc',
+          silver: '#e2e8f0',
+          steel: '#94a3b8',
+          dark: '#475569',
+          edge: '#334155'
+        },
         brand: {
           green: {
             DEFAULT: '#6ab329',
@@ -24,24 +60,24 @@ export default {
             950: '#152c0a',
           },
           teal: {
-            DEFAULT: '#00a896',
-            50: '#f0fdfa',
-            100: '#ccfbf1',
-            200: '#99f6e4',
-            300: '#5eead4',
-            400: '#2dd4bf',
-            500: '#00a896',
-            600: '#0d9488',
-            700: '#0f766e',
-            800: '#115e59',
-            900: '#134e4a',
-            950: '#042f2e',
+            DEFAULT: '#0072ff',
+            50: '#f0f7ff',
+            100: '#e0effe',
+            200: '#bae0fd',
+            300: '#7cc7fb',
+            400: '#38a8f8',
+            500: '#0072ff',
+            600: '#0055eb',
+            700: '#0042c7',
+            800: '#0537a1',
+            900: '#0a307f',
+            950: '#071f54',
           },
           dark: {
-            DEFAULT: '#0f172a',
-            surface: '#1e293b',
-            card: '#182234',
-            border: '#334155'
+            DEFAULT: '#06080e',
+            surface: '#0e1422',
+            card: '#0a0e18',
+            border: '#1a243b'
           }
         }
       },
@@ -51,7 +87,10 @@ export default {
       },
       boxShadow: {
         'glow-green': '0 0 25px -5px rgba(106, 179, 41, 0.3)',
-        'glow-teal': '0 0 25px -5px rgba(0, 168, 150, 0.3)',
+        'glow-teal': '0 0 25px -5px rgba(0, 114, 255, 0.4)',
+        'glow-nexablue': '0 0 35px -5px rgba(0, 114, 255, 0.5)',
+        'glow-shield': '0 0 50px -10px rgba(0, 114, 255, 0.45)',
+        'metal-bevel': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.15), 0 4px 20px rgba(0, 0, 0, 0.6)',
         'xs': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
         '2xs': '0 1px 1px 0 rgba(0, 0, 0, 0.03)',
       },

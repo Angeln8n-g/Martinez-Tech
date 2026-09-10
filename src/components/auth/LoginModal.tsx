@@ -47,13 +47,13 @@ export const LoginModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-3xl max-w-md w-full p-7 sm:p-8 relative shadow-2xl space-y-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
+      <div className="bg-[#0a0e18] border border-slate-800 rounded-3xl max-w-md w-full p-7 sm:p-8 relative shadow-2xl shadow-nexablue-950/40 ring-1 ring-nexablue-500/20 space-y-6">
         
         {/* Close Button */}
         <button
           onClick={() => setIsLoginModalOpen(false)}
-          className="absolute top-5 right-5 p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-300 dark:border-slate-700 transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-xl bg-[#06080e] text-slate-400 hover:text-white border border-slate-800 hover:border-slate-700 transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
@@ -63,17 +63,21 @@ export const LoginModal: React.FC = () => {
           <div className="flex justify-center mb-2">
             <BrandLogo size="md" />
           </div>
-          <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-            Acceso al Sistema CRM
+          <h3 className="text-2xl font-black text-white tracking-tight">
+            Consola de Autenticación CRM
           </h3>
-          <p className="text-xs text-slate-600 dark:text-slate-400 font-medium">
-            Ingresa con tus credenciales autorizadas de Martínez Tech.
+          <p className="text-xs text-slate-400 font-medium">
+            Acceso restringido para personal técnico y administrativo.
           </p>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono uppercase tracking-wider">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Enlace Seguro TLS 1.3</span>
+          </div>
         </div>
 
         {/* Error Alert */}
         {errorMessage && (
-          <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-500/40 text-xs text-rose-800 dark:text-rose-300 flex items-center gap-2">
+          <div className="p-3 rounded-xl bg-rose-950/60 border border-rose-500/40 text-xs text-rose-300 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{errorMessage}</span>
           </div>
@@ -83,25 +87,25 @@ export const LoginModal: React.FC = () => {
         <form onSubmit={handleLoginSubmit} className="space-y-4">
           
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-800 dark:text-slate-300">
-              Correo Electrónico
+            <label className="text-xs font-bold text-slate-300">
+              Usuario / Correo Electrónico
             </label>
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
                 required
-                placeholder="tu-correo@martineztech.com"
+                placeholder="usuario@martineztech.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#06080e] border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-nexablue-500 focus:ring-1 focus:ring-nexablue-500/30 shadow-inner"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-800 dark:text-slate-300">
-              Contraseña
+            <label className="text-xs font-bold text-slate-300">
+              Contraseña de Acceso
             </label>
             <div className="relative">
               <Key className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -111,12 +115,12 @@ export const LoginModal: React.FC = () => {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#06080e] border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-nexablue-500 focus:ring-1 focus:ring-nexablue-500/30 shadow-inner"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -126,14 +130,14 @@ export const LoginModal: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 hover:from-brand-teal-400 hover:to-brand-green-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all border border-brand-teal-600/30"
+            className="w-full py-3.5 px-4 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-glow-nexablue transition-all"
           >
             {loading ? (
-              <span>Iniciando sesión...</span>
+              <span>Validando credenciales...</span>
             ) : (
               <>
                 <Lock className="w-4 h-4" />
-                <span>Ingresar al Panel de Control</span>
+                <span>Ingresar al Sistema Operativo</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
@@ -142,14 +146,14 @@ export const LoginModal: React.FC = () => {
         </form>
 
         {/* Optional Demo Logins Accordion */}
-        <div className="pt-3 border-t border-slate-200 dark:border-slate-800 text-center">
+        <div className="pt-3 border-t border-slate-800 text-center">
           <button
             type="button"
             onClick={() => setShowDemoLogins(!showDemoLogins)}
-            className="text-[11px] text-slate-500 hover:text-brand-teal-600 dark:hover:text-brand-teal-400 font-medium inline-flex items-center gap-1"
+            className="text-[11px] text-slate-400 hover:text-nexablue-400 font-medium inline-flex items-center gap-1 transition-colors"
           >
             <HelpCircle className="w-3.5 h-3.5" />
-            <span>{showDemoLogins ? 'Ocultar accesos demo' : '¿Ver cuentas demo de prueba?'}</span>
+            <span>{showDemoLogins ? 'Ocultar credenciales demo' : '¿Probar con cuentas demo preconfiguradas?'}</span>
           </button>
 
           {showDemoLogins && (
@@ -157,25 +161,25 @@ export const LoginModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleQuickFill('admin@martineztech.com', 'admin123')}
-                className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 hover:bg-brand-teal-50 dark:hover:bg-brand-teal-950/60 border border-slate-300 dark:border-slate-700 text-left transition-colors shadow-sm"
+                className="p-3 rounded-xl bg-[#06080e] hover:bg-[#0f1523] border border-slate-800 hover:border-nexablue-500/50 text-left transition-all group shadow-inner"
               >
-                <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-brand-teal-700 dark:text-brand-teal-400" />
+                <div className="text-xs font-bold text-white flex items-center gap-1.5 group-hover:text-nexablue-400">
+                  <ShieldCheck className="w-3.5 h-3.5 text-nexablue-400" />
                   <span>Administrador</span>
                 </div>
-                <div className="text-[10px] text-slate-600 dark:text-slate-400 truncate">admin@martineztech.com</div>
+                <div className="text-[10px] text-slate-400 truncate mt-0.5 font-mono">admin@martineztech.com</div>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleQuickFill('tecnico@martineztech.com', 'tecnico123')}
-                className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 hover:bg-brand-green-50 dark:hover:bg-brand-green-950/60 border border-slate-300 dark:border-slate-700 text-left transition-colors shadow-sm"
+                className="p-3 rounded-xl bg-[#06080e] hover:bg-[#0f1523] border border-slate-800 hover:border-emerald-500/50 text-left transition-all group shadow-inner"
               >
-                <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <UserCheck className="w-3.5 h-3.5 text-brand-green-700 dark:text-brand-green-400" />
+                <div className="text-xs font-bold text-white flex items-center gap-1.5 group-hover:text-emerald-400">
+                  <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
                   <span>Técnico Campo</span>
                 </div>
-                <div className="text-[10px] text-slate-600 dark:text-slate-400 truncate">tecnico@martineztech.com</div>
+                <div className="text-[10px] text-slate-400 truncate mt-0.5 font-mono">tecnico@martineztech.com</div>
               </button>
             </div>
           )}

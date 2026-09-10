@@ -517,7 +517,7 @@ export const WorkOrderModal: React.FC = () => {
       {/* Exit Confirmation Dialog */}
       {showExitConfirm && (
         <div className="fixed inset-0 z-60 bg-black/70 flex items-center justify-center p-4 backdrop-blur-xs">
-          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn">
             <div className="flex items-center gap-3 text-amber-600 dark:text-amber-400">
               <AlertTriangle className="w-6 h-6 flex-shrink-0" />
               <h4 className="text-base font-black text-slate-900 dark:text-white">
@@ -531,14 +531,14 @@ export const WorkOrderModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowExitConfirm(false)}
-                className="px-4 py-2 rounded-xl bg-brand-green-600 hover:bg-brand-green-500 text-slate-950 font-bold text-xs shadow-sm"
+                className="px-4 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm transition-all"
               >
                 Continuar Editando
               </button>
               <button
                 type="button"
                 onClick={handleDiscardAndClose}
-                className="px-3 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 hover:bg-rose-100 font-bold text-xs border border-rose-300 dark:border-rose-800"
+                className="px-3 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 hover:bg-rose-100 font-bold text-xs border border-rose-200 dark:border-rose-800"
               >
                 Descartar y Salir
               </button>
@@ -547,11 +547,11 @@ export const WorkOrderModal: React.FC = () => {
         </div>
       )}
 
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-3xl max-w-4xl w-full p-5 sm:p-7 relative max-h-[95vh] overflow-y-auto shadow-2xl space-y-6">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-4xl w-full p-5 sm:p-7 relative max-h-[95vh] overflow-y-auto shadow-2xl space-y-6">
         
         {/* Draft Restored Banner */}
         {draftRestoredAt && (
-          <div className="p-3 rounded-xl bg-cyan-50 dark:bg-cyan-950/40 border border-cyan-300 dark:border-cyan-500/30 flex items-center justify-between text-xs text-cyan-900 dark:text-cyan-300">
+          <div className="p-3 rounded-xl bg-cyan-50 dark:bg-cyan-950/40 border border-cyan-200 dark:border-cyan-500/30 flex items-center justify-between text-xs text-cyan-900 dark:text-cyan-300">
             <div className="flex items-center gap-2">
               <RotateCcw className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
               <span>Borrador de orden restaurado ({new Date(draftRestoredAt).toLocaleTimeString()}).</span>
@@ -569,7 +569,7 @@ export const WorkOrderModal: React.FC = () => {
         {/* Header */}
         <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-green-50 dark:bg-brand-green-500/10 border border-brand-green-300 dark:border-brand-green-500/30 flex items-center justify-center text-brand-green-700 dark:text-brand-green-400 shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-nexablue-50 dark:bg-nexablue-950/40 border border-nexablue-200 dark:border-nexablue-500/30 flex items-center justify-center text-nexablue-600 dark:text-nexablue-400 shadow-sm">
               <Wrench className="w-5 h-5" />
             </div>
             <div>
@@ -584,7 +584,7 @@ export const WorkOrderModal: React.FC = () => {
           <button
             type="button"
             onClick={handleSafeClose}
-            className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-300 dark:border-slate-700"
+            className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-200 dark:border-slate-700 transition-colors"
             aria-label="Cerrar Modal"
           >
             <X className="w-5 h-5" />
@@ -595,14 +595,14 @@ export const WorkOrderModal: React.FC = () => {
           
           {/* Linked Quote */}
           {quotes.length > 0 && !activeWorkOrderForEdit && (
-            <div className="space-y-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-300 dark:border-slate-700 shadow-sm">
-              <label className="text-[11px] font-bold text-brand-teal-800 dark:text-brand-teal-300">
+            <div className="space-y-1 bg-slate-50/80 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+              <label className="text-[11px] font-bold text-nexablue-700 dark:text-nexablue-300">
                 ¿Vincular a un Presupuesto Aprobado? (Autollenar datos y tareas)
               </label>
               <select
                 value={selectedQuoteId}
                 onChange={handleSelectQuote}
-                className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-medium"
+                className="w-full px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-medium focus:border-nexablue-500 focus:outline-none"
               >
                 <option value="">-- Ingresar orden independiente o seleccionar presupuesto --</option>
                 {quotes.map(q => (
@@ -624,7 +624,7 @@ export const WorkOrderModal: React.FC = () => {
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
                 placeholder="Ej. Ing. Carlos Mendoza"
-                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm focus:border-nexablue-500 focus:outline-none"
               />
             </div>
 
@@ -636,7 +636,7 @@ export const WorkOrderModal: React.FC = () => {
                 value={clientPhone}
                 onChange={handlePhoneChange}
                 placeholder="Ej. (809) 555-4321"
-                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm font-mono"
+                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm font-mono focus:border-nexablue-500 focus:outline-none"
               />
             </div>
 
@@ -645,7 +645,7 @@ export const WorkOrderModal: React.FC = () => {
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as WorkOrderStatus)}
-                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-bold"
+                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-bold focus:border-nexablue-500 focus:outline-none"
               >
                 <option value="pending">🟡 Pendiente de Iniciar</option>
                 <option value="in_progress">🔵 En Ejecución / Trabajo de Campo</option>
@@ -663,7 +663,7 @@ export const WorkOrderModal: React.FC = () => {
                 value={clientAddress}
                 onChange={(e) => setClientAddress(e.target.value)}
                 placeholder="Calle, nave, sector, ciudad"
-                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm focus:border-nexablue-500 focus:outline-none"
               />
             </div>
 
@@ -672,7 +672,7 @@ export const WorkOrderModal: React.FC = () => {
               <select
                 value={serviceCategory}
                 onChange={(e) => setServiceCategory(e.target.value as ServiceCategory)}
-                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-medium"
+                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-medium focus:border-nexablue-500 focus:outline-none"
               >
                 <option value="camaras">CCTV / Cámaras IP</option>
                 <option value="redes">Redes & Wi-Fi</option>
@@ -694,7 +694,7 @@ export const WorkOrderModal: React.FC = () => {
                 value={assignedTechnician}
                 onChange={(e) => setAssignedTechnician(e.target.value)}
                 placeholder="Nombre del técnico"
-                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm focus:border-nexablue-500 focus:outline-none"
               />
             </div>
 
@@ -704,7 +704,7 @@ export const WorkOrderModal: React.FC = () => {
                 type="date"
                 value={scheduledDate}
                 onChange={(e) => setScheduledDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200"
+                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 focus:border-nexablue-500 focus:outline-none"
               />
             </div>
 
@@ -714,7 +714,7 @@ export const WorkOrderModal: React.FC = () => {
                 type="date"
                 value={completedDate}
                 onChange={(e) => setCompletedDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200"
+                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 focus:border-nexablue-500 focus:outline-none"
               />
             </div>
           </div>
@@ -726,7 +726,7 @@ export const WorkOrderModal: React.FC = () => {
               value={scopeOfWork}
               onChange={(e) => setScopeOfWork(e.target.value)}
               placeholder="Detalle de los equipos que se instalan y pruebas requeridas..."
-              className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none shadow-sm"
+              className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none shadow-sm focus:border-nexablue-500 focus:outline-none"
             />
           </div>
 
@@ -734,7 +734,7 @@ export const WorkOrderModal: React.FC = () => {
           <div className="space-y-3 pt-3 border-t-2 border-slate-200 dark:border-slate-800">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-brand-teal-600 dark:text-brand-teal-400" />
+                <CheckCircle2 className="w-4 h-4 text-nexablue-600 dark:text-nexablue-400" />
                 <span>Checklist de Conformidad Técnica ({checklist.filter(c => c.completed).length}/{checklist.length})</span>
               </label>
             </div>
@@ -746,8 +746,8 @@ export const WorkOrderModal: React.FC = () => {
                   onClick={() => handleToggleChecklist(item.id)}
                   className={`p-2.5 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
                     item.completed
-                      ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-500/40 text-emerald-950 dark:text-white'
-                      : 'bg-slate-50 dark:bg-slate-800/60 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-500/40 text-emerald-950 dark:text-white'
+                      : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -755,7 +755,7 @@ export const WorkOrderModal: React.FC = () => {
                       type="checkbox"
                       checked={item.completed}
                       onChange={() => handleToggleChecklist(item.id)}
-                      className="rounded border-slate-300 text-brand-green-600 focus:ring-brand-green-500 w-4 h-4"
+                      className="rounded border-slate-300 text-nexablue-600 focus:ring-nexablue-500 w-4 h-4"
                     />
                     <span className={`text-xs font-semibold ${item.completed ? 'line-through text-slate-500 dark:text-slate-400' : ''}`}>
                       {item.task}
@@ -765,7 +765,7 @@ export const WorkOrderModal: React.FC = () => {
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); handleRemoveChecklistTask(item.id); }}
-                    className="p-1 text-slate-400 hover:text-rose-500"
+                    className="p-1 text-slate-400 hover:text-rose-500 transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -780,12 +780,12 @@ export const WorkOrderModal: React.FC = () => {
                 value={newChecklistTask}
                 onChange={(e) => setNewChecklistTask(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddChecklistTask(); } }}
-                className="flex-1 px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                className="flex-1 px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm focus:border-nexablue-500 focus:outline-none"
               />
               <button
                 type="button"
                 onClick={handleAddChecklistTask}
-                className="px-3.5 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
+                className="px-3.5 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 transition-colors"
               >
                 + Agregar
               </button>
@@ -796,16 +796,16 @@ export const WorkOrderModal: React.FC = () => {
           <div className="space-y-4 pt-3 border-t-2 border-slate-200 dark:border-slate-800">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-                <ImageIcon className="w-4 h-4 text-brand-teal-600" />
+                <ImageIcon className="w-4 h-4 text-nexablue-600 dark:text-nexablue-400" />
                 <span>Galería de Evidencia Fotográfica (Antes & Después)</span>
               </h4>
 
               <button
                 type="button"
                 onClick={handleApplyPresetGallery}
-                className="px-3 py-1.5 rounded-lg bg-brand-teal-50 dark:bg-brand-teal-950/80 hover:bg-brand-teal-100 text-brand-teal-800 dark:text-brand-teal-300 border border-brand-teal-300 dark:border-brand-teal-500/40 text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
+                className="px-3 py-1.5 rounded-lg bg-nexablue-50 dark:bg-nexablue-950/80 hover:bg-nexablue-100 text-nexablue-800 dark:text-nexablue-300 border border-nexablue-200 dark:border-nexablue-500/40 text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
               >
-                <Sparkles className="w-3.5 h-3.5 text-brand-teal-600" />
+                <Sparkles className="w-3.5 h-3.5 text-nexablue-600" />
                 <span>Cargar Fotos de Muestra de {PRESET_EVIDENCE_GALLERIES[serviceCategory]?.label || 'Servicio'}</span>
               </button>
             </div>
@@ -833,7 +833,7 @@ export const WorkOrderModal: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               
               {/* BEFORE GALLERY BOX */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border-2 border-slate-300 dark:border-slate-700 space-y-3 shadow-sm">
+              <div className="p-4 rounded-2xl bg-slate-50/70 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
@@ -853,7 +853,7 @@ export const WorkOrderModal: React.FC = () => {
                       type="button"
                       disabled={isUploadingBefore}
                       onClick={() => beforeFileInputRef.current?.click()}
-                      className="flex-1 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-60"
+                      className="flex-1 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-60"
                     >
                       {isUploadingBefore ? (
                         <>
@@ -875,12 +875,12 @@ export const WorkOrderModal: React.FC = () => {
                       placeholder="O pegar URL web..."
                       value={beforeImgInput}
                       onChange={(e) => setBeforeImgInput(e.target.value)}
-                      className="flex-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                      className="flex-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm focus:border-nexablue-500 focus:outline-none"
                     />
                     <button
                       type="button"
                       onClick={handleAddBeforeImage}
-                      className="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200"
+                      className="px-3 py-1.5 rounded-lg bg-slate-200 dark:bg-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-300 transition-colors"
                     >
                       +
                     </button>
@@ -891,7 +891,7 @@ export const WorkOrderModal: React.FC = () => {
                 {beforeImages.length === 0 ? (
                   <div 
                     onClick={() => beforeFileInputRef.current?.click()}
-                    className="p-6 text-center border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-slate-400 text-xs cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/30 transition-all flex flex-col items-center gap-1.5"
+                    className="p-6 text-center border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl text-slate-400 text-xs cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/30 transition-all flex flex-col items-center gap-1.5"
                   >
                     <Upload className="w-6 h-6 text-slate-400" />
                     <span className="font-semibold">Haz clic para subir fotos del estado inicial</span>
@@ -899,7 +899,7 @@ export const WorkOrderModal: React.FC = () => {
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
                     {beforeImages.map((img, i) => (
-                      <div key={i} className="relative h-24 rounded-xl overflow-hidden border border-slate-300 dark:border-slate-700 group shadow-sm bg-black/10">
+                      <div key={i} className="relative h-24 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 group shadow-sm bg-black/10">
                         <img src={img} alt={`Antes ${i}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                         
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
@@ -931,7 +931,7 @@ export const WorkOrderModal: React.FC = () => {
               </div>
 
               {/* AFTER GALLERY BOX */}
-              <div className="p-4 rounded-2xl bg-emerald-50/40 dark:bg-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-600/40 space-y-3 shadow-sm">
+              <div className="p-4 rounded-2xl bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-600/40 space-y-3 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -951,7 +951,7 @@ export const WorkOrderModal: React.FC = () => {
                       type="button"
                       disabled={isUploadingAfter}
                       onClick={() => afterFileInputRef.current?.click()}
-                      className="flex-1 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-emerald-50 dark:hover:bg-slate-800 border border-emerald-300 dark:border-emerald-500/40 text-xs font-bold text-emerald-950 dark:text-emerald-200 flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-60"
+                      className="flex-1 py-2 px-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-emerald-50 dark:hover:bg-slate-800 border border-emerald-200 dark:border-emerald-500/40 text-xs font-bold text-emerald-950 dark:text-emerald-200 flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-60"
                     >
                       {isUploadingAfter ? (
                         <>
@@ -973,12 +973,12 @@ export const WorkOrderModal: React.FC = () => {
                       placeholder="O pegar URL web..."
                       value={afterImgInput}
                       onChange={(e) => setAfterImgInput(e.target.value)}
-                      className="flex-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                      className="flex-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm focus:border-nexablue-500 focus:outline-none"
                     />
                     <button
                       type="button"
                       onClick={handleAddAfterImage}
-                      className="px-3 py-1.5 rounded-lg bg-emerald-200 dark:bg-emerald-800 text-xs font-bold text-emerald-950 dark:text-emerald-100"
+                      className="px-3 py-1.5 rounded-lg bg-emerald-200 dark:bg-emerald-800 text-xs font-bold text-emerald-950 dark:text-emerald-100 hover:bg-emerald-300 transition-colors"
                     >
                       +
                     </button>
@@ -989,7 +989,7 @@ export const WorkOrderModal: React.FC = () => {
                 {afterImages.length === 0 ? (
                   <div 
                     onClick={() => afterFileInputRef.current?.click()}
-                    className="p-6 text-center border-2 border-dashed border-emerald-300 dark:border-emerald-700 rounded-xl text-emerald-700/70 dark:text-emerald-400 text-xs cursor-pointer hover:bg-emerald-100/50 dark:hover:bg-emerald-900/30 transition-all flex flex-col items-center gap-1.5"
+                    className="p-6 text-center border-2 border-dashed border-emerald-200 dark:border-emerald-700 rounded-xl text-emerald-700/70 dark:text-emerald-400 text-xs cursor-pointer hover:bg-emerald-100/50 dark:hover:bg-emerald-900/30 transition-all flex flex-col items-center gap-1.5"
                   >
                     <Upload className="w-6 h-6 text-emerald-600" />
                     <span className="font-semibold">Haz clic para subir fotos del trabajo terminado</span>
@@ -1040,13 +1040,13 @@ export const WorkOrderModal: React.FC = () => {
                   type="button"
                   onClick={handleGpsCheckIn}
                   disabled={isGettingGps}
-                  className="px-2 py-0.5 rounded-md bg-brand-teal-50 dark:bg-brand-teal-950/60 hover:bg-brand-teal-100 text-[11px] font-bold text-brand-teal-800 dark:text-brand-teal-300 border border-brand-teal-300 dark:border-brand-teal-600/40 flex items-center gap-1 transition-all shadow-sm"
+                  className="px-2 py-0.5 rounded-md bg-nexablue-50 dark:bg-nexablue-950/60 hover:bg-nexablue-100 text-[11px] font-bold text-nexablue-800 dark:text-nexablue-300 border border-nexablue-200 dark:border-nexablue-600/40 flex items-center gap-1 transition-all shadow-sm"
                   title="Registrar coordenadas GPS como constancia de visita"
                 >
                   {isGettingGps ? (
-                    <Loader2 className="w-3 h-3 animate-spin text-brand-teal-600" />
+                    <Loader2 className="w-3 h-3 animate-spin text-nexablue-600" />
                   ) : (
-                    <MapPin className="w-3 h-3 text-brand-teal-600" />
+                    <MapPin className="w-3 h-3 text-nexablue-600" />
                   )}
                   <span>{gpsSuccess ? '✓ GPS Registrado' : '📍 Check-in GPS'}</span>
                 </button>
@@ -1056,7 +1056,7 @@ export const WorkOrderModal: React.FC = () => {
                 value={technicianNotes}
                 onChange={(e) => setTechnicianNotes(e.target.value)}
                 placeholder="Observaciones de terreno, calibración..."
-                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none shadow-sm"
+                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none shadow-sm focus:border-nexablue-500 focus:outline-none"
               />
             </div>
 
@@ -1067,7 +1067,7 @@ export const WorkOrderModal: React.FC = () => {
                 value={clientFeedback}
                 onChange={(e) => setClientFeedback(e.target.value)}
                 placeholder="Comentarios del cliente al momento de recibir los trabajos..."
-                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none shadow-sm"
+                className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none shadow-sm focus:border-nexablue-500 focus:outline-none"
               />
             </div>
           </div>
@@ -1077,13 +1077,13 @@ export const WorkOrderModal: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsWorkOrderModalOpen(false)}
-              className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-300 text-xs font-semibold border border-slate-300 dark:border-slate-700"
+              className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-300 text-xs font-bold border border-slate-200 dark:border-slate-700 transition-colors"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-green-500 to-brand-teal-500 hover:from-brand-green-400 hover:to-brand-teal-400 text-slate-950 font-black text-xs shadow-md border border-brand-green-600/30 flex items-center gap-1.5"
+              className="px-6 py-2.5 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-md flex items-center gap-1.5 transition-all"
             >
               <Save className="w-4 h-4" />
               <span>Guardar Orden de Trabajo</span>

@@ -210,12 +210,12 @@ export const CatalogBulkImportModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
         
         {/* Header */}
         <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-900/50">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-brand-teal-500/10 border border-brand-teal-500/30 text-brand-teal-600 dark:text-brand-teal-400">
+            <div className="p-2.5 rounded-2xl bg-nexablue-50 dark:bg-nexablue-950/40 border border-nexablue-200 dark:border-nexablue-800 text-nexablue-600 dark:text-nexablue-400">
               <FileSpreadsheet className="w-6 h-6" />
             </div>
             <div>
@@ -243,7 +243,7 @@ export const CatalogBulkImportModal: React.FC = () => {
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 text-xs">
-                <Info className="w-4 h-4 text-brand-teal-600 dark:text-brand-teal-400" />
+                <Info className="w-4 h-4 text-nexablue-600 dark:text-nexablue-400" />
                 <span>¿Primera vez importando? Descarga la plantilla oficial</span>
               </div>
               <p className="text-[11px] text-slate-600 dark:text-slate-400">
@@ -253,9 +253,9 @@ export const CatalogBulkImportModal: React.FC = () => {
 
             <button
               onClick={handleDownloadTemplate}
-              className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs shadow-sm transition-all"
+              className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs shadow-xs transition-all"
             >
-              <Download className="w-4 h-4 text-brand-teal-600 dark:text-brand-teal-400" />
+              <Download className="w-4 h-4 text-nexablue-600 dark:text-nexablue-400" />
               <span>Descargar Plantilla CSV</span>
             </button>
           </div>
@@ -296,7 +296,7 @@ export const CatalogBulkImportModal: React.FC = () => {
           {parsedRows.length === 0 && !successResult && (
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-brand-teal-500 rounded-3xl p-8 sm:p-12 text-center cursor-pointer transition-all bg-slate-50/50 dark:bg-slate-900/50 hover:bg-brand-teal-50/20 group space-y-3"
+              className="border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-nexablue-500 rounded-3xl p-8 sm:p-12 text-center cursor-pointer transition-all bg-slate-50/50 dark:bg-slate-900/50 hover:bg-nexablue-50/20 group space-y-3"
             >
               <input
                 type="file"
@@ -305,7 +305,7 @@ export const CatalogBulkImportModal: React.FC = () => {
                 accept=".csv,text/csv,application/vnd.ms-excel"
                 className="hidden"
               />
-              <div className="w-14 h-14 rounded-2xl bg-brand-teal-500/10 border border-brand-teal-500/30 flex items-center justify-center mx-auto text-brand-teal-600 dark:text-brand-teal-400 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 rounded-2xl bg-nexablue-50 dark:bg-nexablue-950/40 border border-nexablue-200 dark:border-nexablue-800 flex items-center justify-center mx-auto text-nexablue-600 dark:text-nexablue-400 group-hover:scale-110 transition-transform">
                 <Upload className="w-7 h-7" />
               </div>
               <div>
@@ -325,7 +325,7 @@ export const CatalogBulkImportModal: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-slate-900 dark:text-white">
-                    Vista Previa: <span className="text-brand-teal-600 dark:text-brand-teal-400">{parsedRows.length} productos detectados</span>
+                    Vista Previa: <span className="text-nexablue-600 dark:text-nexablue-400">{parsedRows.length} productos detectados</span>
                   </span>
                   <span className="text-[11px] text-slate-500">({fileName})</span>
                 </div>
@@ -414,7 +414,7 @@ export const CatalogBulkImportModal: React.FC = () => {
             <button
               onClick={handleConfirmImport}
               disabled={loading}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 hover:from-brand-teal-400 hover:to-brand-green-400 text-slate-950 font-black text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
             >
               {loading ? (
                 <span>Importando productos...</span>

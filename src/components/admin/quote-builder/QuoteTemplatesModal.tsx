@@ -259,7 +259,7 @@ export const QuoteTemplatesModal: React.FC<QuoteTemplatesModalProps> = ({
               </div>
 
               {currentItems.length === 0 ? (
-                <div className="p-8 text-center border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl">
+                <div className="p-8 text-center border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl">
                   <p className="text-sm font-semibold text-slate-500">
                     Tu presupuesto actual no tiene partidas agregadas.
                   </p>
@@ -279,7 +279,7 @@ export const QuoteTemplatesModal: React.FC<QuoteTemplatesModalProps> = ({
                       placeholder="Ej. Kit Alarma Residencial Inalámbrica 4 Zonas"
                       value={newTemplateName}
                       onChange={(e) => setNewTemplateName(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-semibold focus:outline-none focus:border-purple-500"
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold focus:outline-none focus:border-purple-500"
                     />
                   </div>
 
@@ -291,7 +291,7 @@ export const QuoteTemplatesModal: React.FC<QuoteTemplatesModalProps> = ({
                       <select
                         value={newTemplateCategory}
                         onChange={(e) => setNewTemplateCategory(e.target.value as ServiceCategory)}
-                        className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-semibold focus:outline-none focus:border-purple-500"
+                        className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold focus:outline-none focus:border-purple-500"
                       >
                         <option value="camaras">Cámaras de Vigilancia</option>
                         <option value="redes">Redes Informáticas</option>
@@ -312,7 +312,7 @@ export const QuoteTemplatesModal: React.FC<QuoteTemplatesModalProps> = ({
                         placeholder="Ej. Promoción, Frecuente, Premium"
                         value={newTemplateBadge}
                         onChange={(e) => setNewTemplateBadge(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs focus:outline-none focus:border-purple-500"
+                        className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none focus:border-purple-500"
                       />
                     </div>
                   </div>
@@ -326,7 +326,7 @@ export const QuoteTemplatesModal: React.FC<QuoteTemplatesModalProps> = ({
                       placeholder="Breve explicación de qué incluye este paquete y para qué tipo de cliente se recomienda..."
                       value={newTemplateDescription}
                       onChange={(e) => setNewTemplateDescription(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs focus:outline-none focus:border-purple-500"
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs focus:outline-none focus:border-purple-500"
                     />
                   </div>
 
@@ -582,7 +582,7 @@ export const QuoteTemplatesModal: React.FC<QuoteTemplatesModalProps> = ({
                         <select
                           value={applyMode}
                           onChange={(e) => setApplyMode(e.target.value as 'append' | 'replace')}
-                          className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-semibold focus:outline-none"
+                          className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold focus:outline-none"
                         >
                           <option value="append">Sumar a partidas actuales</option>
                           <option value="replace">Reemplazar partidas actuales</option>

@@ -166,10 +166,10 @@ export const FiscalInvoicesList: React.FC = () => {
       {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+          <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
             <span>Total Facturado</span>
-            <Receipt className="w-4 h-4 text-brand-teal-600 dark:text-brand-teal-400" />
+            <Receipt className="w-4 h-4 text-nexablue-600 dark:text-cyan-400" />
           </div>
           <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono">
             {formatCurrency(totalInvoiced)}
@@ -179,8 +179,8 @@ export const FiscalInvoicesList: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+          <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
             <span>ITBIS Recaudado (18%)</span>
             <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           </div>
@@ -192,8 +192,8 @@ export const FiscalInvoicesList: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+          <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
             <span>Cobrado Efectivo</span>
             <CheckCircle2 className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
           </div>
@@ -205,8 +205,8 @@ export const FiscalInvoicesList: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+          <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
             <span>Cuentas por Cobrar</span>
             <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400" />
           </div>
@@ -221,24 +221,24 @@ export const FiscalInvoicesList: React.FC = () => {
       </div>
 
       {/* Filter and Actions Bar */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         
         <div className="flex items-center gap-3 flex-1 flex-wrap">
           <div className="relative flex-1 min-w-[240px]">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Buscar por NCF, cliente, RNC o No. de factura..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-nexablue-500 shadow-2xs"
             />
           </div>
 
           <select
             value={ncfFilter}
             onChange={(e) => setNcfFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-brand-teal-500 shadow-sm"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-nexablue-500 shadow-2xs"
           >
             <option value="all">Todos los Comprobantes (NCF)</option>
             <option value="B01">B01 - Crédito Fiscal</option>
@@ -250,7 +250,7 @@ export const FiscalInvoicesList: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-brand-teal-500 shadow-sm"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-nexablue-500 shadow-2xs"
           >
             <option value="all">Todos los Estados</option>
             <option value="paid">Pagada / Cobrada</option>
@@ -262,7 +262,7 @@ export const FiscalInvoicesList: React.FC = () => {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={handleExport607}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs border border-slate-300 dark:border-slate-700 shadow-sm transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs border border-slate-200 dark:border-slate-700 shadow-2xs transition-colors"
             title="Exportar archivo CSV formato 607 para la DGII"
           >
             <FileSpreadsheet className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
@@ -271,7 +271,7 @@ export const FiscalInvoicesList: React.FC = () => {
 
           <button
             onClick={handleNewInvoice}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-400 hover:to-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider shadow-md transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm border border-nexablue-700/30 active:scale-95 transition-all"
           >
             <Plus className="w-4 h-4" />
             <span>Emitir Factura Fiscal</span>
@@ -281,7 +281,7 @@ export const FiscalInvoicesList: React.FC = () => {
       </div>
 
       {/* Invoices List Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         {filteredInvoices.length === 0 ? (
           <div className="p-12 text-center space-y-3">
             <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto text-slate-400">

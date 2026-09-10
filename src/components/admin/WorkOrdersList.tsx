@@ -74,7 +74,7 @@ export const WorkOrdersList: React.FC = () => {
         );
       default:
         return (
-          <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700 flex items-center gap-1">
+          <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center gap-1">
             <Clock className="w-3 h-3 text-slate-500" />
             <span>Pendiente</span>
           </span>
@@ -86,7 +86,7 @@ export const WorkOrdersList: React.FC = () => {
     <div className="space-y-6 animate-fadeIn">
       
       {/* Top Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         
         <div className="flex items-center gap-3 flex-1 flex-wrap">
           <div className="relative flex-1 min-w-[240px]">
@@ -96,14 +96,14 @@ export const WorkOrdersList: React.FC = () => {
               placeholder="Buscar por N° de orden, cliente, dirección o alcance..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-nexablue-500 shadow-xs"
             />
           </div>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-brand-teal-500 shadow-sm"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-nexablue-500 shadow-xs"
           >
             <option value="all">Todos los Estados</option>
             <option value="pending">Pendientes</option>
@@ -116,7 +116,7 @@ export const WorkOrdersList: React.FC = () => {
             <select
               value={technicianFilter}
               onChange={(e) => setTechnicianFilter(e.target.value)}
-              className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-brand-teal-500 shadow-sm"
+              className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-nexablue-500 shadow-xs"
             >
               <option value="all">Todos los Técnicos</option>
               {technicians.map((t, idx) => (
@@ -131,7 +131,7 @@ export const WorkOrdersList: React.FC = () => {
             setActiveWorkOrderForEdit(null);
             setIsWorkOrderModalOpen(true);
           }}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-green-600 hover:bg-brand-green-500 text-white font-bold text-xs shadow-md border border-brand-green-700/20"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm hover:shadow-md transition-all"
         >
           <Plus className="w-4 h-4" />
           <span>Nueva Orden de Trabajo</span>
@@ -150,7 +150,7 @@ export const WorkOrdersList: React.FC = () => {
           return (
             <div
               key={order.id}
-              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-brand-teal-500 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-nexablue-500 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4"
             >
               <div className="space-y-3">
                 
@@ -172,7 +172,7 @@ export const WorkOrdersList: React.FC = () => {
 
                 <div className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
                   <div className="flex items-center gap-2">
-                    <User className="w-3.5 h-3.5 text-brand-teal-600 flex-shrink-0" />
+                    <User className="w-3.5 h-3.5 text-nexablue-600 flex-shrink-0" />
                     <span>{order.assignedTechnician}</span>
                   </div>
 
@@ -193,14 +193,14 @@ export const WorkOrdersList: React.FC = () => {
                 {totalPhotos > 0 && (
                   <div 
                     onClick={() => setActiveWorkOrderForView(order)}
-                    className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700 space-y-1.5 cursor-pointer hover:border-brand-teal-500 transition-all"
+                    className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5 cursor-pointer hover:border-nexablue-500 transition-all"
                   >
                     <div className="flex items-center justify-between text-[11px] font-bold text-slate-700 dark:text-slate-300">
                       <span className="flex items-center gap-1">
                         <ImageIcon className="w-3.5 h-3.5 text-emerald-600" />
                         <span>Evidencia Fotográfica ({totalPhotos})</span>
                       </span>
-                      <span className="text-[10px] text-brand-teal-600 font-medium">Ver galería &gt;</span>
+                      <span className="text-[10px] text-nexablue-600 font-medium">Ver galería &gt;</span>
                     </div>
 
                     <div className="flex items-center gap-1.5 overflow-hidden">
@@ -241,7 +241,7 @@ export const WorkOrdersList: React.FC = () => {
               </div>
 
               {/* Actions Footer */}
-              <div className="pt-3 border-t-2 border-slate-200 dark:border-slate-800 flex items-center justify-between">
+              <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${catInfo.color}`}>
                   {catInfo.label}
                 </span>
@@ -249,7 +249,7 @@ export const WorkOrdersList: React.FC = () => {
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => setActiveWorkOrderForView(order)}
-                    className="p-1.5 rounded-lg bg-brand-teal-50 dark:bg-brand-teal-950/80 hover:bg-brand-teal-100 text-brand-teal-800 dark:text-brand-teal-400 border border-brand-teal-300 dark:border-brand-teal-500/30"
+                    className="p-1.5 rounded-lg bg-nexablue-50 dark:bg-nexablue-950/80 hover:bg-nexablue-100 text-nexablue-800 dark:text-nexablue-400 border border-nexablue-200 dark:border-nexablue-500/30"
                     title="Ver Acta de Entrega Membretada / Imprimir / Firmar"
                   >
                     <Eye className="w-4 h-4" />
@@ -260,7 +260,7 @@ export const WorkOrdersList: React.FC = () => {
                       setActiveWorkOrderForEdit(order);
                       setIsWorkOrderModalOpen(true);
                     }}
-                    className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
+                    className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
                     title="Editar Orden"
                   >
                     <Edit className="w-4 h-4" />
@@ -272,7 +272,7 @@ export const WorkOrdersList: React.FC = () => {
                         deleteWorkOrder(order.id);
                       }
                     }}
-                    className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-rose-100 text-rose-600 dark:text-rose-400 border border-slate-300 dark:border-slate-700"
+                    className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-rose-100 text-rose-600 dark:text-rose-400 border border-slate-200 dark:border-slate-700"
                     title="Eliminar"
                   >
                     <Trash2 className="w-4 h-4" />

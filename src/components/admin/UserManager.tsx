@@ -58,6 +58,7 @@ export const UserManager: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [passwordSuccess, setPasswordSuccess] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
 
   // Open Create Modal
   const openNewUserModal = () => {
@@ -101,6 +102,7 @@ export const UserManager: React.FC = () => {
     setNewPassword('');
     setShowNewPassword(false);
     setPasswordSuccess(false);
+    setPasswordError('');
     setIsPasswordModalOpen(true);
   };
 
@@ -167,7 +169,13 @@ export const UserManager: React.FC = () => {
   // Handle Password Update Submit
   const handleUpdatePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPasswordError('');
     if (!targetUserForPassword || !newPassword.trim()) return;
+
+    if (newPassword.trim().length < 6) {
+      setPasswordError('La contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
 
     try {
       await updateUser(targetUserForPassword.id, { password: newPassword.trim() });
@@ -177,7 +185,7 @@ export const UserManager: React.FC = () => {
         setPasswordSuccess(false);
       }, 1000);
     } catch (err: any) {
-      alert(err.message || 'Error al actualizar contraseña.');
+      setPasswordError(err.message || 'Error al actualizar contraseña.');
     }
   };
 
@@ -210,8 +218,8 @@ export const UserManager: React.FC = () => {
       {/* Header & KPI Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3.5">
         
-        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-brand-teal-50 dark:bg-brand-teal-950/60 text-brand-teal-600 dark:text-brand-teal-400">
+        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-nexablue-50 dark:bg-nexablue-950/60 text-nexablue-600 dark:text-nexablue-400">
             <Users className="w-4 h-4" />
           </div>
           <div>
@@ -224,7 +232,7 @@ export const UserManager: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3">
+        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400">
             <ShieldCheck className="w-4 h-4" />
           </div>
@@ -238,7 +246,7 @@ export const UserManager: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3">
+        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-cyan-50 dark:bg-cyan-950/60 text-cyan-600 dark:text-cyan-400">
             <Briefcase className="w-4 h-4" />
           </div>
@@ -252,7 +260,7 @@ export const UserManager: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3">
+        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
             <Wrench className="w-4 h-4" />
           </div>
@@ -266,7 +274,7 @@ export const UserManager: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 shadow-sm flex items-center gap-3 col-span-2 lg:col-span-1">
+        <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-center gap-3 col-span-2 lg:col-span-1">
           <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
             <CheckCircle2 className="w-4 h-4" />
           </div>
@@ -283,7 +291,7 @@ export const UserManager: React.FC = () => {
       </div>
 
       {/* Filter and Actions Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         
         <div className="flex items-center gap-2 flex-1 flex-wrap">
           {/* Search */}
@@ -294,7 +302,7 @@ export const UserManager: React.FC = () => {
               placeholder="Buscar por nombre, correo o teléfono..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-brand-teal-500 shadow-xs"
+              className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-nexablue-500 shadow-xs"
             />
           </div>
 
@@ -302,7 +310,7 @@ export const UserManager: React.FC = () => {
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:border-brand-teal-500 shadow-xs"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:border-nexablue-500 shadow-xs"
           >
             <option value="all">Todos los Roles</option>
             <option value="admin">Administradores</option>
@@ -314,7 +322,7 @@ export const UserManager: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:border-brand-teal-500 shadow-xs"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:border-nexablue-500 shadow-xs"
           >
             <option value="all">Todos los Estados</option>
             <option value="active">Solo Activos</option>
@@ -325,7 +333,7 @@ export const UserManager: React.FC = () => {
         {/* Create User Button */}
         <button
           onClick={openNewUserModal}
-          className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-md border border-brand-teal-700/20 transition-all active:scale-95 whitespace-nowrap"
+          className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm hover:shadow-md transition-all active:scale-95 whitespace-nowrap"
         >
           <UserPlus className="w-4 h-4" />
           <span>Registrar Nuevo Usuario</span>
@@ -344,14 +352,14 @@ export const UserManager: React.FC = () => {
           return (
             <div
               key={user.id}
-              className={`rounded-2xl bg-white dark:bg-slate-900 border transition-all duration-200 shadow-md hover:shadow-lg flex flex-col justify-between overflow-hidden ${
+              className={`rounded-2xl bg-white dark:bg-slate-900 border transition-all duration-200 shadow-sm hover:shadow-md flex flex-col justify-between overflow-hidden ${
                 !isActive
-                  ? 'border-slate-300 dark:border-slate-800 opacity-70 bg-slate-50/60 dark:bg-slate-900/50'
+                  ? 'border-slate-200 dark:border-slate-800 opacity-70 bg-slate-50/60 dark:bg-slate-900/50'
                   : isAdmin
-                  ? 'border-slate-300 dark:border-slate-800 hover:border-purple-500'
+                  ? 'border-slate-200 dark:border-slate-800 hover:border-purple-500'
                   : isSeller
-                  ? 'border-slate-300 dark:border-slate-800 hover:border-cyan-500'
-                  : 'border-slate-300 dark:border-slate-800 hover:border-brand-teal-500'
+                  ? 'border-slate-200 dark:border-slate-800 hover:border-cyan-500'
+                  : 'border-slate-200 dark:border-slate-800 hover:border-nexablue-500'
               }`}
             >
               
@@ -363,10 +371,10 @@ export const UserManager: React.FC = () => {
                     <div
                       className={`w-12 h-12 rounded-2xl flex items-center justify-center text-sm font-black shadow-inner ${
                         isAdmin
-                          ? 'bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-300 dark:border-purple-500/40'
+                          ? 'bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-500/40'
                           : isSeller
-                          ? 'bg-cyan-100 dark:bg-cyan-950/80 text-cyan-700 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-500/40'
-                          : 'bg-brand-teal-100 dark:bg-brand-teal-950/80 text-brand-teal-700 dark:text-brand-teal-300 border border-brand-teal-300 dark:border-brand-teal-500/40'
+                          ? 'bg-cyan-100 dark:bg-cyan-950/80 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-500/40'
+                          : 'bg-nexablue-50 dark:bg-nexablue-950/80 text-nexablue-700 dark:text-nexablue-300 border border-nexablue-200 dark:border-nexablue-500/40'
                       }`}
                     >
                       {user.avatar || user.name.slice(0, 2).toUpperCase()}
@@ -378,7 +386,7 @@ export const UserManager: React.FC = () => {
                           {user.name}
                         </h4>
                         {isMe && (
-                          <span className="px-1.5 py-0.5 rounded bg-brand-teal-500 text-slate-950 text-[10px] font-black uppercase shadow-xs">
+                          <span className="px-1.5 py-0.5 rounded bg-nexablue-600 text-white text-[10px] font-black uppercase shadow-xs">
                             Tú
                           </span>
                         )}
@@ -388,10 +396,10 @@ export const UserManager: React.FC = () => {
                         <span
                           className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wide border shadow-xs ${
                             isAdmin
-                              ? 'bg-purple-50 text-purple-800 dark:bg-purple-950/50 dark:text-purple-300 border-purple-300 dark:border-purple-500/30'
+                              ? 'bg-purple-50 text-purple-800 dark:bg-purple-950/50 dark:text-purple-300 border-purple-200 dark:border-purple-500/30'
                               : isSeller
-                              ? 'bg-cyan-50 text-cyan-800 dark:bg-cyan-950/50 dark:text-cyan-300 border-cyan-300 dark:border-cyan-500/30'
-                              : 'bg-blue-50 text-blue-800 dark:bg-blue-950/50 dark:text-blue-300 border-blue-300 dark:border-blue-500/30'
+                              ? 'bg-cyan-50 text-cyan-800 dark:bg-cyan-950/50 dark:text-cyan-300 border-cyan-200 dark:border-cyan-500/30'
+                              : 'bg-blue-50 text-blue-800 dark:bg-blue-950/50 dark:text-blue-300 border-blue-200 dark:border-blue-500/30'
                           }`}
                         >
                           {isAdmin ? <ShieldCheck className="w-3 h-3" /> : isSeller ? <Briefcase className="w-3 h-3" /> : <Wrench className="w-3 h-3" />}
@@ -401,8 +409,8 @@ export const UserManager: React.FC = () => {
                         <span
                           className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border ${
                             isActive
-                              ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/30'
-                              : 'bg-rose-50 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 border-rose-300 dark:border-rose-500/30'
+                              ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/30'
+                              : 'bg-rose-50 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 border-rose-200 dark:border-rose-500/30'
                           }`}
                         >
                           <span className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-emerald-500' : 'bg-rose-500'}`} />
@@ -442,7 +450,7 @@ export const UserManager: React.FC = () => {
                   {/* Change Password Button */}
                   <button
                     onClick={() => openChangePasswordModal(user)}
-                    className="p-1.5 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-brand-teal-600 border border-slate-300 dark:border-slate-700 shadow-xs text-xs font-bold flex items-center gap-1"
+                    className="p-1.5 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-nexablue-600 border border-slate-200 dark:border-slate-700 shadow-xs text-xs font-bold flex items-center gap-1"
                     title="Cambiar contraseña"
                   >
                     <Key className="w-3.5 h-3.5 text-amber-500" />
@@ -461,8 +469,8 @@ export const UserManager: React.FC = () => {
                     disabled={isMe}
                     className={`p-1.5 rounded-lg text-xs font-bold border shadow-xs transition-colors ${
                       isActive
-                        ? 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-amber-600 border-slate-300 dark:border-slate-700'
-                        : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700'
+                        ? 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-amber-600 border-slate-200 dark:border-slate-700'
+                        : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700'
                     } disabled:opacity-40 disabled:cursor-not-allowed`}
                     title={isActive ? 'Desactivar usuario' : 'Activar usuario'}
                   >
@@ -474,7 +482,7 @@ export const UserManager: React.FC = () => {
                   {/* Edit User Button */}
                   <button
                     onClick={() => openEditUserModal(user)}
-                    className="p-1.5 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 shadow-xs"
+                    className="p-1.5 rounded-lg bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 shadow-xs"
                     title="Editar datos del usuario"
                   >
                     <Edit className="w-3.5 h-3.5" />
@@ -492,7 +500,7 @@ export const UserManager: React.FC = () => {
                       }
                     }}
                     disabled={isMe}
-                    className="p-1.5 rounded-lg bg-white dark:bg-slate-800 hover:bg-rose-50 text-rose-600 dark:text-rose-400 border border-slate-300 dark:border-slate-700 shadow-xs disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="p-1.5 rounded-lg bg-white dark:bg-slate-800 hover:bg-rose-50 text-rose-600 dark:text-rose-400 border border-slate-200 dark:border-slate-700 shadow-xs disabled:opacity-30 disabled:cursor-not-allowed"
                     title={isMe ? 'No puedes auto-eliminarte' : 'Eliminar usuario'}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -509,11 +517,11 @@ export const UserManager: React.FC = () => {
       {/* Create / Edit User Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-3xl max-w-lg w-full p-6 sm:p-7 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-5">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-7 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-5">
             
-            <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-3.5">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3.5">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-xl bg-brand-teal-50 dark:bg-brand-teal-950 text-brand-teal-600 dark:text-brand-teal-400">
+                <div className="p-2 rounded-xl bg-nexablue-50 dark:bg-nexablue-950 text-nexablue-600 dark:text-nexablue-400">
                   <UserPlus className="w-5 h-5" />
                 </div>
                 <div>
@@ -554,7 +562,7 @@ export const UserManager: React.FC = () => {
                   placeholder="Ej. Ing. Rafael Martínez"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-xs font-medium"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500 shadow-xs font-medium"
                 />
               </div>
 
@@ -569,7 +577,7 @@ export const UserManager: React.FC = () => {
                   placeholder="ejemplo@martineztech.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono focus:outline-none focus:border-brand-teal-500 shadow-xs"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono focus:outline-none focus:border-nexablue-500 shadow-xs"
                 />
               </div>
 
@@ -582,7 +590,7 @@ export const UserManager: React.FC = () => {
                   <select
                     value={role}
                     onChange={(e) => setRole(e.target.value as UserRole)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500 shadow-xs"
                   >
                     <option value="admin">Administrador (Acceso Total & Auditoría)</option>
                     <option value="seller">Vendedor / Comercial (Pipeline & Cotizaciones)</option>
@@ -599,7 +607,7 @@ export const UserManager: React.FC = () => {
                     placeholder="Ej. (809) 555-0199"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500 shadow-xs"
                   />
                 </div>
               </div>
@@ -613,7 +621,7 @@ export const UserManager: React.FC = () => {
                   <button
                     type="button"
                     onClick={generateRandomPassword}
-                    className="text-[11px] text-brand-teal-600 dark:text-brand-teal-400 hover:underline font-bold flex items-center gap-1"
+                    className="text-[11px] text-nexablue-600 dark:text-nexablue-400 hover:underline font-bold flex items-center gap-1"
                   >
                     <RefreshCw className="w-3 h-3" />
                     <span>Generar Aleatoria</span>
@@ -627,7 +635,7 @@ export const UserManager: React.FC = () => {
                     placeholder={editingUser ? '••••••••' : 'Ingresa la contraseña'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono focus:outline-none focus:border-brand-teal-500 shadow-xs"
+                    className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono focus:outline-none focus:border-nexablue-500 shadow-xs"
                   />
                   <button
                     type="button"
@@ -641,10 +649,10 @@ export const UserManager: React.FC = () => {
 
               {/* Technician Schedule Settings */}
               {(role === 'technician' || role === 'admin') && (
-                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700 space-y-3">
+                <div className="p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4 text-brand-teal-600 dark:text-brand-teal-400" />
+                      <Calendar className="w-4 h-4 text-nexablue-600 dark:text-nexablue-400" />
                       <span>Horario Laboral & Disponibilidad Técnica</span>
                     </span>
                     <span className="text-[10px] text-slate-500 font-mono">Agenda CRM</span>
@@ -679,8 +687,8 @@ export const UserManager: React.FC = () => {
                             }}
                             className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors ${
                               isSelected
-                                ? 'bg-brand-teal-600 text-white shadow-2xs'
-                                : 'bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-600'
+                                ? 'bg-nexablue-600 text-white shadow-2xs'
+                                : 'bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600'
                             }`}
                           >
                             {d.label}
@@ -698,7 +706,7 @@ export const UserManager: React.FC = () => {
                         type="time"
                         value={startTime}
                         onChange={(e) => setStartTime(e.target.value)}
-                        className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-xs font-mono font-bold text-slate-900 dark:text-white"
+                        className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-xs font-mono font-bold text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                       />
                     </div>
                     <div className="space-y-1">
@@ -707,7 +715,7 @@ export const UserManager: React.FC = () => {
                         type="time"
                         value={endTime}
                         onChange={(e) => setEndTime(e.target.value)}
-                        className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-xs font-mono font-bold text-slate-900 dark:text-white"
+                        className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-xs font-mono font-bold text-slate-900 dark:text-white focus:border-nexablue-500 focus:outline-none"
                       />
                     </div>
                     <div className="space-y-1">
@@ -718,7 +726,7 @@ export const UserManager: React.FC = () => {
                         max={15}
                         value={maxVisitsPerDay}
                         onChange={(e) => setMaxVisitsPerDay(parseInt(e.target.value, 10) || 6)}
-                        className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-xs font-mono font-bold text-slate-900 dark:text-white text-center"
+                        className="w-full px-2 py-1.5 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-xs font-mono font-bold text-slate-900 dark:text-white text-center focus:border-nexablue-500 focus:outline-none"
                       />
                     </div>
                   </div>
@@ -732,7 +740,7 @@ export const UserManager: React.FC = () => {
                   id="activeUserCheckbox"
                   checked={active}
                   onChange={(e) => setActive(e.target.checked)}
-                  className="rounded border-slate-300 text-brand-teal-600 focus:ring-brand-teal-500"
+                  className="rounded border-slate-300 text-nexablue-600 focus:ring-nexablue-500"
                 />
                 <label htmlFor="activeUserCheckbox" className="text-xs font-bold text-slate-800 dark:text-slate-300 cursor-pointer">
                   Cuenta Activa (Habilitada para iniciar sesión en el CRM)
@@ -740,17 +748,17 @@ export const UserManager: React.FC = () => {
               </div>
 
               {/* Actions */}
-              <div className="pt-4 border-t-2 border-slate-200 dark:border-slate-800 flex justify-end gap-2.5">
+              <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-2.5">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 border border-slate-300 dark:border-slate-700"
+                  className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 border border-slate-200 dark:border-slate-700"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-md border border-brand-teal-700/20"
+                  className="px-6 py-2.5 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm hover:shadow-md transition-all"
                 >
                   {editingUser ? 'Guardar Cambios' : 'Registrar Usuario'}
                 </button>
@@ -765,9 +773,9 @@ export const UserManager: React.FC = () => {
       {/* Change Password Modal */}
       {isPasswordModalOpen && targetUserForPassword && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-3xl max-w-md w-full p-6 sm:p-7 relative shadow-2xl space-y-5">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-7 relative shadow-2xl space-y-5">
             
-            <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-3">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2">
                 <Key className="w-5 h-5 text-amber-500" />
                 <h3 className="text-base font-black text-slate-900 dark:text-white">
@@ -782,35 +790,47 @@ export const UserManager: React.FC = () => {
               </button>
             </div>
 
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              Establece una nueva clave de acceso para <strong className="text-slate-900 dark:text-white">{targetUserForPassword.name}</strong> ({targetUserForPassword.email}).
-            </p>
+            {passwordError && (
+              <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-500/40 text-xs text-rose-800 dark:text-rose-300">
+                {passwordError}
+              </div>
+            )}
+
+            {passwordSuccess && (
+              <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-500/40 text-xs text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Contraseña actualizada correctamente para {targetUserForPassword.name}.</span>
+              </div>
+            )}
+
+            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center font-black text-xs">
+                {targetUserForPassword.name.slice(0, 2).toUpperCase()}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                  {targetUserForPassword.name}
+                </div>
+                <div className="text-[11px] text-slate-500 truncate font-mono">
+                  {targetUserForPassword.email}
+                </div>
+              </div>
+            </div>
 
             <form onSubmit={handleUpdatePasswordSubmit} className="space-y-4">
               
               <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-slate-800 dark:text-slate-300">
-                    Nueva Contraseña *
-                  </label>
-                  <button
-                    type="button"
-                    onClick={generateRandomPassword}
-                    className="text-[11px] text-brand-teal-600 dark:text-brand-teal-400 hover:underline font-bold flex items-center gap-1"
-                  >
-                    <RefreshCw className="w-3 h-3" />
-                    <span>Generar Clave</span>
-                  </button>
-                </div>
-
+                <label className="text-xs font-bold text-slate-800 dark:text-slate-300">
+                  Nueva Contraseña (mínimo 6 caracteres) *
+                </label>
                 <div className="relative">
                   <input
                     type={showNewPassword ? 'text' : 'password'}
                     required
-                    placeholder="Escribe la nueva contraseña..."
+                    placeholder="Escribe la nueva clave..."
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono focus:outline-none focus:border-brand-teal-500 shadow-xs"
+                    className="w-full pl-3.5 pr-10 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono focus:outline-none focus:border-nexablue-500 shadow-xs"
                   />
                   <button
                     type="button"
@@ -822,17 +842,17 @@ export const UserManager: React.FC = () => {
                 </div>
               </div>
 
-              <div className="pt-3 border-t-2 border-slate-200 dark:border-slate-800 flex justify-end gap-2">
+              <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setIsPasswordModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 border border-slate-300 dark:border-slate-700"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 border border-slate-200 dark:border-slate-700"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 text-slate-950 font-black text-xs shadow-md border border-brand-teal-600/30"
+                  className="px-5 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm hover:shadow-md transition-all"
                 >
                   {passwordSuccess ? '¡Clave Actualizada!' : 'Actualizar Clave'}
                 </button>

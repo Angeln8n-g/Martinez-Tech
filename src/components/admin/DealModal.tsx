@@ -119,10 +119,10 @@ export const DealModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl max-w-2xl w-full p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-6">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-2xl w-full p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-6">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-4">
+        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
           <div>
             <h3 className="text-xl font-black text-slate-900 dark:text-white">
               {activeDealForEdit ? `Editar Negociación (${activeDealForEdit.code})` : 'Nueva Negociación / Oportunidad'}
@@ -133,7 +133,7 @@ export const DealModal: React.FC = () => {
           </div>
           <button
             onClick={() => setIsDealModalOpen(false)}
-            className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-300 dark:border-slate-700 shadow-sm"
+            className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-black dark:hover:text-white border border-slate-200 dark:border-slate-700 shadow-xs"
           >
             <X className="w-5 h-5" />
           </button>
@@ -152,19 +152,19 @@ export const DealModal: React.FC = () => {
               placeholder="Ej. Instalación de 8 Cámaras 4K + Motor Corredizo"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500 shadow-xs"
             />
           </div>
 
           {/* Client Selection */}
           {clients.length > 0 && !activeDealForEdit && (
-            <div className="space-y-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-300 dark:border-slate-700/50 shadow-sm">
-              <label className="text-[11px] font-bold text-brand-teal-800 dark:text-brand-teal-300">
+            <div className="space-y-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700/50 shadow-xs">
+              <label className="text-[11px] font-bold text-nexablue-700 dark:text-nexablue-300">
                 ¿Seleccionar cliente existente del directorio? (Opcional)
               </label>
               <select
                 onChange={handleSelectExistingClient}
-                className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium"
+                className="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium"
               >
                 <option value="">-- Ingresar cliente nuevo abajo o seleccionar aquí --</option>
                 {clients.map(c => (
@@ -186,7 +186,7 @@ export const DealModal: React.FC = () => {
                 placeholder="Ej. Ing. Juan Pérez / Empresa SRL"
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500 shadow-xs"
               />
             </div>
 
@@ -200,7 +200,7 @@ export const DealModal: React.FC = () => {
                 placeholder="Ej. (809) 555-1234"
                 value={clientPhone}
                 onChange={(e) => setClientPhone(formatDominicanPhone(e.target.value))}
-                className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm font-mono"
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500 shadow-xs font-mono"
               />
             </div>
           </div>
@@ -215,7 +215,7 @@ export const DealModal: React.FC = () => {
                 placeholder="cliente@correo.com"
                 value={clientEmail}
                 onChange={(e) => setClientEmail(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm"
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500 shadow-xs"
               />
             </div>
 
@@ -226,7 +226,7 @@ export const DealModal: React.FC = () => {
               <select
                 value={clientType}
                 onChange={(e) => setClientType(e.target.value as ClientType)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium"
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:border-nexablue-500 focus:outline-none"
               >
                 <option value="residential">Residencial / Hogar</option>
                 <option value="commercial">Comercial / Oficina</option>
@@ -245,7 +245,7 @@ export const DealModal: React.FC = () => {
               placeholder="Ej. Calle 4ta #25, Naco, Santo Domingo"
               value={clientAddress}
               onChange={(e) => setClientAddress(e.target.value)}
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brand-teal-500 shadow-sm"
+              className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-nexablue-500 shadow-xs"
             />
           </div>
 
@@ -258,7 +258,7 @@ export const DealModal: React.FC = () => {
               <select
                 value={stage}
                 onChange={(e) => setStage(e.target.value as DealStage)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold"
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:border-nexablue-500 focus:outline-none"
               >
                 <option value="prospect">1. Prospecto Nuevo</option>
                 <option value="site_visit">2. Levantamiento / Visita</option>
@@ -278,7 +278,7 @@ export const DealModal: React.FC = () => {
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as PriorityLevel)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium"
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:border-nexablue-500 focus:outline-none"
               >
                 <option value="high">🔴 Alta Prioridad</option>
                 <option value="medium">🟡 Media</option>
@@ -293,7 +293,7 @@ export const DealModal: React.FC = () => {
               <select
                 value={serviceCategory}
                 onChange={(e) => setServiceCategory(e.target.value as ServiceCategory)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium"
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:border-nexablue-500 focus:outline-none"
               >
                 <option value="camaras">Cámaras de Vigilancia</option>
                 <option value="redes">Redes Informáticas</option>
@@ -320,7 +320,7 @@ export const DealModal: React.FC = () => {
                 placeholder="0"
                 value={estimatedValue}
                 onChange={(e) => setEstimatedValue(Number(e.target.value))}
-                className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-brand-teal-800 dark:text-brand-teal-400 font-bold font-mono shadow-sm"
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-nexablue-700 dark:text-nexablue-400 font-bold font-mono shadow-xs"
               />
             </div>
 
@@ -333,7 +333,7 @@ export const DealModal: React.FC = () => {
                 placeholder="Ej. Rafael Martínez / Equipo 1"
                 value={assignedTechnician}
                 onChange={(e) => setAssignedTechnician(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-xs"
               />
             </div>
           </div>
@@ -347,23 +347,23 @@ export const DealModal: React.FC = () => {
               placeholder="Detalles sobre las instalaciones, equipos preferidos, condiciones del cliente..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 resize-none shadow-sm"
+              className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 resize-none shadow-xs"
             />
           </div>
 
-          <div className="pt-4 border-t-2 border-slate-200 dark:border-slate-800 flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={() => setIsDealModalOpen(false)}
-              className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-300 text-xs font-semibold border border-slate-300 dark:border-slate-700"
+              className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-300 text-xs font-semibold border border-slate-200 dark:border-slate-700"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-xl bg-gradient-to-r from-brand-teal-500 to-brand-green-500 hover:from-brand-teal-400 hover:to-brand-green-400 text-slate-950 font-black text-xs shadow-md border border-brand-teal-600/30"
+              className="px-5 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm hover:shadow-md transition-all flex items-center gap-1.5"
             >
-              <Save className="w-4 h-4 inline mr-1" />
+              <Save className="w-4 h-4" />
               <span>Guardar Negociación</span>
             </button>
           </div>

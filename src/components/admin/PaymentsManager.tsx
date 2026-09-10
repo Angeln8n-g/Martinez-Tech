@@ -83,12 +83,12 @@ export const PaymentsManager: React.FC = () => {
       {/* Top Metrics Banner */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 space-y-2 shadow-md">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
               Total Cobrado (Pesos)
             </span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-300 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shadow-sm">
+            <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shadow-xs">
               <DollarSign className="w-4 h-4" />
             </div>
           </div>
@@ -101,12 +101,12 @@ export const PaymentsManager: React.FC = () => {
         </div>
 
         {totalCollectedUSD > 0 && (
-          <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 space-y-2 shadow-md">
+          <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                 Total Cobrado (Dólares)
               </span>
-              <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-500/10 border border-blue-300 dark:border-blue-500/30 text-blue-700 dark:text-blue-400 flex items-center justify-center shadow-sm">
+              <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 text-blue-700 dark:text-blue-400 flex items-center justify-center shadow-xs">
                 <DollarSign className="w-4 h-4" />
               </div>
             </div>
@@ -119,18 +119,18 @@ export const PaymentsManager: React.FC = () => {
           </div>
         )}
 
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 space-y-2 shadow-md flex flex-col justify-between">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
               Reportes & Saldos
             </span>
-            <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-500/10 border border-purple-300 dark:border-purple-500/30 text-purple-700 dark:text-purple-400 flex items-center justify-center shadow-sm">
+            <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/30 text-purple-700 dark:text-purple-400 flex items-center justify-center shadow-xs">
               <FileSpreadsheet className="w-4 h-4" />
             </div>
           </div>
           <button
             onClick={() => setIsReportsModalOpen(true)}
-            className="w-full py-2 px-3 rounded-xl bg-purple-100 hover:bg-purple-200 dark:bg-purple-950/80 dark:hover:bg-purple-900 text-purple-800 dark:text-purple-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-purple-300 dark:border-purple-700"
+            className="w-full py-2 px-3 rounded-xl bg-purple-100 hover:bg-purple-200 dark:bg-purple-950/80 dark:hover:bg-purple-900 text-purple-800 dark:text-purple-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-purple-200 dark:border-purple-700"
           >
             <span>Ver Cuentas por Cobrar & Excel</span>
           </button>
@@ -139,7 +139,7 @@ export const PaymentsManager: React.FC = () => {
       </div>
 
       {/* Filter and Register Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         
         <div className="flex items-center gap-3 flex-1 flex-wrap">
           <div className="relative flex-1 min-w-[240px]">
@@ -149,14 +149,14 @@ export const PaymentsManager: React.FC = () => {
               placeholder="Buscar por N° recibo, cliente, cotización o referencia..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 shadow-xs"
             />
           </div>
 
           <select
             value={methodFilter}
             onChange={(e) => setMethodFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-brand-teal-500 shadow-sm"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-emerald-500 shadow-xs"
           >
             <option value="all">Todos los Métodos</option>
             <option value="transferencia">Transferencia Bancaria</option>
@@ -168,7 +168,7 @@ export const PaymentsManager: React.FC = () => {
 
         <button
           onClick={handleOpenNewPayment}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md border border-emerald-700/20"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-sm hover:shadow-md transition-all"
         >
           <Plus className="w-4 h-4" />
           <span>Registrar Nuevo Cobro</span>
@@ -176,11 +176,11 @@ export const PaymentsManager: React.FC = () => {
       </div>
 
       {/* Receipts Table */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-2xl overflow-hidden shadow-md">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 font-bold uppercase text-[10px] tracking-wider border-b-2 border-slate-300 dark:border-slate-700">
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200 dark:border-slate-700">
                 <th className="py-3.5 px-4">N° Recibo</th>
                 <th className="py-3.5 px-4">Cliente / Empresa</th>
                 <th className="py-3.5 px-4">Concepto del Pago</th>
@@ -274,7 +274,7 @@ export const PaymentsManager: React.FC = () => {
                           {/* WhatsApp Template Notification */}
                           <button
                             onClick={() => handleWhatsAppReceipt(p)}
-                            className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-50 text-emerald-700 dark:text-emerald-400 border border-slate-300 dark:border-slate-700"
+                            className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-50 text-emerald-700 dark:text-emerald-400 border border-slate-200 dark:border-slate-700"
                             title="Enviar Comprobante por WhatsApp"
                           >
                             <MessageCircle className="w-4 h-4" />
@@ -287,7 +287,7 @@ export const PaymentsManager: React.FC = () => {
                                 deletePayment(p.id);
                               }
                             }}
-                            className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 text-rose-600 dark:text-rose-400 border border-slate-300 dark:border-slate-700"
+                            className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 text-rose-600 dark:text-rose-400 border border-slate-200 dark:border-slate-700"
                             title="Eliminar"
                           >
                             <Trash2 className="w-4 h-4" />

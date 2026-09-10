@@ -126,7 +126,7 @@ export const ClientDirectory: React.FC = () => {
     <div className="space-y-6 animate-fadeIn">
       
       {/* Top Filter Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         
         <div className="flex items-center gap-3 flex-1 flex-wrap">
           <div className="relative flex-1 min-w-[240px]">
@@ -136,14 +136,14 @@ export const ClientDirectory: React.FC = () => {
               placeholder="Buscar por nombre, empresa, teléfono o correo..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-teal-500 shadow-sm"
+              className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-nexablue-500 shadow-xs"
             />
           </div>
 
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value as any)}
-            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-brand-teal-500 shadow-sm"
+            className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-bold focus:outline-none focus:border-nexablue-500 shadow-xs"
           >
             <option value="all">Todos los Tipos de Clientes</option>
             <option value="residential">Residencial / Hogar</option>
@@ -155,7 +155,7 @@ export const ClientDirectory: React.FC = () => {
 
         <button
           onClick={openNewModal}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-md border border-brand-teal-700/20"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm transition-all"
         >
           <Plus className="w-4 h-4" />
           <span>Nuevo Cliente</span>
@@ -171,7 +171,7 @@ export const ClientDirectory: React.FC = () => {
           return (
             <div
               key={client.id}
-              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-brand-teal-500 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-nexablue-500 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between space-y-4"
             >
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-2">
@@ -181,13 +181,13 @@ export const ClientDirectory: React.FC = () => {
                     </h4>
                     {client.company && (
                       <div className="text-xs font-bold text-slate-700 dark:text-slate-400 flex items-center gap-1">
-                        <Building2 className="w-3.5 h-3.5 text-brand-teal-600 dark:text-brand-teal-400" />
+                        <Building2 className="w-3.5 h-3.5 text-nexablue-600 dark:text-nexablue-400" />
                         <span>{client.company}</span>
                       </div>
                     )}
                   </div>
 
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                     {getClientTypeLabel(client.type)}
                   </span>
                 </div>
@@ -226,7 +226,7 @@ export const ClientDirectory: React.FC = () => {
                 )}
               </div>
 
-              <div className="pt-3 border-t-2 border-slate-200 dark:border-slate-800 flex items-center justify-between">
+              <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
                 <div className="text-[11px] text-slate-600 dark:text-slate-400 font-medium">
                   <strong>{clientDeals.length}</strong> negociaciones · <strong>{clientQuotes.length}</strong> cotizaciones
                 </div>
@@ -234,7 +234,7 @@ export const ClientDirectory: React.FC = () => {
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => handleWhatsApp(client)}
-                    className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-500/30"
+                    className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30 transition-colors"
                     title="WhatsApp"
                   >
                     <MessageCircle className="w-4 h-4" />
@@ -242,7 +242,7 @@ export const ClientDirectory: React.FC = () => {
 
                   <button
                     onClick={() => openEditModal(client)}
-                    className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
+                    className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors"
                     title="Editar"
                   >
                     <Edit className="w-4 h-4" />
@@ -254,7 +254,7 @@ export const ClientDirectory: React.FC = () => {
                         deleteClient(client.id);
                       }
                     }}
-                    className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-rose-100 text-rose-600 dark:text-rose-400 border border-slate-300 dark:border-slate-700"
+                    className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-rose-100 text-rose-600 dark:text-rose-400 border border-slate-200 dark:border-slate-700 transition-colors"
                     title="Eliminar"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -269,13 +269,13 @@ export const ClientDirectory: React.FC = () => {
       {/* Add / Edit Client Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-5">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl space-y-5">
             
             <div className="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-800 pb-3">
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                 {editingClient ? 'Editar Cliente' : 'Registrar Nuevo Cliente'}
               </h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-black dark:hover:text-white">
+              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-black dark:hover:text-white transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -290,7 +290,7 @@ export const ClientDirectory: React.FC = () => {
                   placeholder="Ej. Ing. Marcos Rivas"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-xs focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -302,7 +302,7 @@ export const ClientDirectory: React.FC = () => {
                     placeholder="Ej. Constructora del Este"
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-xs focus:border-nexablue-500 focus:outline-none"
                   />
                 </div>
 
@@ -311,7 +311,7 @@ export const ClientDirectory: React.FC = () => {
                   <select
                     value={type}
                     onChange={(e) => setType(e.target.value as ClientType)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-medium"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-200 font-medium focus:border-nexablue-500 focus:outline-none"
                   >
                     <option value="residential">Residencial / Hogar</option>
                     <option value="commercial">Comercial / Empresa</option>
@@ -330,7 +330,7 @@ export const ClientDirectory: React.FC = () => {
                     placeholder="809-555-1234"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-xs font-mono focus:border-nexablue-500 focus:outline-none"
                   />
                 </div>
 
@@ -341,7 +341,7 @@ export const ClientDirectory: React.FC = () => {
                     placeholder="cliente@correo.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-xs focus:border-nexablue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -354,7 +354,7 @@ export const ClientDirectory: React.FC = () => {
                     placeholder="131-99445-1 o 001-1234567-8"
                     value={rnc}
                     onChange={(e) => setRnc(formatDgiiInput(e.target.value))}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono shadow-sm"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono shadow-xs focus:border-nexablue-500 focus:outline-none"
                   />
                   <RncValidatorBadge value={rnc} />
                 </div>
@@ -365,7 +365,7 @@ export const ClientDirectory: React.FC = () => {
                     type="text"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-xs focus:border-nexablue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -377,7 +377,7 @@ export const ClientDirectory: React.FC = () => {
                   placeholder="Calle, número de casa/edificio, sector"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-sm"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white shadow-xs focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
@@ -388,21 +388,21 @@ export const ClientDirectory: React.FC = () => {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Detalles sobre preferencias, horarios de visita, etc."
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none shadow-sm"
+                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white resize-none shadow-xs focus:border-nexablue-500 focus:outline-none"
                 />
               </div>
 
-              <div className="pt-3 border-t-2 border-slate-200 dark:border-slate-800 flex justify-end gap-2">
+              <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700"
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-lg bg-brand-teal-600 hover:bg-brand-teal-500 text-white font-bold text-xs shadow-md border border-brand-teal-700/20"
+                  className="px-5 py-2 rounded-xl bg-nexablue-600 hover:bg-nexablue-500 text-white font-bold text-xs shadow-sm transition-all"
                 >
                   Guardar Cliente
                 </button>

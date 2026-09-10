@@ -341,7 +341,7 @@ export const FiscalInvoiceModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
         
         {/* Header */}
         <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-900/50">
@@ -385,7 +385,7 @@ export const FiscalInvoiceModal: React.FC = () => {
           {/* Section 1: Fiscal NCF Data */}
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 space-y-4">
             <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-wider text-xs flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-brand-teal-600 dark:text-brand-teal-400" />
+              <ShieldCheck className="w-4 h-4 text-nexablue-600 dark:text-nexablue-400" />
               <span>1. Datos del Comprobante Fiscal (NCF)</span>
             </h4>
 
@@ -395,7 +395,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                 <select
                   value={ncfType}
                   onChange={(e) => handleNcfTypeChange(e.target.value as NCFType)}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-white"
                 >
                   <option value="B01">B01 - Crédito Fiscal (Empresas)</option>
                   <option value="B02">B02 - Consumo Final (Personas)</option>
@@ -411,7 +411,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                   required
                   value={ncf}
                   onChange={(e) => setNcf(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white uppercase"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-mono font-bold text-slate-900 dark:text-white uppercase"
                 />
               </div>
 
@@ -421,7 +421,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                   type="date"
                   value={ncfExpiryDate}
                   onChange={(e) => setNcfExpiryDate(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs font-mono text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-900 dark:text-white"
                 />
               </div>
             </div>
@@ -439,7 +439,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                 <select
                   value={clientId}
                   onChange={(e) => handleClientSelect(e.target.value)}
-                  className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-[11px] text-slate-700 dark:text-slate-300 font-medium"
+                  className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[11px] text-slate-700 dark:text-slate-300 font-medium"
                 >
                   <option value="">-- Cargar de Directorio --</option>
                   {clients.map(c => (
@@ -458,7 +458,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                   placeholder="Ej. Centro Logístico del Caribe S.A."
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-medium"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-medium"
                 />
               </div>
 
@@ -485,7 +485,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                   className={`w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border text-xs text-slate-900 dark:text-white font-mono ${
                     clientRnc && !validateDominicanRNC(clientRnc).isValid
                       ? 'border-rose-400 focus:border-rose-500'
-                      : 'border-slate-300 dark:border-slate-700 focus:border-brand-teal-500'
+                      : 'border-slate-200 dark:border-slate-700 focus:border-nexablue-500'
                   }`}
                 />
               </div>
@@ -499,7 +499,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                   placeholder="Ej. Zona Franca San Isidro, Nave 14"
                   value={clientAddress}
                   onChange={(e) => setClientAddress(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
                 />
               </div>
 
@@ -510,7 +510,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                   placeholder="Ej. (809) 555-0192"
                   value={clientPhone}
                   onChange={(e) => setClientPhone(formatDominicanPhone(e.target.value))}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono"
                 />
               </div>
             </div>
@@ -522,7 +522,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono"
                 />
               </div>
               <div className="space-y-1">
@@ -531,7 +531,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                   type="date"
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono"
                 />
               </div>
               <div className="space-y-1">
@@ -539,7 +539,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                 <select
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value as 'DOP' | 'USD')}
-                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-semibold"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-semibold"
                 >
                   <option value="DOP">DOP (RD$)</option>
                   <option value="USD">USD (US$)</option>
@@ -578,7 +578,7 @@ export const FiscalInvoiceModal: React.FC = () => {
               <button
                 type="button"
                 onClick={handleAddItem}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-brand-teal-700 dark:text-brand-teal-400 font-bold text-[11px]"
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-nexablue-700 dark:text-nexablue-400 font-bold text-[11px]"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Agregar Fila</span>
@@ -606,7 +606,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                           min="1"
                           value={item.quantity}
                           onChange={(e) => handleUpdateItem(idx, 'quantity', parseFloat(e.target.value) || 1)}
-                          className="w-14 px-2 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-center font-mono text-xs"
+                          className="w-14 px-2 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-center font-mono text-xs"
                         />
                       </td>
                       <td className="p-2.5">
@@ -616,7 +616,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                           placeholder="Descripción detallada del equipo o servicio..."
                           value={item.description}
                           onChange={(e) => handleUpdateItem(idx, 'description', e.target.value)}
-                          className="w-full px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
+                          className="w-full px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white"
                         />
                       </td>
                       <td className="p-2.5">
@@ -626,7 +626,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                           step="any"
                           value={item.unitPrice}
                           onChange={(e) => handleUpdateItem(idx, 'unitPrice', parseFloat(e.target.value) || 0)}
-                          className="w-24 px-2 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-right font-mono text-xs"
+                          className="w-24 px-2 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-right font-mono text-xs"
                         />
                       </td>
                       <td className="p-2.5 text-center font-mono text-slate-500 text-[11px]">
@@ -667,7 +667,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                   <select
                     value={paymentMethod}
                     onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs capitalize"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs capitalize"
                   >
                     <option value="transferencia">Transferencia Bancaria</option>
                     <option value="efectivo">Efectivo</option>
@@ -686,7 +686,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                     step="any"
                     value={amountPaid}
                     onChange={(e) => setAmountPaid(parseFloat(e.target.value) || 0)}
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs font-mono"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-mono"
                   />
                 </div>
               </div>
@@ -707,7 +707,7 @@ export const FiscalInvoiceModal: React.FC = () => {
                   placeholder="Detalles de garantía o instrucciones de transferencia..."
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs"
+                  className="w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs"
                 />
               </div>
             </div>
@@ -767,7 +767,7 @@ export const FiscalInvoiceModal: React.FC = () => {
 
           <button
             onClick={handleSubmit}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-400 hover:to-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
+            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
           >
             <Save className="w-4 h-4" />
             <span>{activeInvoiceForEdit ? 'Guardar Cambios' : 'Emitir Factura Fiscal'}</span>
