@@ -317,7 +317,7 @@ export const DashboardOverview: React.FC = () => {
               <h4 className="text-xs font-black text-amber-950 dark:text-amber-200">
                 Alerta de Inventario: {lowStockItems.length} {lowStockItems.length === 1 ? 'producto tiene' : 'productos tienen'} existencia crítica (&le; 3 unidades)
               </h4>
-              <p className="text-[11px] text-amber-800/80 dark:text-amber-400 font-medium">
+              <p className="text-[11px] text-amber-900 dark:text-amber-300 font-medium">
                 {lowStockItems.slice(0, 3).map(p => `${p.name} (${p.stock || 0} disp.)`).join(', ')}
                 {lowStockItems.length > 3 ? ` y ${lowStockItems.length - 3} más...` : ''}
               </p>
@@ -325,7 +325,7 @@ export const DashboardOverview: React.FC = () => {
           </div>
           <button
             onClick={() => setAdminTab('catalog')}
-            className="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-sm whitespace-nowrap self-start sm:self-auto transition-colors"
+            className="px-3.5 py-1.5 rounded-xl bg-amber-700 hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-500 text-white text-xs font-bold shadow-sm whitespace-nowrap self-start sm:self-auto transition-colors"
           >
             Gestionar Stock &rarr;
           </button>
@@ -514,8 +514,8 @@ export const DashboardOverview: React.FC = () => {
                     </h4>
 
                     <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-400 font-medium">
-                      <span>👤 {deal.clientName}</span>
-                      <span>📞 {deal.clientPhone}</span>
+                      <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5 text-slate-400" />{deal.clientName}</span>
+                      <span className="flex items-center gap-1"><Phone className="w-3.5 h-3.5 text-slate-400" />{deal.clientPhone}</span>
                     </div>
                   </div>
 

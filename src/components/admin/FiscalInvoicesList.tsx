@@ -174,7 +174,7 @@ export const FiscalInvoicesList: React.FC = () => {
           <div className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-mono">
             {formatCurrency(totalInvoiced)}
           </div>
-          <div className="text-[11px] text-slate-500 font-medium">
+          <div className="text-[11px] text-slate-600 dark:text-slate-400 font-medium">
             {invoices.length} facturas fiscales emitidas
           </div>
         </div>
@@ -187,7 +187,7 @@ export const FiscalInvoicesList: React.FC = () => {
           <div className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono">
             {formatCurrency(totalITBIS)}
           </div>
-          <div className="text-[11px] text-slate-500 font-medium">
+          <div className="text-[11px] text-slate-600 dark:text-slate-400 font-medium">
             Declarable en Formato 607 / IT-1
           </div>
         </div>
@@ -200,7 +200,7 @@ export const FiscalInvoicesList: React.FC = () => {
           <div className="text-xl sm:text-2xl font-black text-cyan-600 dark:text-cyan-400 font-mono">
             {formatCurrency(totalPaid)}
           </div>
-          <div className="text-[11px] text-slate-500 font-medium">
+          <div className="text-[11px] text-slate-600 dark:text-slate-400 font-medium">
             Ingresos ingresados a cuenta
           </div>
         </div>
@@ -290,7 +290,7 @@ export const FiscalInvoicesList: React.FC = () => {
             <div className="text-sm font-bold text-slate-800 dark:text-slate-200">
               No hay facturas fiscales registradas
             </div>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <p className="text-xs text-slate-600 dark:text-slate-400 max-w-sm mx-auto">
               Puedes emitir una factura desde el botón superior o generarla automáticamente a partir de una cotización aprobada.
             </p>
           </div>

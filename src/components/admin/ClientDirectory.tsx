@@ -213,7 +213,7 @@ export const ClientDirectory: React.FC = () => {
                   )}
 
                   {client.rnc && (
-                    <div className="text-[11px] text-slate-500 font-mono">
+                    <div className="text-[11px] text-slate-600 dark:text-slate-400 font-mono">
                       RNC/Cédula: {client.rnc}
                     </div>
                   )}

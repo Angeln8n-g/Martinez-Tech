@@ -254,7 +254,7 @@ export const AdminHeader: React.FC = () => {
         </div>
 
         {/* Right: Unified Action Menu, Utility Tools & Session */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-end">
           
           {/* Quick Search Spotlight Trigger */}
           <button

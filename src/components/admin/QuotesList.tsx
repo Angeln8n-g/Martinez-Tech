@@ -224,7 +224,7 @@ export const QuotesList: React.FC = () => {
                             {quote.clientCompany}
                           </div>
                         )}
-                        <div className="text-[10px] text-slate-500 font-mono">
+                        <div className="text-[10px] text-slate-600 dark:text-slate-400 font-mono">
                           {quote.clientPhone}
                         </div>
                       </td>
@@ -232,7 +232,7 @@ export const QuotesList: React.FC = () => {
                       {/* Date */}
                       <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300 font-medium">
                         <div>{formatDate(quote.date)}</div>
-                        <div className="text-[10px] text-slate-500">Válido hasta: {formatDate(quote.validUntil)}</div>
+                        <div className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">Válido hasta: {formatDate(quote.validUntil)}</div>
                       </td>
 
                       {/* Items count */}

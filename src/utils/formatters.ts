@@ -49,71 +49,71 @@ export const getStageInfo = (stage: DealStage) => {
       return {
         label: '1. Prospecto Nuevo',
         shortLabel: 'Prospecto',
-        color: 'bg-sky-500/10 text-sky-400 border-sky-500/30',
-        dotColor: 'bg-sky-400',
+        color: 'bg-sky-50 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300 border-sky-300 dark:border-sky-500/40',
+        dotColor: 'bg-sky-500',
         order: 1
       };
     case 'site_visit':
       return {
         label: '2. Levantamiento / Visita',
         shortLabel: 'Levantamiento',
-        color: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-        dotColor: 'bg-amber-400',
+        color: 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-500/40',
+        dotColor: 'bg-amber-500',
         order: 2
       };
     case 'quoted':
       return {
         label: '3. Presupuesto Enviado',
         shortLabel: 'Cotizado',
-        color: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
-        dotColor: 'bg-purple-400',
+        color: 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-500/40',
+        dotColor: 'bg-purple-500',
         order: 3
       };
     case 'negotiation':
       return {
         label: '4. En Negociación',
         shortLabel: 'Negociando',
-        color: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30',
-        dotColor: 'bg-indigo-400',
+        color: 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border-indigo-300 dark:border-indigo-500/40',
+        dotColor: 'bg-indigo-500',
         order: 4
       };
     case 'won':
       return {
         label: '5. Aprobado / Ganado',
         shortLabel: 'Aprobado',
-        color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-        dotColor: 'bg-emerald-400',
+        color: 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40',
+        dotColor: 'bg-emerald-500',
         order: 5
       };
     case 'installation':
       return {
         label: '6. En Instalación',
         shortLabel: 'Instalando',
-        color: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
-        dotColor: 'bg-cyan-400',
+        color: 'bg-cyan-50 dark:bg-cyan-950/60 text-cyan-800 dark:text-cyan-300 border-cyan-300 dark:border-cyan-500/40',
+        dotColor: 'bg-cyan-500',
         order: 6
       };
     case 'completed':
       return {
         label: '7. Finalizado y Cobrado',
         shortLabel: 'Completado',
-        color: 'bg-brand-green-500/10 text-brand-green-400 border-brand-green-500/30',
-        dotColor: 'bg-brand-green-400',
+        color: 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40',
+        dotColor: 'bg-emerald-500',
         order: 7
       };
     case 'lost':
       return {
         label: '8. Cancelado / Perdido',
         shortLabel: 'Cancelado',
-        color: 'bg-rose-500/10 text-rose-400 border-rose-500/30',
-        dotColor: 'bg-rose-400',
+        color: 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-300 dark:border-rose-500/40',
+        dotColor: 'bg-rose-500',
         order: 8
       };
     default:
       return {
         label: stage,
         shortLabel: stage,
-        color: 'bg-slate-500/10 text-slate-400 border-slate-500/30',
+        color: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-600',
         dotColor: 'bg-slate-400',
         order: 9
       };
@@ -123,34 +123,34 @@ export const getStageInfo = (stage: DealStage) => {
 export const getPriorityBadge = (priority: PriorityLevel) => {
   switch (priority) {
     case 'high':
-      return { label: 'Alta', color: 'bg-rose-500/20 text-rose-300 border-rose-500/40' };
+      return { label: 'Alta', color: 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-300 dark:border-rose-500/40' };
     case 'medium':
-      return { label: 'Media', color: 'bg-amber-500/20 text-amber-300 border-amber-500/40' };
+      return { label: 'Media', color: 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-500/40' };
     case 'low':
-      return { label: 'Baja', color: 'bg-slate-500/20 text-slate-300 border-slate-500/40' };
+      return { label: 'Baja', color: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-600' };
   }
 };
 
 export const getCategoryInfo = (category: ServiceCategory) => {
   switch (category) {
     case 'camaras':
-      return { label: 'Cámaras de Vigilancia', color: 'text-brand-teal-400 bg-brand-teal-500/10 border-brand-teal-500/30' };
+      return { label: 'Cámaras de Vigilancia', color: 'text-nexablue-700 dark:text-nexablue-300 bg-nexablue-50 dark:bg-nexablue-950/60 border-nexablue-200 dark:border-nexablue-800/60' };
     case 'redes':
-      return { label: 'Redes Informáticas', color: 'text-blue-400 bg-blue-500/10 border-blue-500/30' };
+      return { label: 'Redes Informáticas', color: 'text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border-blue-200 dark:border-blue-800/60' };
     case 'motores':
-      return { label: 'Motores de Portón', color: 'text-amber-400 bg-amber-500/10 border-amber-500/30' };
+      return { label: 'Motores de Portón', color: 'text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border-amber-200 dark:border-amber-800/60' };
     case 'cerraduras':
-      return { label: 'Cerraduras Magnéticas', color: 'text-rose-400 bg-rose-500/10 border-rose-500/30' };
+      return { label: 'Cerraduras Magnéticas', color: 'text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 border-rose-200 dark:border-rose-800/60' };
     case 'acceso':
-      return { label: 'Control de Acceso', color: 'text-purple-400 bg-purple-500/10 border-purple-500/30' };
+      return { label: 'Control de Acceso', color: 'text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/60 border-purple-200 dark:border-purple-800/60' };
     case 'ponchadores':
-      return { label: 'Ponchadores Biométricos', color: 'text-orange-400 bg-orange-500/10 border-orange-500/30' };
+      return { label: 'Ponchadores Biométricos', color: 'text-orange-800 dark:text-orange-300 bg-orange-50 dark:bg-orange-950/60 border-orange-200 dark:border-orange-800/60' };
     case 'alarmas':
-      return { label: 'Alarmas de Seguridad', color: 'text-red-400 bg-red-500/10 border-red-500/30' };
+      return { label: 'Alarmas de Seguridad', color: 'text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-950/60 border-red-200 dark:border-red-800/60' };
     case 'intercom':
-      return { label: 'Intercom & Video Porteros', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' };
+      return { label: 'Intercom & Video Porteros', color: 'text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border-emerald-200 dark:border-emerald-800/60' };
     default:
-      return { label: 'Servicio General', color: 'text-slate-400 bg-slate-500/10 border-slate-500/30' };
+      return { label: 'Servicio General', color: 'text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700' };
   }
 };
 

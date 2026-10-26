@@ -484,7 +484,7 @@ export const VisitModal: React.FC = () => {
 
           {/* Conflict Confirmation Box */}
           {showOverrideWarning && (
-            <div className="p-3 rounded-xl bg-rose-100 dark:bg-rose-950 border-2 border-rose-500 text-rose-950 dark:text-rose-200 text-xs space-y-2 animate-bounce-short">
+            <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/80 border border-rose-400 dark:border-rose-500/50 text-rose-900 dark:text-rose-200 text-xs space-y-2 animate-fadeIn shadow-sm">
               <div className="font-black flex items-center gap-1.5">
                 <AlertCircle className="w-4 h-4 text-rose-600" />
                 <span>¿Deseas sobreasignar al técnico de todos modos?</span>

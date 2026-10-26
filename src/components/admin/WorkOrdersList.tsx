@@ -200,7 +200,7 @@ export const WorkOrdersList: React.FC = () => {
                         <ImageIcon className="w-3.5 h-3.5 text-emerald-600" />
                         <span>Evidencia Fotográfica ({totalPhotos})</span>
                       </span>
-                      <span className="text-[10px] text-nexablue-600 font-medium">Ver galería &gt;</span>
+                      <span className="text-[10px] text-nexablue-600 dark:text-cyan-400 font-semibold hover:underline">Ver galería &gt;</span>
                     </div>
 
                     <div className="flex items-center gap-1.5 overflow-hidden">

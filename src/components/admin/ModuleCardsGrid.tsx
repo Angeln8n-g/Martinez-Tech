@@ -15,7 +15,9 @@ import {
   ArrowRight,
   Sparkles,
   AlertTriangle,
-  LayoutDashboard
+  LayoutDashboard,
+  Briefcase,
+  Settings2
 } from 'lucide-react';
 
 interface ModuleCardItem {
@@ -207,11 +209,16 @@ export const ModuleCardsGrid: React.FC<ModuleCardsGridProps> = ({
     }
   };
 
-  const categories: Array<{ name: 'Comercial' | 'Operaciones' | 'Finanzas' | 'Sistema'; label: string; icon: string }> = [
-    { name: 'Comercial', label: 'Área Comercial & Ventas', icon: '💼' },
-    { name: 'Operaciones', label: 'Operaciones & Campo Técnico', icon: '🛠️' },
-    { name: 'Finanzas', label: 'Finanzas & Fiscal DGII', icon: '💰' },
-    { name: 'Sistema', label: 'Configuración & Seguridad', icon: '⚙️' },
+  const categories: Array<{ 
+    name: 'Comercial' | 'Operaciones' | 'Finanzas' | 'Sistema'; 
+    label: string; 
+    icon: React.ComponentType<{ className?: string }>;
+    iconColor: string;
+  }> = [
+    { name: 'Comercial', label: 'Área Comercial & Ventas', icon: Briefcase, iconColor: 'text-nexablue-600 dark:text-cyan-400' },
+    { name: 'Operaciones', label: 'Operaciones & Campo Técnico', icon: Wrench, iconColor: 'text-emerald-600 dark:text-emerald-400' },
+    { name: 'Finanzas', label: 'Finanzas & Fiscal DGII', icon: DollarSign, iconColor: 'text-amber-600 dark:text-amber-400' },
+    { name: 'Sistema', label: 'Configuración & Seguridad', icon: Settings2, iconColor: 'text-purple-600 dark:text-purple-400' },
   ];
 
   return (
@@ -219,12 +226,13 @@ export const ModuleCardsGrid: React.FC<ModuleCardsGridProps> = ({
       {categories.map(cat => {
         const catModules = modules.filter(m => m.category === cat.name);
         if (catModules.length === 0) return null;
+        const CatIcon = cat.icon;
 
         return (
           <div key={cat.name} className="space-y-2.5">
             {showCategoryHeaders && (
               <div className="flex items-center gap-2 px-1">
-                <span className="text-xs">{cat.icon}</span>
+                <CatIcon className={`w-3.5 h-3.5 ${cat.iconColor}`} />
                 <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
                   {cat.label}
                 </span>

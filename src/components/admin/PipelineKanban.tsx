@@ -217,7 +217,7 @@ export const PipelineKanban: React.FC = () => {
                 {/* Cards Container */}
                 <div className="p-2.5 space-y-2.5 overflow-y-auto flex-1 scrollbar-thin">
                   {stageDeals.length === 0 ? (
-                    <div className="p-6 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl text-slate-400 text-[11px] italic font-medium">
+                    <div className="p-6 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl text-slate-600 dark:text-slate-400 text-xs italic font-medium">
                       Sin negociaciones
                     </div>
                   ) : (

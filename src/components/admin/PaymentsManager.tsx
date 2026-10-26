@@ -10,7 +10,11 @@ import {
   Trash2, 
   TrendingUp, 
   Calendar,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Building2,
+  Banknote,
+  CreditCard,
+  FileCheck
 } from 'lucide-react';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 
@@ -67,13 +71,13 @@ export const PaymentsManager: React.FC = () => {
   const getMethodBadge = (method: Payment['paymentMethod']) => {
     switch (method) {
       case 'transferencia':
-        return { label: '🏦 Transferencia', color: 'bg-blue-50 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 border-blue-300 dark:border-blue-500/30' };
+        return { label: 'Transferencia', icon: Building2, color: 'bg-blue-50 dark:bg-blue-950/80 text-blue-800 dark:text-blue-300 border-blue-300 dark:border-blue-500/40' };
       case 'efectivo':
-        return { label: '💵 Efectivo', color: 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/30' };
+        return { label: 'Efectivo', icon: Banknote, color: 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-500/40' };
       case 'tarjeta':
-        return { label: '💳 Tarjeta', color: 'bg-purple-50 dark:bg-purple-950/80 text-purple-800 dark:text-purple-300 border-purple-300 dark:border-purple-500/30' };
+        return { label: 'Tarjeta', icon: CreditCard, color: 'bg-purple-50 dark:bg-purple-950/80 text-purple-800 dark:text-purple-300 border-purple-300 dark:border-purple-500/40' };
       default:
-        return { label: '📜 Cheque', color: 'bg-amber-50 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-500/30' };
+        return { label: 'Cheque', icon: FileCheck, color: 'bg-amber-50 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-500/40' };
     }
   };
 
@@ -238,11 +242,17 @@ export const PaymentsManager: React.FC = () => {
 
                       {/* Method */}
                       <td className="py-3.5 px-4">
-                        <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold border ${methodBadge.color}`}>
-                          {methodBadge.label}
-                        </span>
+                        {(() => {
+                          const MethodIcon = methodBadge.icon;
+                          return (
+                            <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-bold border ${methodBadge.color}`}>
+                              <MethodIcon className="w-3 h-3" />
+                              <span>{methodBadge.label}</span>
+                            </span>
+                          );
+                        })()}
                         {p.bankName && (
-                          <div className="text-[10px] text-slate-500 mt-0.5">
+                          <div className="text-[10px] text-slate-600 dark:text-slate-400 mt-0.5 font-medium">
                             {p.bankName}
                           </div>
                         )}

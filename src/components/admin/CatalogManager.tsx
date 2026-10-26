@@ -436,7 +436,7 @@ export const CatalogManager: React.FC = () => {
             <TrendingUp className="w-4 h-4" />
             <span>Alertas & Valoración</span>
             {lowStockItems.length > 0 && (
-              <span className="px-1.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px]">
+              <span className="px-1.5 py-0.5 rounded-full bg-amber-400 dark:bg-amber-500 text-amber-950 dark:text-black font-black text-[10px]">
                 {lowStockItems.length}
               </span>
             )}
@@ -577,7 +577,7 @@ export const CatalogManager: React.FC = () => {
                           </span>
                         )}
                         {item.location && (
-                          <span className="text-[11px] font-medium text-slate-500 flex items-center gap-1">
+                          <span className="text-[11px] font-medium text-slate-600 dark:text-slate-400 flex items-center gap-1">
                             <MapPin className="w-3 h-3 text-slate-400" />
                             {item.location}
                           </span>
@@ -585,7 +585,7 @@ export const CatalogManager: React.FC = () => {
                       </div>
                     </div>
 
-                    <p className="text-xs text-slate-700 dark:text-slate-400 line-clamp-2 leading-relaxed font-normal">
+                    <p className="text-xs text-slate-700 dark:text-slate-300 line-clamp-2 leading-relaxed font-normal">
                       {item.description}
                     </p>
                   </div>
@@ -599,7 +599,7 @@ export const CatalogManager: React.FC = () => {
                         {formatCurrency(item.unitPrice)}
                       </div>
                       {item.costPrice ? (
-                        <div className="text-[10px] text-slate-500 font-mono font-medium">
+                        <div className="text-[10px] text-slate-600 dark:text-slate-400 font-mono font-medium">
                           Costo: {formatCurrency(item.costPrice)}
                         </div>
                       ) : null}

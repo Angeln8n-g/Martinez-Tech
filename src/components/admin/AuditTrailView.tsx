@@ -296,7 +296,7 @@ export const AuditTrailView: React.FC = () => {
                           <Calendar className="w-3.5 h-3.5 text-slate-400" />
                           <span>{dateFormatted}</span>
                         </div>
-                        <div className="text-[11px] text-slate-500 font-mono flex items-center gap-1 mt-0.5">
+                        <div className="text-[11px] text-slate-600 dark:text-slate-400 font-mono flex items-center gap-1 mt-0.5">
                           <Clock className="w-3 h-3 text-slate-400" />
                           <span>{timeFormatted}</span>
                         </div>
@@ -315,7 +315,7 @@ export const AuditTrailView: React.FC = () => {
                           </div>
                           <div>
                             <div className="font-bold text-slate-900 dark:text-white leading-tight">{log.userName}</div>
-                            <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                            <div className="text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 tracking-wider">
                               {log.userRole === 'admin' ? 'Administrador' : log.userRole === 'seller' ? 'Vendedor' : 'Técnico'}
                             </div>
                           </div>
