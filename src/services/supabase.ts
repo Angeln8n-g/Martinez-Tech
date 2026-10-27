@@ -51,6 +51,47 @@ export async function uploadWorkOrderImage(file: File): Promise<string> {
 }
 
 /**
+ * Uploads a portfolio cover or showcase image to Supabase Storage.
+ * Attempts 'portfolio-images' bucket first, then falls back seamlessly to 'work-order-evidence' (portfolio/ folder).
+ * Returns the public URL of the uploaded image.
+ */
+export async function uploadPortfolioImage(file: File): Promise<string> {
+  const fileExt = file.name.split('.').pop() || 'jpg';
+  const cleanExt = fileExt.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${cleanExt}`;
+
+  // Try primary bucket 'portfolio-images'
+  const primaryBucket = 'portfolio-images';
+  const { error: primaryError } = await supabase.storage
+    .from(primaryBucket)
+    .upload(fileName, file, {
+      cacheControl: '31536000',
+      upsert: false
+    });
+
+  if (!primaryError) {
+    const { data } = supabase.storage.from(primaryBucket).getPublicUrl(fileName);
+    return data.publicUrl;
+  }
+
+  // Fallback to active verified bucket 'work-order-evidence' inside 'portfolio/' subfolder
+  const fallbackPath = `portfolio/${fileName}`;
+  const { error: fallbackError } = await supabase.storage
+    .from('work-order-evidence')
+    .upload(fallbackPath, file, {
+      cacheControl: '31536000',
+      upsert: false
+    });
+
+  if (fallbackError) {
+    throw new Error(`Error al almacenar imagen: ${fallbackError.message}`);
+  }
+
+  const { data } = supabase.storage.from('work-order-evidence').getPublicUrl(fallbackPath);
+  return data.publicUrl;
+}
+
+/**
  * Uploads a base64 signature canvas data URL to the signatures bucket.
  * Returns the public URL.
  */

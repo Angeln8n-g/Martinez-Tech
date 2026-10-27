@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useAppState } from '../../context/AppStateContext';
+import { useToast } from '../ui/ToastNotification';
 import { PortfolioProject, ServiceCategory } from '../../types';
 import { 
   Plus, 
@@ -7,12 +8,20 @@ import {
   Trash2, 
   Edit, 
   X, 
-  Globe
+  Globe,
+  UploadCloud,
+  Image as ImageIcon,
+  Loader2,
+  CheckCircle2,
+  Link2
 } from 'lucide-react';
 import { getCategoryInfo } from '../../utils/formatters';
+import { uploadPortfolioImage } from '../../services/supabase';
+import { compressImage } from '../../utils/imageCompression';
 
 export const PortfolioManager: React.FC = () => {
   const { portfolio, addPortfolioProject, updatePortfolioProject, deletePortfolioProject } = useAppState();
+  const { showToast } = useToast();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
@@ -31,6 +40,12 @@ export const PortfolioManager: React.FC = () => {
   const [equipInput, setEquipInput] = useState('');
   const [equipmentInstalled, setEquipmentInstalled] = useState<string[]>([]);
 
+  // Drag and Drop & Storage Upload State
+  const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const openNewModal = () => {
     setEditingProject(null);
     setTitle('');
@@ -39,10 +54,79 @@ export const PortfolioManager: React.FC = () => {
     setLocation('Santo Domingo, D.N.');
     setDate(new Date().toISOString().slice(0, 7));
     setDescription('');
-    setImageUrl('https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=800&q=80');
+    setImageUrl('');
     setFeatured(false);
     setEquipmentInstalled(['Instalación certificada', 'Garantía 1 año']);
+    setIsUploading(false);
+    setUploadProgress(null);
     setIsModalOpen(true);
+  };
+
+  const handleProcessAndUploadImage = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      showToast('Por favor selecciona un archivo de imagen válido (JPG, PNG, WebP)', 'error');
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadProgress('Optimizando imagen...');
+
+    try {
+      // 1. Client-side compression for blazing fast mobile & desktop upload
+      const compressed = await compressImage(file, { maxWidth: 1600, maxHeight: 1200, quality: 0.84 });
+      setUploadProgress('Subiendo al Bucket de Almacenamiento...');
+
+      // 2. Upload to Supabase Storage Bucket
+      const publicUrl = await uploadPortfolioImage(compressed);
+
+      setImageUrl(publicUrl);
+      showToast('¡Imagen subida y alojada exitosamente en el Bucket!', 'success');
+    } catch (err: unknown) {
+      console.warn('Error uploading to Supabase Storage, falling back to Base64:', err);
+      // Fallback to local Base64 URL so the user never gets blocked
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setImageUrl(event.target.result as string);
+          showToast('Imagen cargada localmente con éxito', 'info');
+        }
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      await handleProcessAndUploadImage(files[0]);
+    }
+  };
+
+  const handleFileInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      await handleProcessAndUploadImage(files[0]);
+    }
   };
 
   const openEditModal = (p: PortfolioProject) => {
@@ -316,16 +400,135 @@ export const PortfolioManager: React.FC = () => {
                 </div>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-800 dark:text-slate-300">URL de la Imagen de Portada *</label>
+              {/* Image Upload Zone (Bucket Storage + Drag and Drop) */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-800 dark:text-slate-300 flex items-center gap-1.5">
+                    <ImageIcon className="w-3.5 h-3.5 text-nexablue-600 dark:text-cyan-400" />
+                    <span>Imagen de Portada del Proyecto *</span>
+                  </label>
+                  <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase">
+                    Bucket Supabase Storage
+                  </span>
+                </div>
+
+                {/* Hidden File Input */}
                 <input
-                  type="url"
-                  required
-                  placeholder="https://images.unsplash.com/..."
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white font-mono shadow-xs focus:border-nexablue-500 focus:outline-none"
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp,image/jpg"
+                  onChange={handleFileInputChange}
+                  className="hidden"
                 />
+
+                {/* Drag and Drop Zone */}
+                <div
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onClick={() => !isUploading && fileInputRef.current?.click()}
+                  className={`relative cursor-pointer rounded-2xl border-2 border-dashed p-4 transition-all duration-200 text-center ${
+                    isDragging
+                      ? 'border-nexablue-500 bg-nexablue-50/80 dark:bg-nexablue-950/40 ring-4 ring-nexablue-500/20'
+                      : isUploading
+                      ? 'border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 opacity-80 cursor-wait'
+                      : imageUrl
+                      ? 'border-emerald-500/60 bg-emerald-50/20 dark:bg-emerald-950/20 hover:border-emerald-500'
+                      : 'border-slate-300 dark:border-slate-700 hover:border-nexablue-500 hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                  }`}
+                >
+                  {isUploading ? (
+                    <div className="py-6 flex flex-col items-center justify-center space-y-2.5">
+                      <Loader2 className="w-8 h-8 text-nexablue-600 dark:text-cyan-400 animate-spin" />
+                      <div className="text-xs font-bold text-slate-900 dark:text-white">
+                        {uploadProgress || 'Subiendo archivo...'}
+                      </div>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                        Comprimiendo y alojando de forma segura en la nube...
+                      </p>
+                    </div>
+                  ) : imageUrl ? (
+                    <div className="space-y-3">
+                      <div className="relative w-full h-40 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 group/prev">
+                        <img
+                          src={imageUrl}
+                          alt="Vista previa de portada"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/prev:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              fileInputRef.current?.click();
+                            }}
+                            className="px-3 py-1.5 rounded-lg bg-white/90 text-slate-900 text-xs font-bold shadow-md hover:bg-white"
+                          >
+                            Reemplazar Imagen
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setImageUrl('');
+                            }}
+                            className="p-1.5 rounded-lg bg-rose-600 text-white shadow-md hover:bg-rose-500"
+                            title="Eliminar imagen"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between text-[11px] px-1 text-emerald-700 dark:text-emerald-400 font-bold">
+                        <span className="flex items-center gap-1">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          <span>Imagen cargada y lista</span>
+                        </span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono font-normal truncate max-w-[220px]">
+                          {imageUrl.startsWith('http') ? 'En la nube (Storage)' : 'En memoria local'}
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="py-5 flex flex-col items-center justify-center space-y-2">
+                      <div className="w-12 h-12 rounded-2xl bg-nexablue-50 dark:bg-nexablue-950/60 border border-nexablue-200 dark:border-nexablue-800/40 text-nexablue-600 dark:text-cyan-400 flex items-center justify-center shadow-xs">
+                        <UploadCloud className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-slate-900 dark:text-white">
+                          Arrastra y suelta tu imagen aquí o <span className="text-nexablue-600 dark:text-cyan-400 hover:underline">haz clic para explorar</span>
+                        </p>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                          Formatos admitidos: PNG, JPG, WebP (Optimización automática &le; 1600px)
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Direct Manual URL Input Fallback */}
+                <div className="flex items-center gap-2 pt-1">
+                  <div className="relative flex-1">
+                    <Link2 className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="url"
+                      placeholder="O pega una URL directa de imagen externa..."
+                      value={imageUrl}
+                      onChange={(e) => setImageUrl(e.target.value)}
+                      className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] text-slate-900 dark:text-white font-mono shadow-xs focus:border-nexablue-500 focus:outline-none"
+                    />
+                  </div>
+                  {imageUrl && (
+                    <button
+                      type="button"
+                      onClick={() => setImageUrl('')}
+                      className="px-2 py-1.5 text-xs text-rose-600 hover:text-rose-700 dark:text-rose-400 font-bold"
+                    >
+                      Limpiar
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-1">
